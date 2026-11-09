@@ -107,6 +107,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 <div id="gun" class="hide">
   <div id="gJoin">
     <h1>🔫 Súng bắn chim</h1>
+    <div class="small" style="text-align:center;opacity:.5">v1.1 · ngắm nhanh hơn</div>
     <div class="small" style="text-align:center">Phòng <b id="gRoom"></b></div>
     <input type="text" id="gName" maxlength="12" placeholder="Tên của bạn" autocomplete="off">
     <div>
@@ -501,7 +502,8 @@ function initScreen(){
     // players
     let sx=0,n=0;
     players.forEach(p=>{
-      const k=1-Math.pow(.0005,rdt);p.ax+=(p.tx-p.ax)*k;p.ay+=(p.ty-p.ay)*k; // smooth
+      // light smoothing only (~20ms) — the phone already filters jitter; mouse is not smoothed
+      const k=p.local?1:1-Math.exp(-rdt/0.02);p.ax+=(p.tx-p.ax)*k;p.ay+=(p.ty-p.ay)*k;
       if(p.reloadUntil&&tn>=p.reloadUntil){p.reloadUntil=0;p.ammo=MAX_AMMO;sendState(p);}
       if(!p.spec&&(p.local||tn-p.lastSeen<3000)){sx+=p.ax;n++;}
     });
@@ -586,6 +588,12 @@ function initGun(){
 
   let peer=null,conn=null,connected=false,lastPong=0,rtt=60,reconnTimer=null;
   let st={ammo:MAX_AMMO,max:MAX_AMMO,score:0,reloading:false,phase:'lobby',left:ROUND_SEC};
+  // One Euro filter: strong smoothing when the hand is still (no jitter),
+  // almost no smoothing when moving fast (no lag). minCutoff Hz, beta = speed gain.
+  function oneEuro(minC,beta){let x=null,dx=0,t=0;const al=(c,dt)=>1/(1+1/(2*Math.PI*c*dt));
+    return (v,tn)=>{if(x===null){x=v;t=tn;return v;}const dt=Math.max(.001,(tn-t)/1000);t=tn;
+      dx+=al(1,dt)*((v-x)/dt-dx);x+=al(minC+beta*Math.abs(dx),dt)*(v-x);return x;};}
+  const fX=oneEuro(1.2,25),fY=oneEuro(1.2,25);
   let sensorOK=false,cur=null,mode='y',yaw0=0,pitch0=0,aimX=.5,aimY=.5,hist=[],lastSent=0,sentX=-1,sentY=-1,lastShake=0,needCenter=true;
   const isTouch=matchMedia('(pointer:coarse)').matches;
 
@@ -615,12 +623,12 @@ function initGun(){
     let dy=o.yaw-yaw0;dy=((dy+540)%360)-180;
     const dp=o.pitch-pitch0, degX=+sens.value, degY=degX*.6;
     const nx=clamp(.5+dy/degX,-.05,1.05), ny=clamp(.5-dp/degY,-.05,1.05);
-    aimX+=(nx-aimX)*.6;aimY+=(ny-aimY)*.6;
+    const tn=now();aimX=fX(nx,tn);aimY=fY(ny,tn);
     pushAim();
   }
   function pushAim(){
     const t=now();hist.push({t,x:aimX,y:aimY});while(hist.length&&t-hist[0].t>600)hist.shift();
-    if(t-lastSent>=50&&(Math.abs(aimX-sentX)>.0015||Math.abs(aimY-sentY)>.0015)){lastSent=t;sentX=aimX;sentY=aimY;tx({k:'aim',pid,x:+aimX.toFixed(4),y:+aimY.toFixed(4)});}
+    if(t-lastSent>=15&&(Math.abs(aimX-sentX)>.0007||Math.abs(aimY-sentY)>.0007)){lastSent=t;sentX=aimX;sentY=aimY;tx({k:'aim',pid,x:+aimX.toFixed(4),y:+aimY.toFixed(4)});}
   }
   function aimAgo(ms){const t=now()-ms;for(let i=hist.length-1;i>=0;i--)if(hist[i].t<=t)return hist[i];return hist[0]||{x:aimX,y:aimY};}
   function onMotion(e){
