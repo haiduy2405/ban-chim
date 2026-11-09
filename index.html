@@ -33,35 +33,69 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 #endcard table{margin:14px auto;border-collapse:collapse;font-size:22px}
 #endcard td{padding:8px 16px;border-bottom:1px solid rgba(255,255,255,.12)}
 #endcard h2{font-size:40px}
-/* ---------- GUN ---------- */
-#gun{position:fixed;inset:0;display:flex;flex-direction:column;padding:max(10px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));background:#0b1d2e}
-#gJoin{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;max-width:420px;margin:0 auto;width:100%}
-#gJoin h1{font-size:34px;text-align:center}
-#gJoin input[type=text]{font-size:22px;padding:14px;border-radius:12px;border:2px solid #2c4a6b;background:#132b45;color:#fff;width:100%;user-select:text;-webkit-user-select:text}
-#gJoin label{font-size:15px;opacity:.85;display:block}
-#gJoin input[type=range]{width:100%}
-.tips{font-size:14px;opacity:.75;line-height:1.5}
-#gPlay{flex:1;display:flex;flex-direction:column;gap:10px;min-height:0}
-.gtop{display:flex;justify-content:space-between;align-items:center;font-size:15px}
-.gname{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
-.gname .dot{width:18px;height:18px;border-radius:50%}
-.gscore{font-size:40px;font-weight:800;text-align:center}
-.gsub{text-align:center;font-size:16px;opacity:.85;min-height:22px}
-.ammo{display:flex;justify-content:center;gap:8px;height:34px}
-.ammo i{width:14px;height:34px;border-radius:7px 7px 3px 3px;background:#ffcf4d;display:block}
+/* ---------- GUN (điện thoại, tối ưu cầm 1 tay) ---------- */
+#gun{position:fixed;inset:0;display:flex;flex-direction:column;background:radial-gradient(130% 70% at 50% 0%,#1b4a7a 0%,#0b1d2e 62%);-webkit-touch-callout:none}
+#gJoin{flex:1;display:flex;flex-direction:column;min-height:0;max-width:440px;margin:0 auto;width:100%}
+.jbody{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:max(16px,env(safe-area-inset-top)) 20px 8px}
+.jbody h1{font-size:30px;text-align:center}
+.jmeta{text-align:center;font-size:14px;opacity:.7;margin-top:-8px}
+.jbody input[type=text]{font-size:22px;padding:14px;border-radius:14px;border:2px solid #2c4a6b;background:#132b45;color:#fff;width:100%;user-select:text;-webkit-user-select:text}
+.jbody label{font-size:14px;opacity:.85;display:block;margin-bottom:6px}
+.jbody input[type=range]{width:100%;height:28px}
+.seg{display:flex;background:#132b45;border-radius:14px;padding:4px;gap:4px}
+.seg button{flex:1;padding:13px 6px;border-radius:11px;background:transparent;font-weight:800;font-size:16px;opacity:.65}
+.seg button.on{background:#2fbf71;opacity:1}
+.tips{font-size:13px;opacity:.7;line-height:1.5}
+.jfoot{padding:10px 20px max(16px,env(safe-area-inset-bottom))}
+.jfoot .btn{width:100%;margin:0;font-size:26px;padding:20px;background:#2fbf71;border-radius:18px;box-shadow:0 6px 0 #1b7a47}
+.jfoot .btn:active{transform:translateY(4px);box-shadow:0 2px 0 #1b7a47}
+
+#gPlay{--f:min(54vw,34vh);flex:1;display:flex;flex-direction:column;min-height:0}
+.gtop{display:flex;align-items:center;gap:10px;padding:max(10px,env(safe-area-inset-top)) 14px 0;font-size:14px}
+.gname{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px;flex:1;min-width:0}
+.gname .dot{width:16px;height:16px;border-radius:50%;flex:none}
+#gMe{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#gNet{opacity:.8;white-space:nowrap}
+#gFlip{background:rgba(255,255,255,.14);border-radius:10px;padding:6px 11px;font-size:17px}
+.ghud{display:flex;align-items:center;justify-content:space-between;padding:4px 16px 0;gap:12px}
+.gscore{font-size:46px;font-weight:900;line-height:1.1}
+.ammo{display:flex;gap:6px;height:30px;align-items:flex-end}
+.ammo i{width:12px;height:30px;border-radius:6px 6px 3px 3px;background:#ffcf4d;display:block}
 .ammo i.off{background:#2c4a6b}
-#pad{flex:1;min-height:120px;border:2px dashed #3a5f88;border-radius:16px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;opacity:.9;position:relative;touch-action:none}
+.gsub{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 16px;font-size:21px;font-weight:800;line-height:1.25;min-height:48px}
+.haspad .gsub{flex:none}
+#pad{flex:1;min-height:100px;margin:0 14px 8px;border:2px dashed #3a5f88;border-radius:16px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;opacity:.9;position:relative;touch-action:none}
 #padDot{position:absolute;width:16px;height:16px;border-radius:50%;background:#ff4d4d;transform:translate(-50%,-50%);pointer-events:none}
-#spacer{flex:1}
-.grow{display:flex;gap:10px}
-.grow .btn{flex:1;margin:0;font-size:18px;padding:16px 8px}
-#fire{width:100%;height:34vh;min-height:150px;border-radius:28px;background:radial-gradient(circle at 50% 40%,#ff6b6b,#c81e1e);font-size:44px;font-weight:900;letter-spacing:4px;box-shadow:0 8px 0 #7a0f0f;transition:transform .05s}
-#fire.dn{transform:translateY(6px);box-shadow:0 2px 0 #7a0f0f}
-#gStart{background:#2fbf71}
+#gStart{background:#2fbf71;margin:0 16px 10px;font-size:24px;padding:16px;border-radius:16px;box-shadow:0 5px 0 #1b7a47}
+
+/* vùng điều khiển: BẮN to ở góc ngón cái, NẠP + CĂN GIỮA xếp cung quanh nó; chạm vùng trống = bắn */
+#ctl{position:relative;flex:none;width:100%;height:calc(var(--f)*1.6 + 2vh + env(safe-area-inset-bottom));touch-action:none}
+#fire{position:absolute;right:3vw;bottom:calc(2vh + env(safe-area-inset-bottom));width:var(--f);height:var(--f);border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  background:radial-gradient(circle at 50% 30%,var(--pc,#ff6b6b),color-mix(in srgb,var(--pc,#ff6b6b) 42%,#000));
+  box-shadow:0 10px 0 rgba(0,0,0,.4),inset 0 -10px 22px rgba(0,0,0,.28),inset 0 8px 16px rgba(255,255,255,.3);
+  font-weight:900;transition:transform .05s,box-shadow .05s}
+#fire #fLabel{font-size:calc(var(--f)*.2);letter-spacing:2px;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+#fire #fSub{font-size:calc(var(--f)*.085);opacity:.85;font-weight:800}
+#fire.dn{transform:translateY(7px);box-shadow:0 3px 0 rgba(0,0,0,.4),inset 0 -10px 22px rgba(0,0,0,.28),inset 0 8px 16px rgba(255,255,255,.3)}
+.rbtn{position:absolute;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(#3a638d,#223f5e);border:2px solid rgba(255,255,255,.16);box-shadow:0 6px 0 rgba(0,0,0,.38);font-weight:800}
+.rbtn b{font-size:calc(var(--f)*.15);line-height:1}
+.rbtn span{font-size:calc(var(--f)*.06);letter-spacing:.5px;margin-top:2px;opacity:.9}
+.rbtn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.38)}
+#gReload{width:calc(var(--f)*.56);height:calc(var(--f)*.56);right:calc(3vw + var(--f)*.85);bottom:calc(2vh + env(safe-area-inset-bottom) + var(--f)*.75)}
+#gCenter{width:calc(var(--f)*.5);height:calc(var(--f)*.5);right:calc(3vw + var(--f)*.32);bottom:calc(2vh + env(safe-area-inset-bottom) + var(--f)*1.04)}
+#gReload.busy{opacity:.5}
+#gReload.pulse{background:linear-gradient(#ffc233,#d98a00);animation:pl .5s infinite alternate}
+@keyframes pl{to{transform:scale(1.08)}}
+/* tay trái: đối xứng */
+.lefty #fire{right:auto;left:3vw}
+.lefty #gReload{right:auto;left:calc(3vw + var(--f)*.85)}
+.lefty #gCenter{right:auto;left:calc(3vw + var(--f)*.32)}
 .flashHit{animation:fh .25s}
-@keyframes fh{0%{background:#2fbf71}100%{background:#0b1d2e}}
+@keyframes fh{0%{box-shadow:inset 0 0 0 100vmax rgba(47,191,113,.45)}100%{box-shadow:inset 0 0 0 100vmax rgba(47,191,113,0)}}
 .flashBad{animation:fb .35s}
-@keyframes fb{0%{background:#b00020}100%{background:#0b1d2e}}
+@keyframes fb{0%{box-shadow:inset 0 0 0 100vmax rgba(200,20,40,.55)}100%{box-shadow:inset 0 0 0 100vmax rgba(200,20,40,0)}}
 </style>
 </head>
 <body>
@@ -107,37 +141,44 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 <!-- GUN MODE -->
 <div id="gun" class="hide">
   <div id="gJoin">
-    <h1>🔫 Súng bắn chim</h1>
-    <div class="small" style="text-align:center;opacity:.5">v1.2 · 4 người + power-up</div>
-    <div class="small" style="text-align:center">Phòng <b id="gRoom"></b></div>
-    <input type="text" id="gName" maxlength="12" placeholder="Tên của bạn" autocomplete="off">
-    <div>
-      <label>Độ nhạy ngắm: <b id="sensV"></b></label>
-      <input type="range" id="gSens" min="25" max="100" step="5">
+    <div class="jbody">
+      <h1>🔫 Súng bắn chim</h1>
+      <div class="jmeta">Phòng <b id="gRoom"></b> · v1.3 · giao diện 1 tay</div>
+      <input type="text" id="gName" maxlength="12" placeholder="Tên của bạn" autocomplete="off">
+      <div>
+        <label>Cầm máy bằng tay nào?</label>
+        <div class="seg" id="gHand"><button data-h="R">🤜 Tay phải</button><button data-h="L">Tay trái 🤛</button></div>
+      </div>
+      <div>
+        <label>Độ nhạy ngắm: <b id="sensV"></b></label>
+        <input type="range" id="gSens" min="25" max="100" step="5">
+      </div>
+      <div>
+        <label>Bắn bằng giật máy: <b id="shakeV"></b></label>
+        <input type="range" id="gShake" min="10" max="45" step="1">
+      </div>
+      <div class="tips">Cầm máy như súng, chĩa vào giữa màn hình rồi bấm <b>CĂN GIỮA</b>. Chạm vùng trống bên dưới cũng là <b>BẮN</b>. Hết đạn chạm BẮN sẽ tự nạp. Mở bằng Chrome, không mở trong Zalo.</div>
     </div>
-    <div>
-      <label>Bắn bằng giật máy: <b id="shakeV"></b></label>
-      <input type="range" id="gShake" min="10" max="45" step="1">
-    </div>
-    <button class="btn" id="gGo" style="font-size:26px;padding:18px">Vào chơi</button>
-    <div class="tips">• Cầm điện thoại như súng: <b>cạnh trên chĩa vào màn hình</b> (máy nằm ngang tay) hoặc dựng đứng camera sau chĩa vào màn hình.<br>• Chĩa vào giữa màn hình rồi bấm <b>CĂN GIỮA</b>.<br>• Mở bằng Chrome, không mở trong Zalo/Facebook.</div>
+    <div class="jfoot"><button class="btn" id="gGo">Vào chơi</button></div>
   </div>
   <div id="gPlay" class="hide">
     <div class="gtop">
       <div class="gname"><span class="dot" id="gDot"></span><span id="gMe"></span></div>
       <div id="gNet">⏳</div>
+      <button id="gFlip" title="Đổi tay cầm">⇄</button>
     </div>
-    <div class="gscore" id="gScore">0</div>
+    <div class="ghud">
+      <div class="gscore" id="gScore">0</div>
+      <div class="ammo" id="gAmmo"></div>
+    </div>
     <div class="gsub" id="gSub">Đang kết nối…</div>
-    <div class="ammo" id="gAmmo"></div>
     <div id="pad" class="hide"><div>Không có cảm biến xoay.<br>Chạm/rê chuột trong khung này để ngắm.</div><span id="padDot" class="hide"></span></div>
-    <div id="spacer"></div>
     <button class="btn hide" id="gStart">▶ BẮT ĐẦU VÁN</button>
-    <div class="grow">
-      <button class="btn alt" id="gCenter">◎ CĂN GIỮA</button>
-      <button class="btn alt" id="gReload">⟳ NẠP ĐẠN</button>
+    <div id="ctl">
+      <button class="rbtn" id="gCenter"><b>◎</b><span>CĂN GIỮA</span></button>
+      <button class="rbtn" id="gReload"><b>⟳</b><span>NẠP ĐẠN</span></button>
+      <button id="fire"><span id="fLabel">BẮN</span><span id="fSub"></span></button>
     </div>
-    <button id="fire">BẮN</button>
   </div>
 </div>
 
@@ -640,6 +681,11 @@ function initGun(){
   sens.value=ls('bc_sens','60');shk.value=ls('bc_shake','22');
   const showS=()=>{$('#sensV').textContent=sens.value+'° = hết bề ngang';$('#shakeV').textContent=+shk.value>=45?'TẮT':(+shk.value<16?'rất nhạy':+shk.value<26?'vừa':'khó')+' ('+shk.value+')';};
   sens.oninput=shk.oninput=showS;showS();
+  let hand=ls('bc_hand','R');
+  const applyHand=()=>{$('#gPlay').classList.toggle('lefty',hand==='L');document.querySelectorAll('#gHand button').forEach(b=>b.classList.toggle('on',b.dataset.h===hand));};
+  document.querySelectorAll('#gHand button').forEach(b=>b.onclick=()=>{hand=b.dataset.h;lss('bc_hand',hand);applyHand();});
+  $('#gFlip').addEventListener('pointerdown',e=>{e.preventDefault();hand=hand==='L'?'R':'L';lss('bc_hand',hand);applyHand();});
+  applyHand();
 
   let peer=null,conn=null,connected=false,lastPong=0,rtt=60,reconnTimer=null;
   let st={ammo:MAX_AMMO,max:MAX_AMMO,score:0,reloading:false,phase:'lobby',left:ROUND_SEC};
@@ -702,8 +748,9 @@ function initGun(){
   // ---------- actions ----------
   function fire(agoMs=0){
     audio();
+    if(!st.puInf&&st.ammo<=0&&!st.reloading){reload();say('Hết đạn · đang nạp…');return;}   // hết đạn: chạm BẮN = tự nạp
     const a=aimAgo(agoMs);
-    if(!st.puInf&&(st.reloading||st.ammo<=0)){sfxEmpty();vib(15);say(st.reloading?'Đang nạp đạn…':'HẾT ĐẠN! Bấm NẠP ĐẠN');}
+    if(!st.puInf&&st.reloading){sfxEmpty();vib(15);say('Đang nạp đạn…');}
     else{sfxShot(.8);vib(35);if(!st.puInf){st.ammo--;drawAmmo();}}
     tx({k:'fire',pid,x:+a.x.toFixed(4),y:+a.y.toFixed(4),rtt:Math.round(rtt)});
   }
@@ -712,17 +759,25 @@ function initGun(){
   const fb=$('#fire');
   fb.addEventListener('pointerdown',e=>{e.preventDefault();fb.classList.add('dn');fire(0);});
   ['pointerup','pointercancel','pointerleave'].forEach(ev=>fb.addEventListener(ev,()=>fb.classList.remove('dn')));
+  $('#ctl').addEventListener('pointerdown',e=>{if(e.target!==e.currentTarget)return;e.preventDefault();fb.classList.add('dn');fire(0);setTimeout(()=>fb.classList.remove('dn'),90);});
   $('#gReload').addEventListener('pointerdown',e=>{e.preventDefault();reload();});
   $('#gCenter').addEventListener('pointerdown',e=>{e.preventDefault();center();vib(10);say('Đã căn giữa ✓');});
   $('#gStart').addEventListener('click',()=>{center();tx({k:'start',pid});});
   addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();fire(0);}if(e.key==='r'||e.key==='R')reload();if(e.key==='c'||e.key==='C')center();});
 
   // ---------- UI ----------
-  function drawAmmo(){const el=$('#gAmmo');el.innerHTML='';for(let i=0;i<st.max;i++){const b=document.createElement('i');if(i>=st.ammo||st.reloading)b.className='off';el.appendChild(b);}}
+  function drawAmmo(){
+    const el=$('#gAmmo');el.innerHTML='';for(let i=0;i<st.max;i++){const b=document.createElement('i');if(i>=st.ammo||st.reloading)b.className='off';el.appendChild(b);}
+    const inf=!!st.puInf,empty=!inf&&(st.ammo<=0||st.reloading);
+    $('#fLabel').textContent=empty?(st.reloading?'ĐANG NẠP':'NẠP ĐẠN'):'BẮN';
+    $('#fSub').textContent=inf?'∞':(st.reloading?'':st.ammo+' / '+st.max);
+    $('#gReload').classList.toggle('pulse',!inf&&st.ammo<=0&&!st.reloading);
+    $('#gReload').classList.toggle('busy',!!st.reloading&&!inf);
+  }
   function flash(cls){const g=$('#gun');g.classList.remove('flashHit','flashBad');void g.offsetWidth;g.classList.add(cls);}
   function renderState(){
     $('#gScore').textContent=st.score;drawAmmo();
-    if(st.color){$('#gDot').style.background=st.color;$('#fire').style.background=`radial-gradient(circle at 50% 40%,${st.color},#7a0f0f)`;}
+    if(st.color){$('#gDot').style.background=st.color;$('#gPlay').style.setProperty('--pc',st.color);}
     $('#gMe').textContent=st.name||'';
     const lob=st.phase==='lobby'||st.phase==='end';
     $('#gStart').classList.toggle('hide',!lob||st.spec);
@@ -789,7 +844,7 @@ function initGun(){
   async function lockAwake(){try{if('wakeLock' in navigator&&!document.hidden)wake=await navigator.wakeLock.request('screen');}catch(e){}}
   $('#gGo').onclick=async()=>{
     const name=$('#gName').value.trim();if(!name){$('#gName').focus();$('#gName').placeholder='Nhập tên trước nhé!';return;}
-    lss('bc_name',name);lss('bc_sens',sens.value);lss('bc_shake',shk.value);
+    lss('bc_name',name);lss('bc_sens',sens.value);lss('bc_shake',shk.value);lss('bc_hand',hand);
     audio();
     try{if(typeof DeviceOrientationEvent!=='undefined'&&DeviceOrientationEvent.requestPermission){const r=await DeviceOrientationEvent.requestPermission();if(r!=='granted')alert('Cần cho phép cảm biến chuyển động để ngắm.');}}catch(e){}
     try{if(typeof DeviceMotionEvent!=='undefined'&&DeviceMotionEvent.requestPermission)await DeviceMotionEvent.requestPermission();}catch(e){}
@@ -799,7 +854,7 @@ function initGun(){
     lockAwake();
     $('#gJoin').classList.add('hide');$('#gPlay').classList.remove('hide');
     $('#gMe').textContent=name;drawAmmo();
-    setTimeout(()=>{if(!sensorOK){pad.classList.remove('hide');$('#spacer').classList.add('hide');}},1500);
+    setTimeout(()=>{if(!sensorOK){pad.classList.remove('hide');$('#gPlay').classList.add('haspad');}},1500);
     connect();
   };
   window.__gun={fire,reload,center,state:()=>st,dbg};  // debug hook
