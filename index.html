@@ -106,6 +106,50 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 .cfgrow button:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
 .gsub{white-space:pre-line}
 @media (max-height:820px){.lobby h1{font-size:34px}.lobby .sub{margin-bottom:6px}.code{font-size:42px;margin:0 0 4px}#plist{margin:6px 0}#plist li{padding:5px 12px;font-size:17px;margin:4px 0}.chip{padding:6px 10px;font-size:14px}.card{padding:18px 26px}}
+
+/* ---- coin + infinite-ammo glow ---- */
+.coinpill{background:linear-gradient(#ffe27a,#f0a800);color:#4a2f00;font-weight:900;font-size:14px;padding:5px 11px;border-radius:999px;box-shadow:0 2px 0 rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.6);white-space:nowrap;position:relative}
+.coinfx{position:absolute;right:0;top:100%;font-weight:900;color:#ffe27a;text-shadow:0 2px 0 #000;animation:cfx 1s ease-out forwards;pointer-events:none}
+@keyframes cfx{0%{opacity:0;transform:translateY(-6px)}15%{opacity:1}100%{opacity:0;transform:translateY(22px)}}
+#fire.inf{box-shadow:0 10px 0 rgba(0,0,0,.4),0 0 0 6px rgba(125,249,255,.55),0 0 40px rgba(125,249,255,.7),inset 0 8px 16px rgba(255,255,255,.3);animation:infp .8s infinite alternate}
+@keyframes infp{to{box-shadow:0 10px 0 rgba(0,0,0,.4),0 0 0 10px rgba(125,249,255,.25),0 0 60px rgba(125,249,255,.9),inset 0 8px 16px rgba(255,255,255,.3)}}
+.cfgrow{flex-wrap:wrap}.cfgrow button{flex:1 1 40%}
+.cfgrow .shopbtn{flex:1 1 100%;background:linear-gradient(#ffe27a,#f0a800);color:#4a2f00;font-size:16px;padding:14px 8px}
+/* ---- SHOP ---- */
+#shop{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;background:radial-gradient(120% 55% at 50% 0%,#2a4f7d 0%,#0e2236 55%,#08131f 100%);padding-top:env(safe-area-inset-top)}
+.shop-top{display:flex;align-items:center;gap:10px;padding:12px 14px 6px}
+.shop-top .shback{background:rgba(255,255,255,.12);padding:9px 13px;border-radius:12px;font-weight:800;font-size:15px}
+.shop-title{flex:1;text-align:center;font-weight:900;letter-spacing:3px;font-size:20px;background:linear-gradient(#fff,#ffd96a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.shop-tabs{display:flex;gap:8px;padding:8px 14px 10px}
+.shop-tabs button{flex:1;padding:12px;border-radius:14px;background:rgba(255,255,255,.08);font-weight:800;font-size:15px;opacity:.75}
+.shop-tabs button.on{background:linear-gradient(#ffe27a,#f0a800);color:#4a2f00;opacity:1;box-shadow:0 4px 0 rgba(0,0,0,.3)}
+#shList{flex:1;overflow-y:auto;padding:4px 0 max(24px,env(safe-area-inset-bottom));touch-action:pan-y;-webkit-overflow-scrolling:touch}
+.shcard{display:grid;grid-template-columns:112px 1fr;gap:12px;margin:0 14px 14px;padding:12px;border-radius:20px;background:linear-gradient(150deg,rgba(255,255,255,.12),rgba(255,255,255,.03));border:1.5px solid color-mix(in srgb,var(--rc) 70%,transparent);box-shadow:0 10px 26px rgba(0,0,0,.4),inset 0 0 28px color-mix(in srgb,var(--rc) 16%,transparent);position:relative;overflow:hidden}
+.shcard.sel{border-color:#7dff9a;box-shadow:0 10px 26px rgba(0,0,0,.4),0 0 0 2px rgba(125,255,154,.35),inset 0 0 28px rgba(125,255,154,.14)}
+.shcard.legend::after{content:"";position:absolute;top:-40%;left:-60%;width:40%;height:180%;background:linear-gradient(90deg,transparent,rgba(255,236,150,.35),transparent);transform:rotate(18deg);animation:shine 3.2s infinite}
+@keyframes shine{0%{left:-60%}60%,100%{left:130%}}
+.shimg{display:flex;align-items:center;justify-content:center;border-radius:14px;background:radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--rc) 38%,transparent),rgba(0,0,0,.25) 70%);min-height:96px}
+.shimg svg{width:100%;height:auto;filter:drop-shadow(0 4px 6px rgba(0,0,0,.55))}
+.shimg.item{font-size:54px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
+.shinfo{min-width:0;display:flex;flex-direction:column;gap:6px}
+.shname{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.shname b{font-size:18px}
+.shname em{font-style:normal;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--rc) 30%,transparent);color:var(--rc);border:1px solid color-mix(in srgb,var(--rc) 60%,transparent)}
+.shdesc{font-size:12.5px;opacity:.8;line-height:1.35}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}
+.stats .st{font-size:10.5px;opacity:.95}
+.stats .st span{display:block;opacity:.75;margin-bottom:2px}
+.stats .st i{display:block;height:5px;border-radius:3px;background:rgba(255,255,255,.14);overflow:hidden}
+.stats .st b{display:block;height:100%;border-radius:3px}
+.shbtn{margin-top:4px;padding:12px;border-radius:13px;font-weight:900;font-size:15px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.shbtn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
+.shbtn.buy{background:linear-gradient(#ffe27a,#f0a800);color:#4a2f00}
+.shbtn.buy.poor{background:linear-gradient(#6b7b8f,#46566a);color:#c5d0dc}
+.shbtn.equip{background:linear-gradient(#52d98b,#1f9e58);color:#04210f}
+.shbtn.using{background:transparent;border:1.5px solid #7dff9a;color:#7dff9a;box-shadow:none}
+.have{font-size:12px;font-weight:800;color:#ffe27a}
+#shToast{position:absolute;left:50%;bottom:calc(30px + env(safe-area-inset-bottom));transform:translateX(-50%);background:rgba(0,0,0,.8);padding:11px 18px;border-radius:999px;font-weight:800;font-size:15px;border:1px solid rgba(255,255,255,.2);animation:tin .25s;white-space:nowrap}
+@keyframes tin{from{opacity:0;transform:translate(-50%,10px)}}
 </style>
 </head>
 <body>
@@ -157,7 +201,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
   <div id="gJoin">
     <div class="jbody">
       <h1>🔫 Súng bắn chim</h1>
-      <div class="jmeta">Phòng <b id="gRoom"></b> · v1.5.1 · ngắm ổn định hơn</div>
+      <div class="jmeta">Phòng <b id="gRoom"></b> · v1.6 · xu + cửa hàng</div>
       <input type="text" id="gName" maxlength="12" placeholder="Tên của bạn" autocomplete="off">
       <div>
         <label>Cầm máy bằng tay nào?</label>
@@ -178,7 +222,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
   <div id="gPlay" class="hide">
     <div class="gtop">
       <div class="gname"><span class="dot" id="gDot"></span><span id="gMe"></span></div>
-      <div id="gNet">⏳</div>
+      <div class="coinpill" id="gCoin">🪙 0</div><div id="gNet">⏳</div>
       <button id="gFlip" title="Đổi tay cầm">⇄</button>
     </div>
     <div class="ghud">
@@ -187,7 +231,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
     </div>
     <div class="gsub" id="gSub">Đang kết nối…</div>
     <div id="pad" class="hide"><div>Không có cảm biến xoay.<br>Chạm/rê chuột trong khung này để ngắm.</div><span id="padDot" class="hide"></span></div>
-    <div class="cfgrow hide" id="gCfg"><button id="gMode">Chế độ</button><button id="gTheme">Bối cảnh</button></div>
+    <div class="cfgrow hide" id="gCfg"><button id="gMode">Chế độ</button><button id="gTheme">Bối cảnh</button><button id="gShop" class="shopbtn">🛒 CỬA HÀNG</button></div>
     <button class="btn hide" id="gStart">▶ BẮT ĐẦU VÁN</button>
     <div id="ctl">
       <button class="rbtn" id="gCenter"><b>◎</b><span>CĂN GIỮA</span></button>
@@ -197,6 +241,59 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
   </div>
 </div>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gMetal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfe8f3"/><stop offset=".45" stop-color="#8ba0b6"/><stop offset="1" stop-color="#3a4a5d"/></linearGradient>
+  <linearGradient id="gDark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b6c82"/><stop offset="1" stop-color="#1b2633"/></linearGradient>
+  <linearGradient id="gWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d49a5c"/><stop offset="1" stop-color="#7a4a22"/></linearGradient>
+  <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6b0"/><stop offset=".5" stop-color="#f5c21a"/><stop offset="1" stop-color="#a9710a"/></linearGradient>
+  <radialGradient id="gGem"><stop offset="0" stop-color="#ffd1da"/><stop offset=".5" stop-color="#ff3d6b"/><stop offset="1" stop-color="#8a0f2c"/></radialGradient>
+  <symbol id="gun-pistol" viewBox="0 0 200 90">
+    <rect x="48" y="24" width="116" height="22" rx="5" fill="url(#gMetal)"/><rect x="156" y="28" width="14" height="14" rx="3" fill="url(#gDark)"/>
+    <rect x="62" y="18" width="9" height="6" rx="1" fill="#2a3a4d"/><rect x="148" y="18" width="7" height="6" rx="1" fill="#2a3a4d"/>
+    <path d="M56 46H132V52H110L102 56H88L78 86Q77 89 73 89H63Q58 89 59 85L68 52H56Z" fill="url(#gDark)"/>
+    <path d="M69 57H86L78 84H67Z" fill="url(#gWood)"/>
+    <path d="M94 50v9q0 8 9 8h13" stroke="#2a3a4d" stroke-width="3.5" fill="none" stroke-linecap="round"/><rect x="105" y="50" width="4" height="11" rx="2" fill="#2a3a4d"/>
+    <rect x="52" y="27" width="100" height="3" rx="1.5" fill="rgba(255,255,255,.45)"/>
+  </symbol>
+  <symbol id="gun-hunter" viewBox="0 0 200 90">
+    <path d="M62 34L18 42Q8 46 10 56L18 72Q22 77 29 74L62 54Z" fill="url(#gWood)"/>
+    <rect x="72" y="37" width="122" height="8" rx="3" fill="url(#gMetal)"/><rect x="186" y="35" width="10" height="12" rx="2" fill="url(#gDark)"/>
+    <rect x="58" y="31" width="48" height="24" rx="5" fill="url(#gDark)"/>
+    <rect x="104" y="44" width="62" height="13" rx="6" fill="url(#gWood)"/>
+    <rect x="78" y="22" width="42" height="9" rx="4.5" fill="url(#gDark)"/><circle cx="118" cy="26.5" r="5.5" fill="#5ec8ff" opacity=".85"/><rect x="86" y="30" width="6" height="3" fill="#2a3a4d"/><rect x="108" y="30" width="6" height="3" fill="#2a3a4d"/>
+    <path d="M84 54v8q0 7 8 7h8" stroke="#2a3a4d" stroke-width="3.5" fill="none" stroke-linecap="round"/><rect x="95" y="54" width="4" height="10" rx="2" fill="#2a3a4d"/>
+  </symbol>
+  <symbol id="gun-shotgun" viewBox="0 0 200 90">
+    <path d="M52 32L12 40Q4 44 6 54L16 74Q20 79 28 75L52 54Z" fill="url(#gWood)"/>
+    <rect x="58" y="31" width="136" height="8" rx="3" fill="url(#gMetal)"/><rect x="58" y="40" width="136" height="8" rx="3" fill="url(#gMetal)"/>
+    <circle cx="190" cy="29" r="3" fill="#ffd23f"/>
+    <rect x="46" y="29" width="38" height="26" rx="5" fill="url(#gDark)"/>
+    <rect x="96" y="37" width="48" height="18" rx="7" fill="url(#gWood)"/><rect x="96" y="40" width="48" height="3" rx="1.5" fill="rgba(255,255,255,.3)"/>
+    <path d="M72 55v8q0 7 8 7h9" stroke="#2a3a4d" stroke-width="3.5" fill="none" stroke-linecap="round"/><rect x="82" y="55" width="4" height="10" rx="2" fill="#2a3a4d"/>
+  </symbol>
+  <symbol id="gun-sniper" viewBox="0 0 200 90">
+    <path d="M52 34L12 36Q4 38 6 46L8 52L26 54L24 70Q24 76 30 74L56 56Z" fill="url(#gWood)"/><ellipse cx="26" cy="46" rx="6" ry="4" fill="#0e2236"/>
+    <rect x="62" y="41" width="132" height="6" rx="3" fill="url(#gMetal)"/><rect x="184" y="38" width="12" height="12" rx="2" fill="url(#gDark)"/>
+    <rect x="48" y="35" width="56" height="20" rx="4" fill="url(#gDark)"/>
+    <rect x="76" y="16" width="62" height="13" rx="6.5" fill="url(#gDark)"/><rect x="66" y="13" width="14" height="19" rx="4" fill="url(#gMetal)"/><rect x="132" y="14" width="16" height="17" rx="4" fill="url(#gMetal)"/>
+    <circle cx="140" cy="22.5" r="5" fill="#b8a2ff" opacity=".9"/><rect x="86" y="29" width="5" height="7" fill="#2a3a4d"/><rect x="118" y="29" width="5" height="7" fill="#2a3a4d"/>
+    <path d="M150 47L140 80M158 47L170 80" stroke="#8ba0b6" stroke-width="3" stroke-linecap="round"/>
+    <path d="M84 55v8q0 7 8 7h8" stroke="#2a3a4d" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="gun-gold" viewBox="0 0 200 90">
+    <path d="M26 46Q26 28 46 28H152Q172 28 180 40L194 40V52L180 52Q172 63 152 63H114L106 85Q104 89 97 89H86Q80 89 82 83L90 63H46Q26 63 26 46Z" fill="url(#gGold)" stroke="#8a5a00" stroke-width="1.5"/>
+    <rect x="40" y="34" width="110" height="7" rx="3.5" fill="rgba(255,255,255,.55)"/>
+    <path d="M110 42H168" stroke="#8a5a00" stroke-width="2.5" stroke-linecap="round"/><path d="M110 50H162" stroke="#8a5a00" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="58" cy="47" r="9" fill="url(#gGem)" stroke="#8a5a00" stroke-width="1.5"/><circle cx="55" cy="44" r="2.5" fill="#fff" opacity=".8"/>
+    <rect x="186" y="38" width="12" height="16" rx="3" fill="url(#gDark)"/>
+    <path d="M92 64v6q0 7 8 7h8" stroke="#8a5a00" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  </symbol>
+</defs></svg>
+<div id="shop" class="hide">
+  <div class="shop-top"><button class="shback" id="shBack">‹ Quay lại</button><div class="shop-title">CỬA HÀNG</div><div class="coinpill" id="shCoin">🪙 0</div></div>
+  <div class="shop-tabs"><button data-t="guns" class="on">🔫 Súng</button><button data-t="items">🎒 Vật phẩm</button></div>
+  <div id="shList"></div>
+</div>
 <script>
 // Show any runtime error on screen so it can be reported (photo of the red box).
 function showErr(msg){const b=document.getElementById('errbox');b.classList.remove('hide');b.textContent+=msg+'\n';}
@@ -286,6 +383,21 @@ function music(on){
     const m=mel[i%16]; if(i%2===0)tone(196*Math.pow(2,m/12),.18,'triangle',.05);
     if(i%4===0)tone(98*Math.pow(2,bass[(i/4|0)%8]/12),.35,'sine',.09); i++; },150);
 }
+
+// ================== SHOP DATA (dùng chung host + điện thoại) ==================
+const GUNS={
+  pistol :{name:'Súng Cũ',   tag:'Khởi đầu',  rar:'#9fb3c8',price:0,   ammo:6, reload:1200,rad:1.0, head:2,   boss:1,  desc:'Đáng tin cậy. Ai cũng bắt đầu từ đây.'},
+  hunter :{name:'Súng Săn',  tag:'Thường',    rar:'#4ade80',price:400, ammo:8, reload:1000,rad:1.1, head:2,   boss:1,  desc:'Nhiều đạn hơn, nạp nhanh hơn, ngắm dễ hơn một chút.'},
+  shotgun:{name:'Shotgun',   tag:'Hiếm',      rar:'#38bdf8',price:900, ammo:5, reload:1400,rad:1.9, head:2,   boss:1,  desc:'Đạn tản rộng: chĩa gần là trúng. Cực hợp người mới.'},
+  sniper :{name:'Bắn Tỉa',   tag:'Sử thi',    rar:'#c084fc',price:1800,ammo:4, reload:1500,rad:.95, head:3.5, boss:2,  desc:'Ít đạn nhưng bắn ĐẦU x3.5 và gấp đôi sát thương lên Boss.'},
+  gold   :{name:'Súng Vàng', tag:'Huyền thoại',rar:'#fbbf24',price:4500,ammo:12,reload:700, rad:1.35,head:2.5, boss:1.5,desc:'12 viên, nạp siêu nhanh, đầu x2.5, đau hơn khi đánh Boss.'}};
+const GUN_KEYS=Object.keys(GUNS);
+const ITEMS={
+  heart :{name:'Tim Dự Phòng',     icon:'❤️',price:150,desc:'Bắt đầu ván với thêm 1 tim (Sinh tồn: của bạn · Hành trình: tim chung).'},
+  revive:{name:'Hồi Sinh',         icon:'✨',price:400,desc:'Tự dùng khi bạn bị loại (Sinh tồn) hoặc cả đội hết tim (Hành trình): hồi lại 2 tim.'},
+  boost :{name:'Khởi Đầu Thần Tốc',icon:'⚡',price:120,desc:'Vô hạn đạn trong 8 giây đầu mỗi ván.'}};
+const ITEM_KEYS=Object.keys(ITEMS);
+const MAX_ITEM=9;
 
 // ================== MODE SWITCH ==================
 if(ROOM) initGun(); else initScreen();
@@ -443,7 +555,7 @@ function initScreen(){
     const f=b.flock&&flocks.get(b.flock);if(!f)return;
     f.left--;f.owner=f.owner===undefined||f.owner===p.pid?p.pid:null;
     if(f.left<=0){flocks.delete(b.flock);
-      if(f.owner===p.pid){const bonus=1000*mult(p);p.score+=bonus;popup(b.x,b.y-b.r*2.2,'🐦 CẢ ĐÀN +'+bonus,'#ffd23f',true);sfxGold();shake=Math.max(shake,18*S);slowUntil=now()+400;}}
+      if(f.owner===p.pid){const bonus=1000*mult(p);p.score+=bonus;earn(p,25);popup(b.x,b.y-b.r*2.2,'🐦 CẢ ĐÀN +'+bonus,'#ffd23f',true);sfxGold();shake=Math.max(shake,18*S);slowUntil=now()+400;}}
   }
   function headOf(b,x,y){return {x:x+b.dir*b.r*.95,y:y-b.r*.38,r:b.r*.45};}
   function posAt(b,t){for(let i=b.hist.length-1;i>=0;i--)if(b.hist[i].t<=t)return b.hist[i];return b.hist[0]||b;}
@@ -509,10 +621,10 @@ function initScreen(){
     if(st.boss)sfxBoss();else tone(520,.15,'triangle',.12,0,880);
     sendAll();
   }
-  function beginStagePlay(){phase='play';stageStart=now();roundStart=stageStart;nextSpawn=now()+400;if(STAGES[stage].boss)spawnBossFinal();sendAll();}
+  function beginStagePlay(){phase='play';stageStart=now();roundStart=stageStart;if(stage===0)applyBoost();nextSpawn=now()+400;if(STAGES[stage].boss)spawnBossFinal();sendAll();}
   function stageClear(){
     phase='intro';introKind='clear';introStart=now();
-    const bonus=300*(stage+1);activePlayers().forEach(p=>{p.score+=bonus;});
+    const bonus=300*(stage+1);activePlayers().forEach(p=>{p.score+=bonus;earn(p,25*(stage+1));});
     hearts=Math.min(maxHearts,hearts+1);sfxGold();shake=Math.max(shake,16*S);
     birds.forEach(b=>{if(!b.dying)kill(b);});sendAll();
   }
@@ -520,11 +632,16 @@ function initScreen(){
     if(mode!=='coop'||phase!=='play')return;
     hearts--;shake=Math.max(shake,22*S);sfxBad();popup(W/2,H*.42,msg+' −1❤','#ff6b6b',true);
     players.forEach(p=>send(p,{k:'hurt'}));sendAll();
-    if(hearts<=0)endCoop(false);
+    if(hearts<=0){
+      const rv=activePlayers().find(q=>q.gear.revive>0);
+      if(rv){useItem(rv,'revive');hearts=Math.min(2,maxHearts);popup(W/2,H*.35,'✨ '+rv.name+' HỒI SINH CẢ ĐỘI!','#7dff9a',true);sfxGold();sendAll();}
+      else endCoop(false);
+    }
   }
   function hurtLife(p){
     p.lives--;
-    if(p.lives<=0){p.out=true;p.outAt=now();popup(p.ax*W,p.ay*H-40*S,'☠ '+p.name+' BỊ LOẠI','#ff5050',true);sfxBoss();}
+    if(p.lives<=0&&p.gear.revive>0){useItem(p,'revive');p.lives=2;popup(p.ax*W,p.ay*H-40*S,'✨ '+p.name+' HỒI SINH!','#7dff9a',true);sfxGold();}
+    else if(p.lives<=0){p.out=true;p.outAt=now();popup(p.ax*W,p.ay*H-40*S,'☠ '+p.name+' BỊ LOẠI','#ff5050',true);sfxBoss();}
     send(p,{k:'hurt'});
   }
   function spawnBossFinal(){
@@ -545,7 +662,7 @@ function initScreen(){
   }
   function bossDefeated(){
     bossDown=true;winAt=now()+2600;eggs.forEach(e=>puff(e.x,e.y));eggs=[];
-    activePlayers().forEach(p=>{p.score+=3000;});popup(W/2,H*.3,'🏆 BOSS BỊ HẠ! +3000 mỗi người','#ffd23f',true);shake=40*S;
+    activePlayers().forEach(p=>{p.score+=3000;earn(p,150);});popup(W/2,H*.3,'🏆 BOSS BỊ HẠ! +3000 mỗi người','#ffd23f',true);shake=40*S;
   }
   function coopTick(tn){
     if(winAt){if(tn>=winAt){winAt=0;endCoop(true);}return;}
@@ -561,13 +678,28 @@ function initScreen(){
     [[-.3,-.3],[.3,.1],[-.1,.5]].forEach(([a,b])=>{ctx.beginPath();ctx.arc(a*e.r,b*e.r,e.r*.14,0,7);ctx.fill();});ctx.restore();
   }
 
+  // ---------- xu + trang bị ----------
+  const COIN={normal:2,fast:4,gold:20,dodge:6,crate:8};
+  function earn(p,n){p.coins+=n;}
+  function cleanGear(g){g=g&&typeof g==='object'?g:{};const o={gun:GUNS[g.gun]?g.gun:'pistol'};ITEM_KEYS.forEach(k=>{o[k]=clamp(Math.floor(+g[k]||0),0,MAX_ITEM);});return o;}
+  function applyGun(p){const g=GUNS[p.gear.gun]||GUNS.pistol;p.maxAmmo=g.ammo;p.reloadMs=g.reload;p.rad=g.rad;p.headMul=g.head;p.bossMul=g.boss;p.ammo=p.maxAmmo;p.reloadUntil=0;}
+  function useItem(p,k){p.gear[k]=Math.max(0,p.gear[k]-1);send(p,{k:'used',item:k});}
+  function applyHearts(){   // Tim Dự Phòng
+    activePlayers().forEach(p=>{if(p.gear.heart>0){useItem(p,'heart');if(mode==='survival')p.lives=4;else if(mode==='coop'){maxHearts++;hearts++;}}});
+  }
+  let boosted=false;
+  function applyBoost(){    // Khởi Đầu Thần Tốc
+    if(boosted)return;boosted=true;
+    activePlayers().forEach(p=>{if(p.gear.boost>0){useItem(p,'boost');p.infUntil=now()+8000;p.infTotal=8000;p.ammo=p.maxAmmo;p.reloadUntil=0;popup(p.ax*W,p.ay*H-60*S,'⚡ THẦN TỐC!','#7df9ff',true);}});
+  }
+
   // ---------- players ----------
   function activePlayers(){return [...players.values()].filter(p=>!p.spec);}
   function freeColor(){const used=activePlayers().map(p=>p.color);return COLORS.find(c=>!used.includes(c))||COLORS[0];}
   function newPlayer(pid,name,conn){
     const spec=activePlayers().length>=MAX_PLAYERS;
     const p={pid,name:name||'Người chơi',conn,color:spec?'#999':freeColor(),spec,tx:.5,ty:.5,ax:.5,ay:.5,lastSeen:now(),
-      score:0,ammo:MAX_AMMO,reloadUntil:0,combo:0,best:0,hits:0,shots:0,rtt:60,flash:0,infUntil:0,x2Until:0,jamUntil:0,lives:3,out:false,local:!conn};
+      score:0,ammo:MAX_AMMO,reloadUntil:0,combo:0,best:0,hits:0,shots:0,rtt:60,flash:0,infUntil:0,x2Until:0,jamUntil:0,lives:3,out:false,maxAmmo:6,reloadMs:1200,rad:1,headMul:2,bossMul:1,infTotal:6000,coins:0,gear:{gun:'pistol',heart:0,revive:0,boost:0},local:!conn};
     players.set(pid,p);return p;
   }
   function send(p,msg){if(p.conn&&p.conn.open){try{p.conn.send(msg);}catch(e){}}}
@@ -581,7 +713,7 @@ function initScreen(){
       else left=STAGES[stage].boss?0:Math.max(0,Math.ceil(STAGE_SEC-(tn-stageStart)/1000));
     }
     const co=mode==='coop';
-    send(p,{k:'st',ammo:p.ammo,max:MAX_AMMO,score:p.score,combo:p.combo,mult:mult(p),reloading:!!p.reloadUntil,phase,left,color:p.color,name:p.name,spec:p.spec,
+    send(p,{k:'st',ammo:p.ammo,max:p.maxAmmo,coins:p.coins,gun:p.gear.gun,score:p.score,combo:p.combo,mult:mult(p),reloading:!!p.reloadUntil,phase,left,color:p.color,name:p.name,spec:p.spec,
       puInf:Math.max(0,Math.ceil((p.infUntil-tn)/1000)),puX2:Math.max(0,Math.ceil((p.x2Until-tn)/1000)),puJam:Math.max(0,Math.ceil((p.jamUntil-tn)/1000)),frz:tn<freezeUntil,gold:goldenHour(),
       mode,modeName:MODES[mode].icon+' '+MODES[mode].name,themeName:themeLabel(),
       stage:stage+1,nSt:STAGES.length,boss:co&&!!STAGES[stage].boss,goal:stageGoal,kills:stageKills,hearts,maxH:maxHearts,
@@ -600,7 +732,7 @@ function initScreen(){
     $('#startBtn').disabled=activePlayers().length===0;
     el.innerHTML=arr.length?'':'<li class="small">Chưa có người chơi… quét QR để vào</li>';
     arr.forEach(p=>{const li=document.createElement('li');const on=p.local||now()-p.lastSeen<3000;
-      li.innerHTML=`<span class="dot" style="background:${p.color}"></span><span></span><span class="small" style="margin-left:auto">${p.spec?'khán giả':on?'🟢':'🔴 mất kết nối'}</span>`;
+      li.innerHTML=`<span class="dot" style="background:${p.color}"></span><span></span><span class="small" style="margin-left:auto">${p.spec?'khán giả':(on?'🟢 ':'🔴 mất kết nối ')+(GUNS[p.gear.gun]||GUNS.pistol).name}</span>`;
       li.children[1].textContent=p.name;el.appendChild(li);});
   }
 
@@ -614,15 +746,15 @@ function initScreen(){
     if(now()<p.jamUntil){px+=(Math.random()-.5)*150*S;py+=(Math.random()-.5)*150*S;}   // bị nhiễu: đạn lệch ngẫu nhiên
     if(eggs.length){   // bắn vỡ trứng của boss
       let ei=-1,ed=1e9;eggs.forEach((e,i)=>{const d=Math.hypot(px-e.x,py-e.y)/e.r;if(d<=1.7&&d<ed){ed=d;ei=i;}});
-      if(ei>=0){const e=eggs.splice(ei,1)[0];p.combo++;p.hits++;const m=mult(p),pts=80*m;p.score+=pts;puff(e.x,e.y);feathers(e.x,e.y,'#fff3d0',8);popup(e.x,e.y,'+'+pts+' TRỨNG','#fff3d0');sfxHit();
+      if(ei>=0){const e=eggs.splice(ei,1)[0];p.combo++;p.hits++;const m=mult(p),pts=80*m;p.score+=pts;earn(p,2);puff(e.x,e.y);feathers(e.x,e.y,'#fff3d0',8);popup(e.x,e.y,'+'+pts+' TRỨNG','#fff3d0');sfxHit();
         p.best=Math.max(p.best,p.combo);send(p,{k:'hit',pts});sendState(p);return;}
     }
     let best=null,bestD=1e9,nearD=1e9;
     for(const b of birds){
       if(b.dying)continue;const P=posAt(b,tq),hd=headOf(b,P.x,P.y);
       const dh=Math.hypot(px-hd.x,py-hd.y),db=Math.hypot(px-P.x,py-P.y)/1.15;
-      if(dh<=hd.r*1.3&&dh/hd.r<bestD){best={b,head:true};bestD=dh/hd.r;}
-      else if(db<=b.r*1.3&&db/b.r<bestD){best={b,head:false};bestD=db/b.r;}
+      if(dh<=hd.r*1.3*p.rad&&dh/hd.r<bestD){best={b,head:true};bestD=dh/hd.r;}
+      else if(db<=b.r*1.3*p.rad&&db/b.r<bestD){best={b,head:false};bestD=db/b.r;}
       nearD=Math.min(nearD,db/b.r);
     }
     if(best){
@@ -632,18 +764,18 @@ function initScreen(){
         send(p,{k:'hit',pts:T.pts,bad:true});
         if(mode==='coop')loseHeart('Bắn nhầm dân!');else if(mode==='survival')hurtLife(p);
       }else if(b.type==='crate'){
-        p.combo++;p.hits++;const m=mult(p);const pts=T.pts*(best.head?2:1)*m;p.score+=pts;
-        popup(b.x,b.y-b.r*1.6,'+'+pts,p.color);givePU(p,b);countKill();
+        p.combo++;p.hits++;const m=mult(p);const pts=T.pts*(best.head?p.headMul:1)*m;p.score+=pts;
+        popup(b.x,b.y-b.r*1.6,'+'+pts,p.color);earn(p,COIN.crate);givePU(p,b);countKill();
         send(p,{k:'hit',pts,head:best.head,gold:true});
       }else if(b.type==='boss'){
-        b.hp-=(mode==='coop'&&best.head)?2:1;b.hitT=now();p.combo++;p.hits++;const m=mult(p);let pts=100*(best.head?2:1)*m;
+        b.hp-=Math.max(1,Math.round(((mode==='coop'&&best.head)?2:1)*p.bossMul));earn(p,1);b.hitT=now();p.combo++;p.hits++;const m=mult(p);let pts=100*(best.head?p.headMul:1)*m;
         feathers(px,py,T.col,6);sfxHit();
-        if(b.hp<=0){pts+=T.pts*m;kill(b);if(mode==='coop'&&b===boss)bossDefeated();popup(b.x,b.y,'BOSS +'+pts,'#ffd23f',true);shake=30*S;sfxGold();slowUntil=now()+700;}
+        if(b.hp<=0){pts+=T.pts*m;earn(p,100);kill(b);if(mode==='coop'&&b===boss)bossDefeated();popup(b.x,b.y,'BOSS +'+pts,'#ffd23f',true);shake=30*S;sfxGold();slowUntil=now()+700;}
         else popup(px,py,'+'+pts+(best.head?' ĐẦU!':''),p.color);
         p.score+=pts;send(p,{k:'hit',pts,head:best.head,boss:true});
       }else{
-        p.combo++;p.hits++;const m=mult(p);const pts=T.pts*(best.head?2:1)*m;p.score+=pts;kill(b);flockKill(b,p);countKill();
-        popup(b.x,b.y-b.r,'+'+pts+(best.head?' ĐẦU x2':'')+(m>1?' combo x'+m:''),b.type==='gold'?'#ffd23f':p.color,b.type==='gold'||best.head);
+        p.combo++;p.hits++;const m=mult(p);const pts=T.pts*(best.head?p.headMul:1)*m;p.score+=pts;earn(p,COIN[b.type]||2);kill(b);flockKill(b,p);countKill();
+        popup(b.x,b.y-b.r,'+'+pts+(best.head?' ĐẦU x'+p.headMul:'')+(m>1?' combo x'+m:''),b.type==='gold'?'#ffd23f':p.color,b.type==='gold'||best.head);
         b.type==='gold'?sfxGold():sfxHit();shake=Math.max(shake,(b.type==='gold'?16:6)*S);
         send(p,{k:'hit',pts,head:best.head,gold:b.type==='gold'});
       }
@@ -662,7 +794,7 @@ function initScreen(){
     const names={inf:'∞ ĐẠN VÔ HẠN',x2:'ĐIỂM x2',freeze:'❄ ĐÓNG BĂNG',bomb:'💣 BOM!',jam:'📡 GÂY NHIỄU ĐỐI THỦ'};
     kill(b);shake=Math.max(shake,10*S);sfxGold();
     popup(b.x,b.y-b.r*2.4,names[k]+' · '+p.name,p.color,true);
-    if(k==='inf'){p.infUntil=tn+PU_INF;p.reloadUntil=0;p.ammo=MAX_AMMO;}
+    if(k==='inf'){p.infUntil=tn+PU_INF;p.infTotal=PU_INF;p.reloadUntil=0;p.ammo=p.maxAmmo;}
     else if(k==='x2')p.x2Until=tn+PU_X2;
     else if(k==='freeze')freezeUntil=tn+PU_FREEZE;
     else if(k==='jam'){players.forEach(q=>{if(q!==p&&!q.spec){q.jamUntil=tn+PU_JAM;send(q,{k:'jammed',by:p.name});sendState(q);}});}
@@ -679,22 +811,24 @@ function initScreen(){
     eggs.forEach(e=>{tot+=80*m;puff(e.x,e.y);});eggs=[];
     p.score+=tot;shake=Math.max(shake,34*S);flashT=now();
   }
-  function doReload(p){if(p.spec||p.reloadUntil||p.ammo===MAX_AMMO)return;p.reloadUntil=now()+RELOAD_MS;if(p.local)sfxReload();sendState(p);}
+  function doReload(p){if(p.spec||p.reloadUntil||p.ammo>=p.maxAmmo)return;p.reloadUntil=now()+p.reloadMs;if(p.local)sfxReload();sendState(p);}
 
   // ---------- phases ----------
   function startRound(){
     audio();const act=activePlayers();
-    players.forEach(p=>{p.score=0;p.combo=0;p.best=0;p.hits=0;p.shots=0;p.ammo=MAX_AMMO;p.reloadUntil=0;p.infUntil=0;p.x2Until=0;p.jamUntil=0;p.lives=3;p.out=false;});
+    players.forEach(p=>{p.score=0;p.combo=0;p.best=0;p.hits=0;p.shots=0;p.infUntil=0;p.x2Until=0;p.jamUntil=0;p.lives=3;p.out=false;p.coins=0;applyGun(p);});
+    boosted=false;
     flocks.clear();freezeUntil=0;goldenAnnounced=false;eggs=[];boss=null;bossDown=false;winAt=0;speedMul=1;birds=[];
     if(mode==='coop'){maxHearts=3+Math.max(1,act.length);hearts=maxHearts;stage=0;setTheme(STAGES[0].theme);}
     else setTheme(themeCfg==='random'?THEME_KEYS[Math.random()*THEME_KEYS.length|0]:themeCfg);
+    applyHearts();
     phase='count';countStart=now();
     $('#lobby').classList.add('hide');$('#endov').classList.add('hide');sendAll();
   }
   function beginPlay(){
     music(true);
     if(mode==='coop'){enterStage(0);return;}
-    phase='play';roundStart=now();nextSpawn=now()+300;nextBoss=now()+(mode==='survival'?40000:30000);sendAll();
+    phase='play';roundStart=now();nextSpawn=now()+300;nextBoss=now()+(mode==='survival'?40000:30000);applyBoost();sendAll();
   }
   function hiKey(){return mode==='classic'?'bc_high':'bc_high_'+mode;}
   function showHi(){let hi=null;try{hi=JSON.parse(localStorage.getItem(hiKey()));}catch(e){}$('#hiscore').textContent=hi&&hi.score?`Kỷ lục (${MODES[mode].name}): ${hi.score} (${hi.name})`:'';}
@@ -704,9 +838,9 @@ function initScreen(){
     let hi={score:0,name:''};try{hi=JSON.parse(localStorage.getItem(hiKey()))||hi;}catch(e){}
     if(val>hi.score){hi={score:val,name:valName};try{localStorage.setItem(hiKey(),JSON.stringify(hi));}catch(e){}}
     $('#endTitle').textContent=title;$('#endSub').textContent=sub||'';
-    const t=$('#rank');t.innerHTML='<tr><td>#</td><td>Tên</td><td>Điểm</td><td>Chính xác</td><td>Combo</td></tr>';
+    const t=$('#rank');t.innerHTML='<tr><td>#</td><td>Tên</td><td>Điểm</td><td>Chính xác</td><td>Combo</td><td>🪙 Xu</td></tr>';
     arr.forEach((p,i)=>{const tr=document.createElement('tr');
-      tr.innerHTML=`<td>${['🥇','🥈','🥉','4'][i]||i+1}</td><td style="color:${p.color}"></td><td><b>${p.score}</b></td><td>${p.shots?Math.round(p.hits/p.shots*100):0}%</td><td>x${p.best}</td>`;
+      tr.innerHTML=`<td>${['🥇','🥈','🥉','4'][i]||i+1}</td><td style="color:${p.color}"></td><td><b>${p.score}</b></td><td>${p.shots?Math.round(p.hits/p.shots*100):0}%</td><td>x${p.best}</td><td style="color:#ffe27a"><b>+${p.coins}</b></td>`;
       tr.children[1].textContent=p.name+(p.out?' ☠':'');t.appendChild(tr);});
     $('#hiscore2').textContent=hi.score?`Kỷ lục máy này (${MODES[mode].name}): ${hi.score} (${hi.name})`:'';
     $('#endov').classList.remove('hide');sendAll();
@@ -716,11 +850,13 @@ function initScreen(){
     if(mode==='survival'){
       const al=activePlayers().filter(p=>!p.out);let sub='';
       if(al.length===1&&activePlayers().length>1){al[0].score+=2000;sub='Sống sót cuối cùng: '+al[0].name+' (+2000)';}
+      activePlayers().forEach(p=>earn(p,20+Math.floor(((p.out?p.outAt:now())-roundStart)/5000)));
       showEnd('☠ Kết thúc sinh tồn',sub);
-    }else showEnd('🏆 Hết giờ!','');
+    }else{const ar=activePlayers().sort((a,b)=>b.score-a.score);ar.forEach((p,i)=>earn(p,20+(i===0&&ar.length>1?30:0)));showEnd('🏆 Hết giờ!','');}
   }
   function endCoop(win){
     if(phase==='end')return;phase='end';music(false);eggs=[];
+    activePlayers().forEach(p=>earn(p,20+(win?150:0)));
     const team=activePlayers().reduce((s,p)=>s+p.score,0);
     showEnd(win?'🏆 CHIẾN THẮNG!':'💀 THẤT BẠI',(win?'Cả đội đã hạ Chúa Tể Chim · tim còn '+Math.max(0,hearts):'Dừng ở '+(STAGES[stage].boss?'trận BOSS':'màn '+(stage+1)))+' · tổng điểm đội '+team,team,'Cả đội');
     if(win)sfxGold();
@@ -758,6 +894,7 @@ function initScreen(){
     if(d.k==='join'){
       if(!p)p=newPlayer(d.pid,String(d.name||'').slice(0,12),conn);
       else{p.conn=conn;if(d.name)p.name=String(d.name).slice(0,12);}
+      if(d.gear){p.gear=cleanGear(d.gear);applyGun(p);}
       p.lastSeen=now();send(p,{k:'welcome',color:p.color,spec:p.spec,room});sendState(p);renderList();return;
     }
     if(!p){conn.send({k:'rejoin'});return;}
@@ -769,6 +906,7 @@ function initScreen(){
       case 'reload':doReload(p);break;
       case 'ping':p.rtt=+d.rtt||p.rtt;send(p,{k:'pong',t:d.t});break;
       case 'start':if(phase==='lobby'||phase==='end')startRound();break;
+      case 'gear':p.gear=cleanGear(d.gear);if(phase==='lobby'||phase==='end'){applyGun(p);sendState(p);renderList();}break;
       case 'mode':if(phase==='lobby'||phase==='end')setMode(MODE_KEYS[(MODE_KEYS.indexOf(mode)+1)%MODE_KEYS.length]);break;
       case 'theme':if(phase==='lobby'||phase==='end'){const L=['random',...THEME_KEYS];setThemeCfg(L[(L.indexOf(themeCfg)+1)%L.length]);}break;
     }
@@ -853,7 +991,7 @@ function initScreen(){
     players.forEach(p=>{
       // light smoothing only (~20ms) — the phone already filters jitter; mouse is not smoothed
       const k=p.local?1:1-Math.exp(-rdt/0.02);p.ax+=(p.tx-p.ax)*k;p.ay+=(p.ty-p.ay)*k;
-      if(p.reloadUntil&&tn>=p.reloadUntil){p.reloadUntil=0;p.ammo=MAX_AMMO;sendState(p);}
+      if(p.reloadUntil&&tn>=p.reloadUntil){p.reloadUntil=0;p.ammo=p.maxAmmo;sendState(p);}
       if(!p.spec&&(p.local||tn-p.lastSeen<3000)){sx+=p.ax;n++;}
     });
     avgX+=((n?sx/n:.5)-avgX)*Math.min(1,rdt*2);
@@ -894,9 +1032,22 @@ function initScreen(){
       const fa=1-(tn-p.flash)/150;if(fa>0){ctx.fillStyle=`rgba(255,240,180,${fa*.8})`;ctx.beginPath();ctx.arc(x,y,r*1.4*(1.2-fa*.2),0,7);ctx.fill();}
       ctx.font=`700 ${16*S}px system-ui,sans-serif`;ctx.fillStyle='#fff';ctx.strokeStyle='rgba(0,0,0,.7)';ctx.lineWidth=4*S;
       ctx.strokeText(p.name,x,y+r*2.3);ctx.fillText(p.name,x,y+r*2.3);
-      if(p.reloadUntil){ctx.strokeStyle='#fff';ctx.lineWidth=4*S;ctx.beginPath();ctx.arc(x,y,r*1.9,-Math.PI/2,-Math.PI/2+Math.PI*2*(1-(p.reloadUntil-tn)/RELOAD_MS));ctx.stroke();}
+      if(p.reloadUntil){ctx.strokeStyle='#fff';ctx.lineWidth=4*S;ctx.beginPath();ctx.arc(x,y,r*1.9,-Math.PI/2,-Math.PI/2+Math.PI*2*(1-(p.reloadUntil-tn)/p.reloadMs));ctx.stroke();}
+      drawBuffs(p,x,y,r,tn);
     });
     drawHUD(tn);
+  }
+  function drawBuffs(p,x,y,r,tn){   // vô hạn đạn / x2 / nhiễu: đếm ngược ngay tại tâm ngắm
+    const L=[];
+    if(tn<p.infUntil)L.push({t:'∞ ĐẠN '+Math.ceil((p.infUntil-tn)/1000)+'s',c:'#7df9ff',f:clamp((p.infUntil-tn)/(p.infTotal||6000),0,1)});
+    if(tn<p.x2Until)L.push({t:'x2 '+Math.ceil((p.x2Until-tn)/1000)+'s',c:'#ffd23f',f:clamp((p.x2Until-tn)/PU_X2,0,1)});
+    if(tn<p.jamUntil)L.push({t:'📡 NHIỄU '+Math.ceil((p.jamUntil-tn)/1000)+'s',c:'#ff6bd6',f:clamp((p.jamUntil-tn)/PU_JAM,0,1)});
+    if(!L.length)return;
+    const b0=L[0],rr=r*2.5;
+    ctx.lineWidth=7*S;ctx.strokeStyle='rgba(0,0,0,.45)';ring(x,y,rr);
+    ctx.strokeStyle=b0.c;ctx.lineCap='round';ctx.beginPath();ctx.arc(x,y,rr,-Math.PI/2,-Math.PI/2+Math.PI*2*b0.f);ctx.stroke();ctx.lineCap='butt';
+    ctx.textAlign='center';
+    L.forEach((b,i)=>{ctx.font=`900 ${26*S}px system-ui,sans-serif`;outlined(b.t,x,y-rr-14*S-i*30*S,b.c,6);});
   }
   function ring(x,y,r){ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.stroke();}
   function outlined(t,x,y,fill,lw){ctx.lineWidth=(lw||6)*S;ctx.strokeStyle='rgba(0,0,0,.6)';ctx.strokeText(t,x,y);ctx.fillStyle=fill;ctx.fillText(t,x,y);}
@@ -909,7 +1060,8 @@ function initScreen(){
       ctx.fillStyle=p.color;ctx.fillRect(x,y,6*S,ph);
       ctx.fillStyle='#fff';ctx.font=`700 ${16*S}px system-ui,sans-serif`;ctx.fillText(p.name+(p.local||tn-p.lastSeen<3000?'':' (mất mạng)'),x+14*S,y+22*S);
       ctx.font=`900 ${28*S}px system-ui,sans-serif`;ctx.fillText(p.score,x+14*S,y+54*S);
-      for(let a=0;a<MAX_AMMO;a++){ctx.fillStyle=a<p.ammo&&!p.reloadUntil?'#ffcf4d':'rgba(255,255,255,.2)';ctx.fillRect(x+120*S+a*14*S,y+36*S,9*S,22*S);}
+      {const mx=p.maxAmmo,gp=Math.min(14,90/mx);for(let a=0;a<mx;a++){ctx.fillStyle=a<p.ammo&&!p.reloadUntil?(tn<p.infUntil?'#7df9ff':'#ffcf4d'):'rgba(255,255,255,.2)';ctx.fillRect(x+120*S+a*gp*S,y+36*S,gp*.64*S,22*S);}}
+      ctx.font=`700 ${12*S}px system-ui,sans-serif`;ctx.fillStyle='#ffe27a';ctx.fillText('🪙 '+p.coins,mode==='survival'?x+120*S:x+14*S,mode==='survival'?y+80*S:y+70*S);
       if(p.combo>=3){ctx.fillStyle='#ffd23f';ctx.font=`800 ${14*S}px system-ui,sans-serif`;ctx.fillText('combo x'+mult(p),x+120*S,y+22*S);}
       const bd=(tn<p.infUntil?'∞ ':'')+(tn<p.x2Until?'x2 ':'')+(tn<p.jamUntil?'📡nhiễu ':'');
       if(bd){ctx.fillStyle='#7df9ff';ctx.font=`800 ${13*S}px system-ui,sans-serif`;ctx.fillText(bd,x+120*S,y+70*S);}
@@ -973,6 +1125,57 @@ function initGun(){
   const ls=(k,d)=>{try{return localStorage.getItem(k)??d;}catch(e){return d;}};
   const lss=(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}};
   $('#gName').value=ls('bc_name','');
+  // ---------- ví xu + trang bị (lưu trên điện thoại) ----------
+  const wallet={coins:0,guns:['pistol'],gun:'pistol',items:{heart:0,revive:0,boost:0}};
+  try{const w=JSON.parse(localStorage.getItem('bc_wallet')||'null');if(w&&typeof w==='object'){
+    wallet.coins=Math.max(0,Math.floor(+w.coins||0));
+    if(Array.isArray(w.guns))wallet.guns=[...new Set(['pistol',...w.guns.filter(g=>GUNS[g])])];
+    if(GUNS[w.gun]&&wallet.guns.includes(w.gun))wallet.gun=w.gun;
+    ITEM_KEYS.forEach(k=>{wallet.items[k]=clamp(Math.floor(+(w.items&&w.items[k])||0),0,MAX_ITEM);});}}catch(e){}
+  const saveWallet=()=>lss('bc_wallet',JSON.stringify(wallet));
+  const gearMsg=()=>({gun:wallet.gun,heart:wallet.items.heart,revive:wallet.items.revive,boost:wallet.items.boost});
+  const sendGear=()=>tx({k:'gear',pid,gear:gearMsg()});
+  const joinMsg=()=>({k:'join',pid,name:$('#gName').value.trim()||'Người chơi',gear:gearMsg()});
+  const money=n=>Math.floor(n).toLocaleString('vi-VN');
+  let lastCoins=null;
+  function updCoin(){$('#gCoin').textContent='🪙 '+money(wallet.coins);$('#shCoin').textContent='🪙 '+money(wallet.coins);$('#gShop').textContent='🛒 CỬA HÀNG · '+GUNS[wallet.gun].name;}
+  function coinFx(d){const el=document.createElement('div');el.className='coinfx';el.textContent='+'+d+' 🪙';$('#gCoin').appendChild(el);setTimeout(()=>el.remove(),1000);}
+  // ---------- cửa hàng ----------
+  let shopTab='guns',toastT=null;
+  function toast(t){let el=$('#shToast');if(!el){el=document.createElement('div');el.id='shToast';$('#shop').appendChild(el);}el.textContent=t;el.classList.remove('hide');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.add('hide'),1600);}
+  const bar=(label,pct,col)=>`<div class="st"><span>${label}</span><i><b style="width:${Math.round(clamp(pct,5,100))}%;background:${col}"></b></i></div>`;
+  function renderShop(){
+    updCoin();
+    document.querySelectorAll('.shop-tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===shopTab));
+    let html='';
+    if(shopTab==='guns'){
+      GUN_KEYS.forEach(k=>{const g=GUNS[k],own=wallet.guns.includes(k),using=wallet.gun===k;
+        const btn=using?'<button class="shbtn using" disabled>ĐANG DÙNG ✓</button>':own?`<button class="shbtn equip" data-a="equip" data-k="${k}">TRANG BỊ</button>`
+          :`<button class="shbtn buy ${wallet.coins<g.price?'poor':''}" data-a="buyg" data-k="${k}">MUA · 🪙 ${money(g.price)}</button>`;
+        html+=`<div class="shcard ${k==='gold'?'legend':''} ${using?'sel':''}" style="--rc:${g.rar}"><div class="shimg"><svg viewBox="0 0 200 90"><use href="#gun-${k}"/></svg></div>
+          <div class="shinfo"><div class="shname"><b>${g.name}</b><em>${g.tag}</em></div><div class="shdesc">${g.desc}</div>
+          <div class="stats">${bar('Số đạn',g.ammo/12*100,g.rar)}${bar('Tốc độ nạp',(1700-g.reload)/1000*100,g.rar)}${bar('Độ rộng',(g.rad-.7)/1.3*100,g.rar)}${bar('Bắn đầu',g.head/3.5*100,g.rar)}${bar('Sát thương Boss',g.boss/2*100,g.rar)}</div>${btn}</div></div>`;});
+    }else{
+      ITEM_KEYS.forEach(k=>{const it=ITEMS[k],n=wallet.items[k],full=n>=MAX_ITEM;
+        html+=`<div class="shcard" style="--rc:#ffd23f"><div class="shimg item">${it.icon}</div><div class="shinfo"><div class="shname"><b>${it.name}</b><span class="have">đang có: ${n}</span></div><div class="shdesc">${it.desc}</div>
+          <button class="shbtn buy ${(!full&&wallet.coins<it.price)||full?'poor':''}" data-a="buyi" data-k="${k}">${full?'ĐÃ ĐẦY ('+MAX_ITEM+')':'MUA · 🪙 '+money(it.price)}</button></div></div>`;});
+    }
+    $('#shList').innerHTML=html;
+  }
+  function shopAct(a,k){
+    if(a==='equip'){wallet.gun=k;saveWallet();sendGear();toast('Đã trang bị '+GUNS[k].name);tone(700,.06,'triangle',.1);}
+    else if(a==='buyg'){const g=GUNS[k];if(wallet.coins<g.price){toast('Chưa đủ xu 🪙 — chơi thêm nhé!');vib(30);return;}
+      wallet.coins-=g.price;wallet.guns.push(k);wallet.gun=k;saveWallet();sendGear();toast('Đã mua '+g.name+' ✓');vib([30,40,60]);[660,880,1320].forEach((f,i)=>tone(f,.12,'triangle',.12,i*.07));}
+    else if(a==='buyi'){const it=ITEMS[k];if(wallet.items[k]>=MAX_ITEM){toast('Túi đã đầy');return;}
+      if(wallet.coins<it.price){toast('Chưa đủ xu 🪙');vib(30);return;}
+      wallet.coins-=it.price;wallet.items[k]++;saveWallet();sendGear();toast('Đã mua '+it.name+' ✓');vib(40);tone(880,.1,'triangle',.12);}
+    renderShop();
+  }
+  $('#shList').addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(b&&!b.disabled)shopAct(b.dataset.a,b.dataset.k);});
+  document.querySelectorAll('.shop-tabs button').forEach(b=>b.addEventListener('click',()=>{shopTab=b.dataset.t;renderShop();$('#shList').scrollTop=0;}));
+  $('#shBack').addEventListener('click',()=>$('#shop').classList.add('hide'));
+  $('#gShop').addEventListener('click',()=>{audio();renderShop();$('#shop').classList.remove('hide');});
+  updCoin();
   const sens=$('#gSens'),shk=$('#gShake');
   sens.value=ls('bc_sens','60');shk.value=ls('bc_shake','22');
   const showS=()=>{$('#sensV').textContent=sens.value+'° = hết bề ngang';$('#shakeV').textContent=+shk.value>=45?'TẮT':(+shk.value<16?'rất nhạy':+shk.value<26?'vừa':'khó')+' ('+shk.value+')';};
@@ -1075,7 +1278,8 @@ function initGun(){
     const el=$('#gAmmo');el.innerHTML='';for(let i=0;i<st.max;i++){const b=document.createElement('i');if(i>=st.ammo||st.reloading)b.className='off';el.appendChild(b);}
     const inf=!!st.puInf,empty=!inf&&(st.ammo<=0||st.reloading);
     $('#fLabel').textContent=empty?(st.reloading?'ĐANG NẠP':'NẠP ĐẠN'):'BẮN';
-    $('#fSub').textContent=inf?'∞':(st.reloading?'':st.ammo+' / '+st.max);
+    $('#fSub').textContent=inf?'∞ '+st.puInf+'s':(st.reloading?'':st.ammo+' / '+st.max);
+    $('#fire').classList.toggle('inf',inf);
     $('#gReload').classList.toggle('pulse',!inf&&st.ammo<=0&&!st.reloading);
     $('#gReload').classList.toggle('busy',!!st.reloading&&!inf);
   }
@@ -1085,7 +1289,12 @@ function initGun(){
     $('#gScore').textContent=st.score;drawAmmo();
     if(st.color){$('#gDot').style.background=st.color;$('#gPlay').style.setProperty('--pc',st.color);}
     $('#gMe').textContent=st.name||'';
+    if(typeof st.coins==='number'){
+      if(lastCoins!==null&&st.coins>lastCoins){const d=st.coins-lastCoins;wallet.coins+=d;saveWallet();coinFx(d);}
+      lastCoins=st.coins;updCoin();
+    }
     const lob=st.phase==='lobby'||st.phase==='end';
+    if(!lob)$('#shop').classList.add('hide');
     $('#gStart').classList.toggle('hide',!lob||st.spec);
     $('#gCfg').classList.toggle('hide',!lob||!!st.spec);
     $('#gMode').textContent='Chế độ: '+(st.modeName||'');
@@ -1137,7 +1346,7 @@ function initGun(){
     if(conn){try{conn.close();}catch(e){}}
     net('⏳ đang vào phòng…');
     const c=peer.connect(PREFIX+ROOM,{reliable:true,serialization:'json'});conn=c;
-    c.on('open',()=>{if(conn!==c)return;connected=true;lastPong=now();net('🟢 đã nối');setTimeout(()=>linkType(c),2500);setTimeout(()=>linkType(c),9000);c.send({k:'join',pid,name:$('#gName').value.trim()||'Người chơi'});});
+    c.on('open',()=>{if(conn!==c)return;connected=true;lastPong=now();net('🟢 đã nối');setTimeout(()=>linkType(c),2500);setTimeout(()=>linkType(c),9000);c.send(joinMsg());});
     c.on('data',onMsg);
     c.on('close',()=>{if(conn!==c)return;connected=false;net('🔴 mất kết nối');retry(1500,'close');});
     c.on('error',()=>{if(conn!==c)return;retry(2000,'connerr '+(arguments[0]&&arguments[0].type));});
@@ -1155,7 +1364,8 @@ function initGun(){
       case 'jammed':vib([60,40,60,40,60]);flash('flashBad');say('📡 Bị '+d.by+' gây nhiễu! Đạn lệch');break;
       case 'pu':vib([40,40,40,40,120]);flash('flashHit');say('🎁 '+d.name);break;
       case 'empty':break;
-      case 'rejoin':tx({k:'join',pid,name:$('#gName').value.trim()||'Người chơi'});break;
+      case 'rejoin':tx(joinMsg());break;
+      case 'used':wallet.items[d.item]=Math.max(0,(wallet.items[d.item]||0)-1);saveWallet();sendGear();if(ITEMS[d.item])say(ITEMS[d.item].icon+' Dùng '+ITEMS[d.item].name);break;
     }
   }
   setInterval(()=>{
