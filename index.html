@@ -29,6 +29,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 .btn:disabled{opacity:.4;cursor:default}
 .small{font-size:14px;opacity:.75}
 #netst{position:fixed;top:10px;right:12px;z-index:6;font-size:14px;background:rgba(0,0,0,.45);padding:6px 10px;border-radius:10px}
+#verTag{position:fixed;left:12px;bottom:34px;z-index:6;font-size:12px;font-weight:800;letter-spacing:1px;color:#ffe27a;opacity:.75;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.7)}
 #mute{position:fixed;bottom:12px;right:12px;z-index:6;background:rgba(0,0,0,.45);padding:8px 12px;border-radius:10px;font-size:20px}
 #endcard table{margin:14px auto;border-collapse:collapse;font-size:22px}
 #endcard td{padding:8px 16px;border-bottom:1px solid rgba(255,255,255,.12)}
@@ -63,8 +64,9 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 /* ---------- GUN (điện thoại, tối ưu cầm 1 tay) ---------- */
 #gun{position:fixed;inset:0;display:flex;flex-direction:column;background:radial-gradient(130% 70% at 50% 0%,#1b4a7a 0%,#0b1d2e 62%);-webkit-touch-callout:none}
 #gJoin{flex:1;display:flex;flex-direction:column;min-height:0;max-width:440px;margin:0 auto;width:100%}
-.jbody{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:max(16px,env(safe-area-inset-top)) 20px 8px}
+.jbody{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;display:flex;flex-direction:column;justify-content:flex-start;gap:14px;padding:max(16px,env(safe-area-inset-top)) 20px 8px}
 .jbody h1{font-size:30px;text-align:center}
+.jbody>:first-child{margin-top:auto}.jbody>:last-child{margin-bottom:auto}
 .jmeta{text-align:center;font-size:14px;opacity:.7;margin-top:-8px}
 .jbody input[type=text]{font-size:22px;padding:14px;border-radius:14px;border:2px solid #2c4a6b;background:#132b45;color:#fff;width:100%;user-select:text;-webkit-user-select:text}
 .jbody label{font-size:14px;opacity:.85;display:block;margin-bottom:6px}
@@ -206,6 +208,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
   <canvas id="cv"></canvas>
   <div id="netst">⏳ Đang kết nối máy chủ…</div>
   <button id="mute" title="Tắt/bật tiếng">🔊</button>
+  <div id="verTag"></div>
   <div id="lobby" class="overlay menu">
     <div class="mwrap">
       <div class="mleft">
@@ -502,7 +505,7 @@ const SKIN_KEYS=Object.keys(SKINS);
 
 
 // ================== MODE SWITCH ==================
-{const v=document.getElementById('ver');if(v)v.textContent=VERSION;const g=document.getElementById('gVer');if(g)g.textContent=VERSION;}
+{const v=document.getElementById('ver');if(v)v.textContent=VERSION;const vt=document.getElementById('verTag');if(vt)vt.textContent=VERSION;const g=document.getElementById('gVer');if(g)g.textContent=VERSION;}
 if(ROOM) initGun(); else initScreen();
 
 // =====================================================================
