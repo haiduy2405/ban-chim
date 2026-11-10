@@ -323,7 +323,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
     <div class="gsub" id="gSub">Đang kết nối…</div>
     <div id="pad" class="hide"><div>Không có cảm biến xoay.<br>Chạm/rê chuột trong khung này để ngắm.</div><span id="padDot" class="hide"></span></div>
     <div class="cfgrow hide" id="gCfg"><button id="gMode">Chế độ</button><button id="gTheme">Bối cảnh</button><button id="gShop" class="shopbtn">🛒 CỬA HÀNG</button></div>
-    <div class="cfgrow hide" id="gEnd"><button id="gMenu">🏠 MENU CHÍNH</button><button id="gShop2" class="shopbtn">🛒 CỬA HÀNG · nâng cấp súng</button></div>
+    <div class="cfgrow hide" id="gEnd"><button id="gMenu">🏠 MENU CHÍNH</button><button id="gShop2" class="shopbtn">🎨 CỬA HÀNG SKIN</button></div>
     <div class="cfgrow hide" id="gBrk"><button id="gShop3" class="shopbtn">🛒 MỞ CỬA HÀNG</button><button id="gReady" class="rdybtn">✔ SẴN SÀNG</button></div>
     <button class="btn hide" id="gStart">▶ BẮT ĐẦU VÁN</button>
     <div id="ctl">
@@ -413,7 +413,7 @@ window.addEventListener('unhandledrejection',e=>showErr('Lỗi: '+(e.reason&&e.r
 // ================== CONFIG ==================
 const PREFIX = 'banchim-v2-';      // peer id prefix on the public PeerJS server
 const ROUND_SEC = 90;
-const VERSION='v2.3';
+const VERSION='v2.4';
 const MAX_AMMO = 6;
 const RELOAD_MS = 1200;
 const MAX_PLAYERS = 4;
@@ -460,15 +460,23 @@ function noise(){
   const d=nbuf.getChannelData(0); for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1; return nbuf;
 }
 function setMuted(m){muted=m;if(master)master.gain.value=m?0:.7;}
-function sfxShot(vol=1){
-  const a=audio(); if(!a)return; const t=a.currentTime;
+const SHOT={pistol:[4000,250,.3,160,40,.18],rifle:[3500,300,.26,210,60,.14],smg:[5200,700,.09,260,100,.07],shotgun:[2400,110,.5,110,28,.32],sniper:[7500,180,.75,280,30,.38],launcher:[900,80,.42,120,28,.32]};
+function sfxShot(vol=1,kind='pistol'){
+  const a=audio(); if(!a)return; const t=a.currentTime,c=SHOT[kind]||SHOT.pistol;
   const s=a.createBufferSource(); s.buffer=noise();
-  const f=a.createBiquadFilter(); f.type='lowpass'; f.frequency.setValueAtTime(4000,t); f.frequency.exponentialRampToValueAtTime(250,t+.25);
-  const g=a.createGain(); g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.001,t+.3);
-  s.connect(f); f.connect(g); g.connect(master); s.start(t); s.stop(t+.32);
-  const o=a.createOscillator(); o.frequency.setValueAtTime(160,t); o.frequency.exponentialRampToValueAtTime(40,t+.15);
-  const g2=a.createGain(); g2.gain.setValueAtTime(.9*vol,t); g2.gain.exponentialRampToValueAtTime(.001,t+.18);
-  o.connect(g2); g2.connect(master); o.start(t); o.stop(t+.2);
+  const f=a.createBiquadFilter(); f.type='lowpass'; f.frequency.setValueAtTime(c[0],t); f.frequency.exponentialRampToValueAtTime(c[1],t+c[2]*.8);
+  const g=a.createGain(); g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.001,t+c[2]);
+  s.connect(f); f.connect(g); g.connect(master); s.start(t); s.stop(t+c[2]+.02);
+  const o=a.createOscillator(); o.frequency.setValueAtTime(c[3],t); o.frequency.exponentialRampToValueAtTime(c[4],t+c[5]*.8);
+  const g2=a.createGain(); g2.gain.setValueAtTime(.9*vol,t); g2.gain.exponentialRampToValueAtTime(.001,t+c[5]);
+  o.connect(g2); g2.connect(master); o.start(t); o.stop(t+c[5]+.02);
+}
+function whoosh(f0,f1,dur,vol=.12,q=1.2,delay=0){
+  const a=audio(); if(!a)return; const t=a.currentTime+delay;
+  const s=a.createBufferSource(); s.buffer=noise(); s.loop=true;
+  const f=a.createBiquadFilter(); f.type='bandpass'; f.Q.value=q; f.frequency.setValueAtTime(f0,t); f.frequency.exponentialRampToValueAtTime(f1,t+dur);
+  const g=a.createGain(); g.gain.setValueAtTime(.001,t); g.gain.linearRampToValueAtTime(vol,t+dur*.35); g.gain.exponentialRampToValueAtTime(.001,t+dur);
+  s.connect(f); f.connect(g); g.connect(master); s.start(t); s.stop(t+dur+.05);
 }
 function tone(freq,dur,type='square',vol=.15,delay=0,to=null){
   const a=audio(); if(!a)return; const t=a.currentTime+delay;
@@ -481,6 +489,23 @@ const sfxGold=()=>{[880,1100,1320,1760].forEach((f,i)=>tone(f,.12,'triangle',.15
 const sfxBad=()=>{tone(200,.35,'sawtooth',.15,0,90);};
 const sfxEmpty=()=>{tone(1800,.03,'square',.08);};
 const sfxReload=()=>{tone(500,.04,'square',.1);tone(700,.04,'square',.1,.25);tone(900,.06,'square',.1,.9);};
+const sfxArmor=()=>{tone(2600,.05,'square',.09);tone(1800,.09,'triangle',.1,.03);};
+const sfxSwoop=()=>whoosh(500,2400,.45,.1);
+const sfxBat=()=>{tone(3000,.05,'sine',.06,0,4200);tone(3400,.05,'sine',.06,.09,4600);};
+const sfxThunder=()=>{whoosh(500,70,1.6,.35,.6,.12);tone(60,1.2,'sine',.25,.12,32);};
+const sfxBoom=()=>{whoosh(1800,90,.55,.3,.5);tone(100,.4,'sawtooth',.2,0,30);};
+const sfxClear=()=>{[523,659,784,1047,1319].forEach((f,i)=>tone(f,.22,'triangle',.14,i*.09));};
+const sfxBuy=()=>{tone(988,.07,'square',.09);tone(1319,.16,'square',.09,.07);};
+// môi trường: mưa + gió (tiếng ồn lặp, chỉnh âm lượng mỗi khung hình)
+let amb=null;
+function ambient(rain,wind){
+  const a=AC; if(!a||muted){if(amb){amb.rg.gain.value=0;amb.wg.gain.value=0;}return;}
+  if(!amb){
+    const mk=(type,fr,q)=>{const s=a.createBufferSource();s.buffer=noise();s.loop=true;const f=a.createBiquadFilter();f.type=type;f.frequency.value=fr;f.Q.value=q;const g=a.createGain();g.gain.value=0;s.connect(f);f.connect(g);g.connect(master);s.start();return {f,g};};
+    const r=mk('highpass',3200,.5),w=mk('bandpass',420,.8);amb={rg:r.g,wg:w.g,wf:w.f};
+  }
+  const t=a.currentTime;amb.rg.gain.setTargetAtTime(rain,t,.3);amb.wg.gain.setTargetAtTime(wind,t,.25);amb.wf.frequency.setTargetAtTime(300+wind*2500,t,.3);
+}
 const sfxBoss=()=>{tone(110,.6,'sawtooth',.2,0,55);tone(165,.6,'sawtooth',.12,.1,80);};
 let musicTimer=null;
 function music(on){
@@ -495,24 +520,24 @@ function music(on){
 // Súng/nâng cấp/vật phẩm: mua bằng XU kiếm TRONG ván (mỗi ván bắt đầu từ 0 xu + súng lục).
 const GUNS={
   pistol  :{name:'Súng Lục',    tag:'Cơ bản',       rar:'#9fb3c8',price:0,  ammo:6, reload:1200,iv:160,auto:0,pel:1,spr:0, rad:1,   head:2,  boss:1,  art:'pistol',  kind:'Bắn từng phát',   desc:'Cân bằng, chính xác. Không điểm yếu — cũng không điểm mạnh.'},
-  rifle   :{name:'Trường Băng', tag:'Nhiều đạn',    rar:'#4ade80',price:120,ammo:14,reload:1500,iv:140,auto:0,pel:1,spr:0, rad:1.1, head:2,  boss:1,  art:'hunter',  kind:'Bắn từng phát',   desc:'14 viên, bắn nhanh. Dành cho người thích bắn thoải mái, ít phải nạp.'},
-  smg     :{name:'Liên Thanh',  tag:'Tự động',      rar:'#38bdf8',price:180,ammo:30,reload:1800,iv:90, auto:1,pel:1,spr:60,rad:1.2, head:1.5,boss:.5, art:'smg',     kind:'GIỮ nút để xả',   desc:'GIỮ nút BẮN để xả đạn. Xả lâu thì đạn càng loạn — bắn từng loạt ngắn cho chuẩn.'},
-  shotgun :{name:'Đạn Chùm',    tag:'Chùm',         rar:'#fb923c',price:180,ammo:5, reload:1500,iv:420,auto:0,pel:7,spr:80,rad:.9,  head:1.5,boss:.55,art:'shotgun', kind:'7 viên chùm',     desc:'Mỗi phát 7 viên tản rộng — một phát có thể hạ cả đàn gần nhau. Xa thì loãng.'},
-  sniper  :{name:'Bắn Tỉa',     tag:'Chính xác',    rar:'#c084fc',price:220,ammo:4, reload:1900,iv:600,auto:0,pel:1,spr:0, rad:.75, head:4,  boss:3,  art:'sniper',  kind:'1 phát chí mạng', desc:'Ít đạn, nạp chậm, nhưng bắn ĐẦU x4 và boss chịu gấp 3 sát thương. Phải ngắm thật chuẩn.'},
-  launcher:{name:'Phóng Lựu',   tag:'Nổ diện rộng', rar:'#f87171',price:260,ammo:3, reload:2400,iv:700,auto:0,pel:1,spr:0, aoe:140,rad:.9,head:1,  boss:4,  art:'launcher',kind:'Nổ diện rộng',    desc:'Nổ hạ MỌI con trong vùng — kể cả dân thường! Mạnh với đàn đông và boss, ít đạn, nạp lâu.'}};
+  rifle   :{name:'Trường Băng', tag:'Nhiều đạn',    rar:'#4ade80',price:220,ammo:12,reload:1500,iv:140,auto:0,pel:1,spr:0, rad:1.1, head:2,  boss:1,  art:'hunter',  kind:'Bắn từng phát',   desc:'14 viên, bắn nhanh. Dành cho người thích bắn thoải mái, ít phải nạp.'},
+  smg     :{name:'Liên Thanh',  tag:'Tự động',      rar:'#38bdf8',price:380,ammo:26,reload:1800,iv:90, auto:1,pel:1,spr:60,rad:1.2, head:1.5,boss:.5, art:'smg',     kind:'GIỮ nút để xả',   desc:'GIỮ nút BẮN để xả đạn. Xả lâu thì đạn càng loạn — bắn từng loạt ngắn cho chuẩn.'},
+  shotgun :{name:'Đạn Chùm',    tag:'Chùm',         rar:'#fb923c',price:340,ammo:5, reload:1500,iv:420,auto:0,pel:7,spr:80,rad:.9,  head:1.5,boss:.55,art:'shotgun', kind:'7 viên chùm',     desc:'Mỗi phát 7 viên tản rộng — một phát có thể hạ cả đàn gần nhau. Xa thì loãng.'},
+  sniper  :{name:'Bắn Tỉa',     tag:'Chính xác',    rar:'#c084fc',price:480,ammo:4, reload:1900,iv:600,auto:0,pel:1,spr:0, rad:.75, head:4,  boss:3,  art:'sniper',  kind:'1 phát chí mạng', desc:'Ít đạn, nạp chậm, nhưng bắn ĐẦU x4 và boss chịu gấp 3 sát thương. Phải ngắm thật chuẩn.'},
+  launcher:{name:'Phóng Lựu',   tag:'Nổ diện rộng', rar:'#f87171',price:620,ammo:3, reload:2400,iv:700,auto:0,pel:1,spr:0, aoe:140,rad:.9,head:1,  boss:4,  art:'launcher',kind:'Nổ diện rộng',    desc:'Nổ hạ MỌI con trong vùng — kể cả dân thường! Mạnh với đàn đông và boss, ít đạn, nạp lâu.'}};
 const GUN_KEYS=Object.keys(GUNS);
 const UPS={
   mag:{name:'Băng Đạn',       icon:'📦',desc:'+25% số đạn mỗi cấp'},
   rel:{name:'Nạp Nhanh',      icon:'🔄',desc:'−18% thời gian nạp mỗi cấp'},
   rad:{name:'Tầm Ngắm Rộng',  icon:'🎯',desc:'+12% độ rộng trúng mỗi cấp'},
   dmg:{name:'Đạn Xuyên Giáp', icon:'💥',desc:'+15% sát thương ĐẦU và BOSS mỗi cấp'}};
-const UP_KEYS=Object.keys(UPS),UP_COST=[60,110,170],UP_MAX=3;
+const UP_KEYS=Object.keys(UPS),UP_COST=[90,170,260],UP_MAX=3;
 const ITEMS={
-  heart :{name:'Tim Hồi Phục',icon:'❤️',price:150,modes:['coop','survival'],desc:'+1 tim ngay (Hành trình: tim chung · Sinh tồn: mạng của bạn).'},
-  shield:{name:'Khiên Chắn',  icon:'🛡️',price:130,modes:['coop','survival'],max:3,desc:'Chặn 1 lần mất tim/mạng (bắn nhầm dân, quái chạm…). Giữ tối đa 3.'},
-  revive:{name:'Hồi Sinh',    icon:'✨',price:300,modes:['coop','survival'],max:1,desc:'Tự dùng khi bạn bị loại / cả đội hết tim: hồi lại 2 tim.'},
-  boost :{name:'Thần Tốc',    icon:'⚡',price:90, modes:['classic','coop','survival'],desc:'Vô hạn đạn 8 giây — dùng ngay.'},
-  dbl   :{name:'Điểm Đôi',    icon:'🎯',price:90, modes:['classic','coop','survival'],desc:'Điểm x2 trong 15 giây — dùng ngay.'}};
+  heart :{name:'Tim Hồi Phục',icon:'❤️',price:220,modes:['coop','survival'],desc:'+1 tim ngay (Hành trình: tim chung · Sinh tồn: mạng của bạn).'},
+  shield:{name:'Khiên Chắn',  icon:'🛡️',price:180,modes:['coop','survival'],max:3,desc:'Chặn 1 lần mất tim/mạng (bắn nhầm dân, quái chạm…). Giữ tối đa 3.'},
+  revive:{name:'Hồi Sinh',    icon:'✨',price:420,modes:['coop','survival'],max:1,desc:'Tự dùng khi bạn bị loại / cả đội hết tim: hồi lại 2 tim.'},
+  boost :{name:'Thần Tốc',    icon:'⚡',price:130,modes:['classic','coop','survival'],desc:'Vô hạn đạn 8 giây — dùng ngay.'},
+  dbl   :{name:'Điểm Đôi',    icon:'🎯',price:120,modes:['classic','coop','survival'],desc:'Điểm x2 trong 15 giây — dùng ngay.'}};
 const ITEM_KEYS=Object.keys(ITEMS);
 // Skin: mua bằng NGỌC 💎 (thưởng khi thắng) ở cửa hàng ngoài menu.
 const SKINS={
@@ -662,6 +687,7 @@ function initScreen(){
     const r=T.r*S*(type==='boss'?1:(.9+Math.random()*.3));
     const hp0=type==='boss'?4+4*Math.max(1,activePlayers().length):T.hp;   // boss máu tăng theo số người
     const baseY=type==='boss'?H*.3:type==='swoop'?H*(.28+Math.random()*.2):H*(.1+Math.random()*.5);
+    if(phase==='play'){if(type==='swoop')sfxSwoop();else if(type==='bat')sfxBat();}
     birds.push({id:++bid,type,dir,x:dir>0?-r*2.5:W+r*2.5,y:baseY,baseY,vx:dir*T.spd*S*speedMul*(.85+Math.random()*.3),
       amp:T.amp*S*(type==='swoop'?.8+Math.random()*.4:.5+Math.random()),freq:type==='swoop'?.8+Math.random()*.5:type==='bat'?2.5+Math.random()*1.5:1+Math.random()*2,ph:Math.random()*6,r,hp:hp0,maxhp:hp0,flap:Math.random()*6,hist:[],dying:false,rot:0,vy:0,hitT:0});
   }
@@ -683,6 +709,7 @@ function initScreen(){
     }
     b.yo=(b.yo||0)+((b.yt||0)-(b.yo||0))*Math.min(1,dt*9);
   }
+  function STAGES_WIND(){return mode==='coop'?(STAGES[stage].wind||0)*2:0;}
   function pickW(o){let tot=0;for(const k in o)tot+=o[k];let r=Math.random()*tot;for(const k in o){if((r-=o[k])<0)return k;}return 'normal';}
   // đàn chim: 5 con bay hình chữ V; cùng một người hạ cả 5 → thưởng lớn
   function spawnFlock(){
@@ -696,7 +723,7 @@ function initScreen(){
     const f=b.flock&&flocks.get(b.flock);if(!f)return;
     f.left--;f.owner=f.owner===undefined||f.owner===p.pid?p.pid:null;
     if(f.left<=0){flocks.delete(b.flock);
-      if(f.owner===p.pid){const bonus=1000*mult(p);p.score+=bonus;earn(p,40);popup(b.x,b.y-b.r*2.2,'🐦 CẢ ĐÀN +'+bonus,'#ffd23f',true);sfxGold();shake=Math.max(shake,18*S);slowUntil=now()+400;}}
+      if(f.owner===p.pid){const bonus=1000*mult(p);p.score+=bonus;earn(p,25);popup(b.x,b.y-b.r*2.2,'🐦 CẢ ĐÀN +'+bonus,'#ffd23f',true);sfxGold();shake=Math.max(shake,18*S);slowUntil=now()+400;}}
   }
   function headOf(b,x,y){return {x:x+b.dir*b.r*.95,y:y-b.r*.38,r:b.r*.45};}
   function posAt(b,t){for(let i=b.hist.length-1;i>=0;i--)if(b.hist[i].t<=t)return b.hist[i];return b.hist[0]||b;}
@@ -784,8 +811,8 @@ function initScreen(){
   }
   function stageClear(){
     phase='intro';introKind='clear';introStart=now();
-    const bonus=300*(stage+1);activePlayers().forEach(p=>{p.score+=bonus;earn(p,120+40*stage);});
-    hearts=Math.min(maxHearts,hearts+1);sfxGold();shake=Math.max(shake,16*S);
+    const bonus=300*(stage+1);activePlayers().forEach(p=>{p.score+=bonus;earn(p,50+15*stage);});
+    hearts=Math.min(maxHearts,hearts+1);sfxClear();shake=Math.max(shake,16*S);
     birds.forEach(b=>{if(!b.dying)kill(b);});sendAll();
   }
   function loseHeart(msg){
@@ -841,7 +868,7 @@ function initScreen(){
   }
 
   // ---------- xu trong ván + súng + nâng cấp ----------
-  const COIN={normal:7,fast:14,gold:60,dodge:20,crate:25,swoop:18,heavy:35,bat:22};
+  const COIN={normal:5,fast:9,gold:40,dodge:12,crate:15,swoop:12,heavy:25,bat:15};
   function earn(p,n){p.coins+=n;}
   function cleanGear(g){g=g&&typeof g==='object'?g:{};return {skin:SKINS[g.skin]?g.skin:'classic'};}
   function applyGun(p,fill){
@@ -938,10 +965,10 @@ function initScreen(){
     }else{
       if(b.maxhp>1){   // chim giáp: nhiều máu, bắn đầu = 2 sát thương
         b.hp-=(head?2:1)*Math.max(1,p.bossMul);b.hitT=now();
-        if(b.hp>0){p.hits++;p.score+=30;earn(p,2);feathers(px,py,'#c9ced8',5);puff(px,py);if(!shot.quiet)sfxHit();popup(px,py-b.r*.5,head?'GIÁP -2':'GIÁP','#c9ced8');send(p,{k:'hit',pts:30,head});return;}
+        if(b.hp>0){p.hits++;p.score+=30;earn(p,2);feathers(px,py,'#c9ced8',5);puff(px,py);if(!shot.quiet)sfxArmor();popup(px,py-b.r*.5,head?'GIÁP -2':'GIÁP','#c9ced8');send(p,{k:'hit',pts:30,head});return;}
         countKill();
       }
-      p.combo++;p.hits++;const m=mult(p);const pts=Math.round(T.pts*(head?p.headMul:1)*m);p.score+=pts;earn(p,COIN[b.type]||7);kill(b);flockKill(b,p);countKill();
+      p.combo++;p.hits++;const m=mult(p);const pts=Math.round(T.pts*(head?p.headMul:1)*m);p.score+=pts;earn(p,COIN[b.type]||5);kill(b);flockKill(b,p);countKill();
       popup(b.x,b.y-b.r,'+'+pts+(head&&p.headMul>=2?' ĐẦU':'')+(m>1?' x'+m:''),b.type==='gold'?'#ffd23f':p.color,b.type==='gold'||head);
       b.type==='gold'?sfxGold():sfxHit();shake=Math.max(shake,(b.type==='gold'?16:6)*S);
       send(p,{k:'hit',pts,head,gold:b.type==='gold'});
@@ -961,7 +988,7 @@ function initScreen(){
     return {hit:false,near:nearD};
   }
   function explode(p,px,py,tq,R,shot){   // phóng lựu: nổ hạ MỌI con trong vùng (cả dân thường)
-    let any=false;
+    let any=false;sfxBoom();
     for(let a=0;a<22;a++){const an=Math.random()*6.283,sp=(120+Math.random()*260)*S;parts.push({x:px,y:py,vx:Math.cos(an)*sp,vy:Math.sin(an)*sp,rot:0,vr:0,life:.5,col:a%2?'#ffb347':'#ff6b3d',sz:(4+Math.random()*5)*S,dot:1});}
     ctxPop=px;shake=Math.max(shake,16*S);
     for(let i=eggs.length-1;i>=0;i--)if(Math.hypot(px-eggs[i].x,py-eggs[i].y)<=R+eggs[i].r){popEgg(p,i);any=true;}
@@ -974,7 +1001,7 @@ function initScreen(){
     const tn=now(),g=GUNS[p.gun]||GUNS.pistol,inf=tn<p.infUntil;
     if(tn-p.lastShot<g.iv*.7)return;                       // chống bắn nhanh hơn tốc độ súng
     if(!inf&&(p.reloadUntil||p.ammo<=0)){send(p,{k:'empty'});if(p.local)sfxEmpty();return;}
-    p.lastShot=tn;if(!inf)p.ammo--;p.shots++;p.flash=tn;sfxShot(p.local?1:.45);
+    p.lastShot=tn;if(!inf)p.ammo--;p.shots++;p.flash=tn;sfxShot(p.local?1:.45,p.gun);
     p.heat=Math.max(0,p.heat-(tn-p.heatT)/130)+1;p.heatT=tn;
     let px=x*W,py=y*H;const tq=tn-rewindMs;
     if(tn<p.jamUntil){px+=(Math.random()-.5)*150*S;py+=(Math.random()-.5)*150*S;}   // bị nhiễu: đạn lệch ngẫu nhiên
@@ -1188,7 +1215,8 @@ function initScreen(){
     {const wc=(phase==='play'&&mode==='coop'&&STAGES[stage].wind)||0;gust=wc?clamp(Math.sin(tn/1000*.45)+.6*Math.sin(tn/1000*1.1+1),-1,1):0;windPx=gust*wc*130*S;}
     for(const f of flakes){f.y+=f.v*S*rdt;f.x+=Math.sin(f.ph+=rdt)*20*S*rdt+windPx*.8*rdt;if(f.x>W)f.x-=W;if(f.x<0)f.x+=W;if(f.y>H){f.y=-5;f.x=Math.random()*W;}}
     for(const d of drops){d.y+=d.v*S*rdt;d.x+=(140*S+windPx*.6)*rdt;if(d.y>H||d.x>W){d.y=-20;d.x=Math.random()*W*1.1-W*.1;}}
-    if(theme.fx==='rain'&&(phase==='play'||phase==='lobby')&&tn>nextLight){lightT=tn;nextLight=tn+5000+Math.random()*6000;tone(70,.7,'sawtooth',.12,.15,38);}
+    if(theme.fx==='rain'&&(phase==='play'||phase==='lobby')&&tn>nextLight){lightT=tn;nextLight=tn+5000+Math.random()*6000;sfxThunder();}
+    ambient(theme.fx==='rain'&&phase!=='end'?.05:0,phase==='play'?Math.min(.09,Math.abs(gust)*STAGES_WIND()*.12+(theme.fx==='snow'&&mode==='coop'&&STAGES[stage].blizzard?.03:0)):0);
     // birds
     for(const b of birds){
       if(b.dying){b.vy+=900*S*dt;b.y+=b.vy*dt;b.x+=b.vx*dt;b.rot+=4*dt*b.dir;}
@@ -1613,7 +1641,7 @@ function initGun(){
     if(!st.puInf&&st.ammo<=0&&!st.reloading){reload();say('Hết đạn · đang nạp…');return;}   // hết đạn: chạm BẮN = tự nạp
     const a=aimAgo(agoMs);
     if(!st.puInf&&st.reloading){sfxEmpty();vib(15);say('Đang nạp đạn…');}
-    else{sfxShot(.8);vib(35);if(!st.puInf){st.ammo--;drawAmmo();}}
+    else{sfxShot(.8,st.gun);vib(35);if(!st.puInf){st.ammo--;drawAmmo();}}
     tx({k:'fire',pid,x:+a.x.toFixed(4),y:+a.y.toFixed(4),rtt:Math.round(rtt),ago:agoMs});
   }
   function reload(){audio();if(st.reloading||st.ammo===st.max)return;sfxReload();vib(20);tx({k:'reload',pid});}
@@ -1733,7 +1761,7 @@ function initGun(){
       case 'empty':break;
       case 'rejoin':tx(joinMsg());break;
       case 'openshop':if(st.phase==='end'||st.phase==='lobby')openShop('menu');break;
-      case 'bought':if(d.ok){toast('Đã mua ✓');tone(880,.1,'triangle',.12);vib(30);}else{toast(d.msg||'Không mua được');vib(30);}if(!$('#shop').classList.contains('hide'))renderShop();break;
+      case 'bought':if(d.ok){toast('Đã mua ✓');sfxBuy();vib(30);}else{toast(d.msg||'Không mua được');vib(30);}if(!$('#shop').classList.contains('hide'))renderShop();break;
       case 'gems':{const t=save.stats;save.gems+=d.n|0;t.runs++;if(d.win)t.wins++;
         if(d.mode==='classic')t.bestClassic=Math.max(t.bestClassic,d.score|0);else if(d.mode==='survival')t.bestSurv=Math.max(t.bestSurv,d.secs|0);else t.bestCoop=Math.max(t.bestCoop,d.win?5:(d.stage|0));
         save.name=$('#gName').value.trim().slice(0,12);writeSave();say('💎 +'+d.n+' ngọc'+(d.win?' · CHIẾN THẮNG!':''));break;}
