@@ -157,7 +157,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
   <div id="gJoin">
     <div class="jbody">
       <h1>🔫 Súng bắn chim</h1>
-      <div class="jmeta">Phòng <b id="gRoom"></b> · v1.5 · nhiều chế độ + bối cảnh</div>
+      <div class="jmeta">Phòng <b id="gRoom"></b> · v1.5.1 · ngắm ổn định hơn</div>
       <input type="text" id="gName" maxlength="12" placeholder="Tên của bạn" autocomplete="off">
       <div>
         <label>Cầm máy bằng tay nào?</label>
@@ -765,7 +765,7 @@ function initScreen(){
     p.lastSeen=now();
     switch(d.k){
       case 'aim':p.tx=+d.x||0;p.ty=+d.y||0;break;
-      case 'fire':p.tx=+d.x||0;p.ty=+d.y||0;doFire(p,+d.x||0,+d.y||0,clamp((+d.rtt||60)/2+20,0,200));break;
+      case 'fire':if(!d.ago){p.tx=+d.x||0;p.ty=+d.y||0;}doFire(p,+d.x||0,+d.y||0,clamp((+d.rtt||60)/2+20+(+d.ago||0),0,350));break;
       case 'reload':doReload(p);break;
       case 'ping':p.rtt=+d.rtt||p.rtt;send(p,{k:'pong',t:d.t});break;
       case 'start':if(phase==='lobby'||phase==='end')startRound();break;
@@ -993,6 +993,9 @@ function initGun(){
   const fX=oneEuro(1.2,25),fY=oneEuro(1.2,25);
   let sensorOK=false,cur=null,mode='y',yaw0=0,pitch0=0,aimX=.5,aimY=.5,hist=[],lastSent=0,sentX=-1,sentY=-1,lastShake=0,needCenter=true;
   const isTouch=matchMedia('(pointer:coarse)').matches;
+  // lịch sử cảm biến thô: khi bấm nút (ngón cái làm máy rung/nghiêng) ta lấy tư thế TRƯỚC lúc bấm
+  const oriHist=[];let oriCount=0,sensorHz=0,modeSet=false;
+  setInterval(()=>{sensorHz=oriCount;oriCount=0;},1000);
 
   // ---------- sensors ----------
   const D=Math.PI/180;
@@ -1004,15 +1007,18 @@ function initGun(){
     // device axes in earth frame (R = Rz(a)·Rx(b)·Ry(g), W3C convention)
     const fy=[-sA*cB, cA*cB, sB];                                   // top edge
     const fz=[-(cA*sG+sA*sB*cG), -(sA*sG-cA*sB*cG), -(cB*cG)];     // back camera
-    cur={fy,fz};
+    cur={fy,fz};oriCount++;const tt=now();oriHist.push({t:tt,fy,fz});while(oriHist.length&&tt-oriHist[0].t>800)oriHist.shift();
     if(needCenter){center();needCenter=false;}
     computeAim();
   }
   function hp(v){return {yaw:Math.atan2(v[0],v[1])/D,pitch:Math.asin(clamp(v[2],-1,1))/D};}
-  function center(){
-    if(!cur){aimX=.5;aimY=.5;return;}
-    mode=Math.abs(cur.fy[2])<=Math.abs(cur.fz[2])?'y':'z';   // whichever axis is more level = barrel
-    const o=hp(mode==='y'?cur.fy:cur.fz);yaw0=o.yaw;pitch0=o.pitch;
+  function oriAgo(ms){const t=now()-ms;for(let i=oriHist.length-1;i>=0;i--)if(oriHist[i].t<=t)return oriHist[i];return oriHist[0]||cur;}
+  function center(agoMs=0){
+    const s=agoMs?oriAgo(agoMs):cur;
+    if(!s){aimX=.5;aimY=.5;return;}
+    const dY=Math.abs(s.fy[2]),dZ=Math.abs(s.fz[2]);
+    if(!modeSet||Math.abs(dY-dZ)>.12){mode=dY<=dZ?'y':'z';modeSet=true;}   // trục nào nằm ngang hơn = nòng súng; gần 45° thì giữ trục cũ cho khỏi đổi thất thường
+    const o=hp(mode==='y'?s.fy:s.fz);yaw0=o.yaw;pitch0=o.pitch;
   }
   function computeAim(){
     if(!cur)return;
@@ -1049,17 +1055,17 @@ function initGun(){
     const a=aimAgo(agoMs);
     if(!st.puInf&&st.reloading){sfxEmpty();vib(15);say('Đang nạp đạn…');}
     else{sfxShot(.8);vib(35);if(!st.puInf){st.ammo--;drawAmmo();}}
-    tx({k:'fire',pid,x:+a.x.toFixed(4),y:+a.y.toFixed(4),rtt:Math.round(rtt)});
+    tx({k:'fire',pid,x:+a.x.toFixed(4),y:+a.y.toFixed(4),rtt:Math.round(rtt),ago:agoMs});
   }
   function reload(){audio();if(st.reloading||st.ammo===st.max)return;sfxReload();vib(20);tx({k:'reload',pid});}
   function vib(p){try{navigator.vibrate&&navigator.vibrate(p);}catch(e){}}
   const fb=$('#fire');
-  fb.addEventListener('pointerdown',e=>{e.preventDefault();fb.classList.add('dn');fire(0);});
+  fb.addEventListener('pointerdown',e=>{e.preventDefault();fb.classList.add('dn');fire(70);});
   ['pointerup','pointercancel','pointerleave'].forEach(ev=>fb.addEventListener(ev,()=>fb.classList.remove('dn')));
-  $('#ctl').addEventListener('pointerdown',e=>{if(e.target!==e.currentTarget)return;e.preventDefault();fb.classList.add('dn');fire(0);setTimeout(()=>fb.classList.remove('dn'),90);});
+  $('#ctl').addEventListener('pointerdown',e=>{if(e.target!==e.currentTarget)return;e.preventDefault();fb.classList.add('dn');fire(70);setTimeout(()=>fb.classList.remove('dn'),90);});
   $('#gReload').addEventListener('pointerdown',e=>{e.preventDefault();reload();});
-  $('#gCenter').addEventListener('pointerdown',e=>{e.preventDefault();center();vib(10);say('Đã căn giữa ✓');});
-  $('#gStart').addEventListener('click',()=>{center();tx({k:'start',pid});});
+  $('#gCenter').addEventListener('pointerdown',e=>{e.preventDefault();center(180);vib(10);say('Đã căn giữa ✓');});
+  $('#gStart').addEventListener('click',()=>{center(180);tx({k:'start',pid});});
   $('#gMode').addEventListener('click',()=>tx({k:'mode',pid}));
   $('#gTheme').addEventListener('click',()=>tx({k:'theme',pid}));
   addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();fire(0);}if(e.key==='r'||e.key==='R')reload();if(e.key==='c'||e.key==='C')center();});
@@ -1141,7 +1147,7 @@ function initGun(){
     switch(d.k){
       case 'welcome':st.color=d.color;st.spec=d.spec;renderState();break;
       case 'st':Object.assign(st,d);renderState();break;
-      case 'pong':lastPong=now();rtt=rtt*.7+(now()-d.t)*.3;net('🟢 '+Math.round(rtt)+' ms'+(linkKind?' · '+linkKind:''));break;
+      case 'pong':lastPong=now();rtt=rtt*.7+(now()-d.t)*.3;net('🟢 '+Math.round(rtt)+' ms'+(linkKind?' · '+linkKind:'')+(sensorOK?' · '+sensorHz+'Hz'+(sensorHz<25?'⚠':''):''));break;
       case 'hit':if(d.bad){vib([80,60,80]);flash('flashBad');}else{vib(d.gold||d.head?[40,40,90]:60);flash('flashHit');}
         say(d.bad?'Bắn nhầm dân thường! '+d.pts:'TRÚNG! +'+d.pts+(d.head?' (đầu)':''));break;
       case 'miss':say('Trượt!');break;
