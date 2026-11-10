@@ -33,6 +33,30 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 #endcard table{margin:14px auto;border-collapse:collapse;font-size:22px}
 #endcard td{padding:8px 16px;border-bottom:1px solid rgba(255,255,255,.12)}
 #endcard h2{font-size:40px}
+
+/* ---------- MENU CHÍNH ---------- */
+.menu{background:radial-gradient(120% 90% at 50% 20%,rgba(20,60,110,.35),rgba(3,10,22,.78));backdrop-filter:blur(3px)}
+.mwrap{display:flex;gap:30px;align-items:stretch;justify-content:center;flex-wrap:wrap;max-width:1060px;width:100%;max-height:100%;overflow:auto;cursor:default}
+.mleft{flex:1 1 440px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-width:0}
+.mright{flex:0 0 330px;background:rgba(8,22,40,.82);border:2px solid rgba(255,255,255,.14);border-radius:22px;padding:18px 20px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.logo{position:relative;line-height:.86;margin-bottom:4px}
+.logo .l1,.logo .l2{display:block;font-weight:900;font-size:clamp(54px,9vw,104px);letter-spacing:4px;background:linear-gradient(#fff6b0 10%,#ffc928 55%,#ef7d00);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:3px #5a2a00;paint-order:stroke fill;filter:drop-shadow(0 6px 0 #5a2a00) drop-shadow(0 12px 18px rgba(0,0,0,.5))}
+.logo .l2{background:linear-gradient(#ffb199 10%,#ff5a3c 55%,#b01c10);-webkit-background-clip:text;background-clip:text}
+.lbird{position:absolute;right:-6px;top:-18px;font-size:clamp(36px,5vw,60px);animation:bob 1.8s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
+@keyframes bob{50%{transform:translateY(-8px) rotate(8deg)}}
+.lsub{opacity:.85;margin:6px 0 14px;font-size:17px}
+.mpanel{background:rgba(8,22,40,.72);border:2px solid rgba(255,255,255,.13);border-radius:20px;padding:14px 18px;width:100%;max-width:560px}
+.mlabel{font-size:12px;font-weight:800;letter-spacing:3px;opacity:.6;margin:2px 0 4px}
+.mbtns{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.btn.play{font-size:34px;padding:14px 54px;border-radius:20px;background:linear-gradient(#5fe39a,#1faa5c);box-shadow:0 7px 0 #137a40,0 14px 24px rgba(0,0,0,.35);letter-spacing:2px}
+.btn.play:active{transform:translateY(5px);box-shadow:0 2px 0 #137a40}
+.btn.play:disabled{filter:grayscale(.6)}
+.mright .code{font-size:46px;margin:6px 0 4px}
+.mright #plist{min-width:0;margin:8px 0}
+.shophint{margin-top:6px;padding:8px 10px;border-radius:12px;background:rgba(255,210,63,.12);color:#ffe9a6;line-height:1.4}
+#endcard .ebtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+#endcard .ebtns .btn{margin:0}
+@media (max-width:900px){.mright{flex:1 1 100%}}
 /* ---------- GUN (điện thoại, tối ưu cầm 1 tay) ---------- */
 #gun{position:fixed;inset:0;display:flex;flex-direction:column;background:radial-gradient(130% 70% at 50% 0%,#1b4a7a 0%,#0b1d2e 62%);-webkit-touch-callout:none}
 #gJoin{flex:1;display:flex;flex-direction:column;min-height:0;max-width:440px;margin:0 auto;width:100%}
@@ -48,6 +72,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 .tips{font-size:13px;opacity:.7;line-height:1.5}
 .jfoot{padding:10px 20px max(16px,env(safe-area-inset-bottom))}
 .jfoot .btn{width:100%;margin:0;font-size:26px;padding:20px;background:#2fbf71;border-radius:18px;box-shadow:0 6px 0 #1b7a47}
+.jfoot .btn.shopj{font-size:18px;padding:13px;margin-bottom:10px;background:linear-gradient(#ffe27a,#f0a800);color:#4a2f00;box-shadow:0 5px 0 #a87400}
 .jfoot .btn:active{transform:translateY(4px);box-shadow:0 2px 0 #1b7a47}
 
 #gPlay{--f:min(54vw,34vh);flex:1;display:flex;flex-direction:column;min-height:0}
@@ -160,29 +185,33 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
   <canvas id="cv"></canvas>
   <div id="netst">⏳ Đang kết nối máy chủ…</div>
   <button id="mute" title="Tắt/bật tiếng">🔊</button>
-  <div id="lobby" class="overlay">
-    <div class="card lobby">
-      <div>
-        <div id="qr">Đang tạo phòng…</div>
-        <div class="small" style="margin-top:8px">Quét bằng camera, mở bằng <b>Chrome</b> (không mở trong Zalo)</div>
+  <div id="lobby" class="overlay menu">
+    <div class="mwrap">
+      <div class="mleft">
+        <div class="logo"><div class="lbird">🐦</div><div class="l1">BẮN</div><div class="l2">CHIM</div></div>
+        <div class="lsub">Điện thoại là súng · màn hình là sân chơi</div>
+        <div class="mpanel">
+          <div class="mlabel">CHẾ ĐỘ CHƠI</div>
+          <div class="chips" id="modeChips"></div>
+          <div class="small" id="modeDesc" style="min-height:34px"></div>
+          <div id="themeRow"><div class="mlabel">BỐI CẢNH</div><div class="chips" id="themeChips"></div></div>
+          <div class="small hide" id="coopHint">Màn: 🌲 Rừng → 🏝 Biển → 🏜 Sa mạc → 🏔 Tuyết → 👑 BOSS đêm trăng</div>
+        </div>
+        <div class="mbtns">
+          <button class="btn play" id="startBtn">▶ CHƠI</button>
+          <button class="btn alt" id="mouseBtn">🖱 Chơi bằng chuột</button>
+        </div>
+        <div class="small" id="hiscore" style="margin-top:6px"></div>
+        <div class="small" id="audioHint" style="margin-top:4px">Nhấn vào màn hình 1 lần để bật âm thanh</div>
       </div>
-      <div>
-        <h1>🐦 BẮN CHIM</h1>
-        <div class="sub">Điện thoại là súng · màn hình là sân chơi</div>
-        <div class="small">Mã phòng</div>
+      <div class="mright">
+        <div class="mlabel">VÀO PHÒNG</div>
+        <div id="qr">Đang tạo phòng…</div>
+        <div class="small" style="margin-top:6px">Quét bằng camera · mở bằng <b>Chrome</b> (không mở trong Zalo)</div>
         <div class="code" id="roomCode">----</div>
         <div class="small" id="pcount"></div>
         <ul id="plist"><li class="small">Chưa có người chơi…</li></ul>
-        <div class="chips" id="modeChips"></div>
-        <div class="small" id="modeDesc" style="min-height:34px;max-width:440px;margin:0 auto 4px"></div>
-        <div id="themeRow"><div class="small">Bối cảnh</div><div class="chips" id="themeChips"></div></div>
-        <div class="small hide" id="coopHint">Màn: 🌲 Rừng → 🏝 Biển → 🏜 Sa mạc → 🏔 Tuyết → 👑 BOSS đêm trăng</div>
-        <div>
-          <button class="btn" id="startBtn">▶ Bắt đầu</button>
-          <button class="btn alt" id="mouseBtn">🖱 Chơi bằng chuột</button>
-        </div>
-        <div class="small" id="audioHint" style="margin-top:10px">Nhấn vào màn hình này 1 lần để bật âm thanh</div>
-        <div class="small" id="hiscore" style="margin-top:6px"></div>
+        <div class="small shophint">🛒 <b>Cửa hàng súng &amp; nâng cấp</b> mở ngay trên điện thoại của bạn (trước hoặc sau ván)</div>
       </div>
     </div>
   </div>
@@ -191,7 +220,8 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
       <h2 id="endTitle">🏆 Hết giờ!</h2><div class="small" id="endSub"></div>
       <table id="rank"></table>
       <div class="small" id="hiscore2"></div>
-      <button class="btn" id="againBtn" style="margin-top:14px">↻ Chơi lại</button>
+      <div class="small" id="endHint" style="margin-top:6px">🪙 Xu đã vào ví trên điện thoại · bắn nhiều hơn = nhiều xu hơn</div>
+      <div class="ebtns"><button class="btn play" id="againBtn" style="font-size:26px;padding:12px 30px">↻ CHƠI LẠI</button><button class="btn alt" id="endShopBtn">🛒 Cửa hàng</button><button class="btn alt" id="menuBtn">🏠 Menu chính</button></div>
     </div>
   </div>
 </div>
@@ -201,7 +231,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
   <div id="gJoin">
     <div class="jbody">
       <h1>🔫 Súng bắn chim</h1>
-      <div class="jmeta">Phòng <b id="gRoom"></b> · v1.7 · ngắm kiểu chuột</div>
+      <div class="jmeta">Phòng <b id="gRoom"></b> · v1.8 · menu mới</div>
       <input type="text" id="gName" maxlength="12" placeholder="Tên của bạn" autocomplete="off">
       <div>
         <label>Cầm máy bằng tay nào?</label>
@@ -217,7 +247,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
       </div>
       <div class="tips">Cầm máy như súng, chĩa vào giữa màn hình rồi bấm <b>CĂN GIỮA</b>. Chạm vùng trống bên dưới cũng là <b>BẮN</b>. Hết đạn chạm BẮN sẽ tự nạp. Mở bằng Chrome, không mở trong Zalo.</div>
     </div>
-    <div class="jfoot"><button class="btn" id="gGo">Vào chơi</button></div>
+    <div class="jfoot"><button class="btn shopj" id="gShopJ">🛒 CỬA HÀNG · <span id="jCoin">🪙 0</span></button><button class="btn" id="gGo">Vào chơi</button></div>
   </div>
   <div id="gPlay" class="hide">
     <div class="gtop">
@@ -232,6 +262,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
     <div class="gsub" id="gSub">Đang kết nối…</div>
     <div id="pad" class="hide"><div>Không có cảm biến xoay.<br>Chạm/rê chuột trong khung này để ngắm.</div><span id="padDot" class="hide"></span></div>
     <div class="cfgrow hide" id="gCfg"><button id="gMode">Chế độ</button><button id="gTheme">Bối cảnh</button><button id="gShop" class="shopbtn">🛒 CỬA HÀNG</button></div>
+    <div class="cfgrow hide" id="gEnd"><button id="gMenu">🏠 MENU CHÍNH</button><button id="gShop2" class="shopbtn">🛒 CỬA HÀNG · nâng cấp súng</button></div>
     <button class="btn hide" id="gStart">▶ BẮT ĐẦU VÁN</button>
     <div id="ctl">
       <button class="rbtn" id="gCenter"><b>◎</b><span>CĂN GIỮA</span></button>
@@ -387,15 +418,15 @@ function music(on){
 // ================== SHOP DATA (dùng chung host + điện thoại) ==================
 const GUNS={
   pistol :{name:'Súng Cũ',   tag:'Khởi đầu',  rar:'#9fb3c8',price:0,   ammo:6, reload:1200,rad:1.0, head:2,   boss:1,  desc:'Đáng tin cậy. Ai cũng bắt đầu từ đây.'},
-  hunter :{name:'Súng Săn',  tag:'Thường',    rar:'#4ade80',price:400, ammo:8, reload:1000,rad:1.1, head:2,   boss:1,  desc:'Nhiều đạn hơn, nạp nhanh hơn, ngắm dễ hơn một chút.'},
-  shotgun:{name:'Shotgun',   tag:'Hiếm',      rar:'#38bdf8',price:900, ammo:5, reload:1400,rad:1.9, head:2,   boss:1,  desc:'Đạn tản rộng: chĩa gần là trúng. Cực hợp người mới.'},
-  sniper :{name:'Bắn Tỉa',   tag:'Sử thi',    rar:'#c084fc',price:1800,ammo:4, reload:1500,rad:.95, head:3.5, boss:2,  desc:'Ít đạn nhưng bắn ĐẦU x3.5 và gấp đôi sát thương lên Boss.'},
-  gold   :{name:'Súng Vàng', tag:'Huyền thoại',rar:'#fbbf24',price:4500,ammo:12,reload:700, rad:1.35,head:2.5, boss:1.5,desc:'12 viên, nạp siêu nhanh, đầu x2.5, đau hơn khi đánh Boss.'}};
+  hunter :{name:'Súng Săn',  tag:'Thường',    rar:'#4ade80',price:300, ammo:8, reload:1000,rad:1.1, head:2,   boss:1,  desc:'Nhiều đạn hơn, nạp nhanh hơn, ngắm dễ hơn một chút.'},
+  shotgun:{name:'Shotgun',   tag:'Hiếm',      rar:'#38bdf8',price:700, ammo:5, reload:1400,rad:1.9, head:2,   boss:1,  desc:'Đạn tản rộng: chĩa gần là trúng. Cực hợp người mới.'},
+  sniper :{name:'Bắn Tỉa',   tag:'Sử thi',    rar:'#c084fc',price:1400,ammo:4, reload:1500,rad:.95, head:3.5, boss:2,  desc:'Ít đạn nhưng bắn ĐẦU x3.5 và gấp đôi sát thương lên Boss.'},
+  gold   :{name:'Súng Vàng', tag:'Huyền thoại',rar:'#fbbf24',price:3000,ammo:12,reload:700, rad:1.35,head:2.5, boss:1.5,desc:'12 viên, nạp siêu nhanh, đầu x2.5, đau hơn khi đánh Boss.'}};
 const GUN_KEYS=Object.keys(GUNS);
 const ITEMS={
-  heart :{name:'Tim Dự Phòng',     icon:'❤️',price:150,desc:'Bắt đầu ván với thêm 1 tim (Sinh tồn: của bạn · Hành trình: tim chung).'},
-  revive:{name:'Hồi Sinh',         icon:'✨',price:400,desc:'Tự dùng khi bạn bị loại (Sinh tồn) hoặc cả đội hết tim (Hành trình): hồi lại 2 tim.'},
-  boost :{name:'Khởi Đầu Thần Tốc',icon:'⚡',price:120,desc:'Vô hạn đạn trong 8 giây đầu mỗi ván.'}};
+  heart :{name:'Tim Dự Phòng',     icon:'❤️',price:100,desc:'Bắt đầu ván với thêm 1 tim (Sinh tồn: của bạn · Hành trình: tim chung).'},
+  revive:{name:'Hồi Sinh',         icon:'✨',price:250,desc:'Tự dùng khi bạn bị loại (Sinh tồn) hoặc cả đội hết tim (Hành trình): hồi lại 2 tim.'},
+  boost :{name:'Khởi Đầu Thần Tốc',icon:'⚡',price:80,desc:'Vô hạn đạn trong 8 giây đầu mỗi ván.'}};
 const ITEM_KEYS=Object.keys(ITEMS);
 const MAX_ITEM=9;
 
@@ -555,7 +586,7 @@ function initScreen(){
     const f=b.flock&&flocks.get(b.flock);if(!f)return;
     f.left--;f.owner=f.owner===undefined||f.owner===p.pid?p.pid:null;
     if(f.left<=0){flocks.delete(b.flock);
-      if(f.owner===p.pid){const bonus=1000*mult(p);p.score+=bonus;earn(p,25);popup(b.x,b.y-b.r*2.2,'🐦 CẢ ĐÀN +'+bonus,'#ffd23f',true);sfxGold();shake=Math.max(shake,18*S);slowUntil=now()+400;}}
+      if(f.owner===p.pid){const bonus=1000*mult(p);p.score+=bonus;earn(p,100);popup(b.x,b.y-b.r*2.2,'🐦 CẢ ĐÀN +'+bonus,'#ffd23f',true);sfxGold();shake=Math.max(shake,18*S);slowUntil=now()+400;}}
   }
   function headOf(b,x,y){return {x:x+b.dir*b.r*.95,y:y-b.r*.38,r:b.r*.45};}
   function posAt(b,t){for(let i=b.hist.length-1;i>=0;i--)if(b.hist[i].t<=t)return b.hist[i];return b.hist[0]||b;}
@@ -624,7 +655,7 @@ function initScreen(){
   function beginStagePlay(){phase='play';stageStart=now();roundStart=stageStart;if(stage===0)applyBoost();nextSpawn=now()+400;if(STAGES[stage].boss)spawnBossFinal();sendAll();}
   function stageClear(){
     phase='intro';introKind='clear';introStart=now();
-    const bonus=300*(stage+1);activePlayers().forEach(p=>{p.score+=bonus;earn(p,25*(stage+1));});
+    const bonus=300*(stage+1);activePlayers().forEach(p=>{p.score+=bonus;earn(p,80*(stage+1));});
     hearts=Math.min(maxHearts,hearts+1);sfxGold();shake=Math.max(shake,16*S);
     birds.forEach(b=>{if(!b.dying)kill(b);});sendAll();
   }
@@ -662,7 +693,7 @@ function initScreen(){
   }
   function bossDefeated(){
     bossDown=true;winAt=now()+2600;eggs.forEach(e=>puff(e.x,e.y));eggs=[];
-    activePlayers().forEach(p=>{p.score+=3000;earn(p,150);});popup(W/2,H*.3,'🏆 BOSS BỊ HẠ! +3000 mỗi người','#ffd23f',true);shake=40*S;
+    activePlayers().forEach(p=>{p.score+=3000;earn(p,500);});popup(W/2,H*.3,'🏆 BOSS BỊ HẠ! +3000 mỗi người','#ffd23f',true);shake=40*S;
   }
   function coopTick(tn){
     if(winAt){if(tn>=winAt){winAt=0;endCoop(true);}return;}
@@ -679,7 +710,7 @@ function initScreen(){
   }
 
   // ---------- xu + trang bị ----------
-  const COIN={normal:2,fast:4,gold:20,dodge:6,crate:8};
+  const COIN={normal:8,fast:16,gold:80,dodge:24,crate:30};   // casual: ván ngắn ~1 phút kiếm 300-600 xu
   function earn(p,n){p.coins+=n;}
   function cleanGear(g){g=g&&typeof g==='object'?g:{};const o={gun:GUNS[g.gun]?g.gun:'pistol'};ITEM_KEYS.forEach(k=>{o[k]=clamp(Math.floor(+g[k]||0),0,MAX_ITEM);});return o;}
   function applyGun(p){const g=GUNS[p.gear.gun]||GUNS.pistol;p.maxAmmo=g.ammo;p.reloadMs=g.reload;p.rad=g.rad;p.headMul=g.head;p.bossMul=g.boss;p.ammo=p.maxAmmo;p.reloadUntil=0;}
@@ -746,7 +777,7 @@ function initScreen(){
     if(now()<p.jamUntil){px+=(Math.random()-.5)*150*S;py+=(Math.random()-.5)*150*S;}   // bị nhiễu: đạn lệch ngẫu nhiên
     if(eggs.length){   // bắn vỡ trứng của boss
       let ei=-1,ed=1e9;eggs.forEach((e,i)=>{const d=Math.hypot(px-e.x,py-e.y)/e.r;if(d<=1.7&&d<ed){ed=d;ei=i;}});
-      if(ei>=0){const e=eggs.splice(ei,1)[0];p.combo++;p.hits++;const m=mult(p),pts=80*m;p.score+=pts;earn(p,2);puff(e.x,e.y);feathers(e.x,e.y,'#fff3d0',8);popup(e.x,e.y,'+'+pts+' TRỨNG','#fff3d0');sfxHit();
+      if(ei>=0){const e=eggs.splice(ei,1)[0];p.combo++;p.hits++;const m=mult(p),pts=80*m;p.score+=pts;earn(p,6);puff(e.x,e.y);feathers(e.x,e.y,'#fff3d0',8);popup(e.x,e.y,'+'+pts+' TRỨNG','#fff3d0');sfxHit();
         p.best=Math.max(p.best,p.combo);send(p,{k:'hit',pts});sendState(p);return;}
     }
     let best=null,bestD=1e9,nearD=1e9;
@@ -768,13 +799,13 @@ function initScreen(){
         popup(b.x,b.y-b.r*1.6,'+'+pts,p.color);earn(p,COIN.crate);givePU(p,b);countKill();
         send(p,{k:'hit',pts,head:best.head,gold:true});
       }else if(b.type==='boss'){
-        b.hp-=Math.max(1,Math.round(((mode==='coop'&&best.head)?2:1)*p.bossMul));earn(p,1);b.hitT=now();p.combo++;p.hits++;const m=mult(p);let pts=100*(best.head?p.headMul:1)*m;
+        b.hp-=Math.max(1,Math.round(((mode==='coop'&&best.head)?2:1)*p.bossMul));earn(p,4);b.hitT=now();p.combo++;p.hits++;const m=mult(p);let pts=100*(best.head?p.headMul:1)*m;
         feathers(px,py,T.col,6);sfxHit();
-        if(b.hp<=0){pts+=T.pts*m;earn(p,100);kill(b);if(mode==='coop'&&b===boss)bossDefeated();popup(b.x,b.y,'BOSS +'+pts,'#ffd23f',true);shake=30*S;sfxGold();slowUntil=now()+700;}
+        if(b.hp<=0){pts+=T.pts*m;earn(p,300);kill(b);if(mode==='coop'&&b===boss)bossDefeated();popup(b.x,b.y,'BOSS +'+pts,'#ffd23f',true);shake=30*S;sfxGold();slowUntil=now()+700;}
         else popup(px,py,'+'+pts+(best.head?' ĐẦU!':''),p.color);
         p.score+=pts;send(p,{k:'hit',pts,head:best.head,boss:true});
       }else{
-        p.combo++;p.hits++;const m=mult(p);const pts=T.pts*(best.head?p.headMul:1)*m;p.score+=pts;earn(p,COIN[b.type]||2);kill(b);flockKill(b,p);countKill();
+        p.combo++;p.hits++;const m=mult(p);const pts=T.pts*(best.head?p.headMul:1)*m;p.score+=pts;earn(p,COIN[b.type]||8);kill(b);flockKill(b,p);countKill();
         popup(b.x,b.y-b.r,'+'+pts+(best.head?' ĐẦU x'+p.headMul:'')+(m>1?' combo x'+m:''),b.type==='gold'?'#ffd23f':p.color,b.type==='gold'||best.head);
         b.type==='gold'?sfxGold():sfxHit();shake=Math.max(shake,(b.type==='gold'?16:6)*S);
         send(p,{k:'hit',pts,head:best.head,gold:b.type==='gold'});
@@ -850,13 +881,13 @@ function initScreen(){
     if(mode==='survival'){
       const al=activePlayers().filter(p=>!p.out);let sub='';
       if(al.length===1&&activePlayers().length>1){al[0].score+=2000;sub='Sống sót cuối cùng: '+al[0].name+' (+2000)';}
-      activePlayers().forEach(p=>earn(p,20+Math.floor(((p.out?p.outAt:now())-roundStart)/5000)));
+      activePlayers().forEach(p=>earn(p,100+Math.floor(((p.out?p.outAt:now())-roundStart)/1000)*2+(al.length===1&&activePlayers().length>1&&al[0]===p?100:0)));
       showEnd('☠ Kết thúc sinh tồn',sub);
-    }else{const ar=activePlayers().sort((a,b)=>b.score-a.score);ar.forEach((p,i)=>earn(p,20+(i===0&&ar.length>1?30:0)));showEnd('🏆 Hết giờ!','');}
+    }else{const ar=activePlayers().sort((a,b)=>b.score-a.score);ar.forEach((p,i)=>earn(p,100+(ar.length>1?[150,60,30,30][i]||30:0)));showEnd('🏆 Hết giờ!','');}
   }
   function endCoop(win){
     if(phase==='end')return;phase='end';music(false);eggs=[];
-    activePlayers().forEach(p=>earn(p,20+(win?150:0)));
+    activePlayers().forEach(p=>earn(p,100+stage*40+(win?400:0)));
     const team=activePlayers().reduce((s,p)=>s+p.score,0);
     showEnd(win?'🏆 CHIẾN THẮNG!':'💀 THẤT BẠI',(win?'Cả đội đã hạ Chúa Tể Chim · tim còn '+Math.max(0,hearts):'Dừng ở '+(STAGES[stage].boss?'trận BOSS':'màn '+(stage+1)))+' · tổng điểm đội '+team,team,'Cả đội');
     if(win)sfxGold();
@@ -906,6 +937,7 @@ function initScreen(){
       case 'reload':doReload(p);break;
       case 'ping':p.rtt=+d.rtt||p.rtt;send(p,{k:'pong',t:d.t});break;
       case 'start':if(phase==='lobby'||phase==='end')startRound();break;
+      case 'menu':toMenu();break;
       case 'gear':p.gear=cleanGear(d.gear);if(phase==='lobby'||phase==='end'){applyGun(p);sendState(p);renderList();}break;
       case 'mode':if(phase==='lobby'||phase==='end')setMode(MODE_KEYS[(MODE_KEYS.indexOf(mode)+1)%MODE_KEYS.length]);break;
       case 'theme':if(phase==='lobby'||phase==='end'){const L=['random',...THEME_KEYS];setThemeCfg(L[(L.indexOf(themeCfg)+1)%L.length]);}break;
@@ -925,6 +957,13 @@ function initScreen(){
   // ---------- UI ----------
   $('#startBtn').onclick=e=>{e.stopPropagation();startRound();};
   $('#againBtn').onclick=e=>{e.stopPropagation();startRound();};
+  function toMenu(){
+    if(phase!=='end')return;phase='lobby';birds=[];eggs=[];boss=null;music(false);
+    if(themeCfg!=='random')setTheme(themeCfg);
+    $('#endov').classList.add('hide');$('#lobby').classList.remove('hide');renderCfg();renderList();showHi();sendAll();
+  }
+  $('#menuBtn').onclick=e=>{e.stopPropagation();toMenu();};
+  $('#endShopBtn').onclick=e=>{e.stopPropagation();players.forEach(p=>send(p,{k:'openshop'}));$('#endHint').textContent='🛒 Mọi người đang mở cửa hàng trên điện thoại — mua xong bấm CHƠI LẠI';};
   function toggleMute(){setMuted(!muted);$('#mute').textContent=muted?'🔇':'🔊';}
   $('#mute').onclick=e=>{e.stopPropagation();audio();toggleMute();};
   addEventListener('pointerdown',()=>{audio();});
@@ -1138,7 +1177,7 @@ function initGun(){
   const joinMsg=()=>({k:'join',pid,name:$('#gName').value.trim()||'Người chơi',gear:gearMsg()});
   const money=n=>Math.floor(n).toLocaleString('vi-VN');
   let lastCoins=null;
-  function updCoin(){$('#gCoin').textContent='🪙 '+money(wallet.coins);$('#shCoin').textContent='🪙 '+money(wallet.coins);$('#gShop').textContent='🛒 CỬA HÀNG · '+GUNS[wallet.gun].name;}
+  function updCoin(){$('#gCoin').textContent='🪙 '+money(wallet.coins);$('#shCoin').textContent='🪙 '+money(wallet.coins);$('#jCoin').textContent='🪙 '+money(wallet.coins);$('#gShop').textContent='🛒 CỬA HÀNG · '+GUNS[wallet.gun].name;}
   function coinFx(d){const el=document.createElement('div');el.className='coinfx';el.textContent='+'+d+' 🪙';$('#gCoin').appendChild(el);setTimeout(()=>el.remove(),1000);}
   // ---------- cửa hàng ----------
   let shopTab='guns',toastT=null;
@@ -1174,7 +1213,9 @@ function initGun(){
   $('#shList').addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(b&&!b.disabled)shopAct(b.dataset.a,b.dataset.k);});
   document.querySelectorAll('.shop-tabs button').forEach(b=>b.addEventListener('click',()=>{shopTab=b.dataset.t;renderShop();$('#shList').scrollTop=0;}));
   $('#shBack').addEventListener('click',()=>$('#shop').classList.add('hide'));
-  $('#gShop').addEventListener('click',()=>{audio();renderShop();$('#shop').classList.remove('hide');});
+  const openShop=()=>{audio();renderShop();$('#shop').classList.remove('hide');};
+  ['#gShop','#gShop2','#gShopJ'].forEach(s=>$(s).addEventListener('click',openShop));
+  $('#gMenu').addEventListener('click',()=>{tx({k:'menu',pid});vib(10);});
   updCoin();
   const sens=$('#gSens'),shk=$('#gShake');
   sens.value=ls('bc_sens','60');shk.value=ls('bc_shake','22');
@@ -1331,7 +1372,9 @@ function initGun(){
     const lob=st.phase==='lobby'||st.phase==='end';
     if(!lob)$('#shop').classList.add('hide');
     $('#gStart').classList.toggle('hide',!lob||st.spec);
-    $('#gCfg').classList.toggle('hide',!lob||!!st.spec);
+    $('#gCfg').classList.toggle('hide',st.phase!=='lobby'||!!st.spec);
+    $('#gEnd').classList.toggle('hide',st.phase!=='end'||!!st.spec);
+    $('#gStart').textContent=st.phase==='end'?'↻ CHƠI LẠI':'▶ BẮT ĐẦU VÁN';
     $('#gMode').textContent='Chế độ: '+(st.modeName||'');
     $('#gTheme').textContent=st.mode==='coop'?'Bối cảnh: tự đổi theo màn':'Bối cảnh: '+(st.themeName||'');
     const ex=(st.mult>1?' · điểm x'+st.mult:'')+(st.puInf?' · ∞ đạn '+st.puInf+'s':'')+(st.puX2?' · x2 '+st.puX2+'s':'')+(st.frz?' · ❄':'')+(st.puJam?' · 📡 nhiễu '+st.puJam+'s':'')+(st.gold?' · 🌟 GIỜ VÀNG':'')+(st.reloading&&!st.puInf?' · đang nạp…':'');
@@ -1400,6 +1443,7 @@ function initGun(){
       case 'pu':vib([40,40,40,40,120]);flash('flashHit');say('🎁 '+d.name);break;
       case 'empty':break;
       case 'rejoin':tx(joinMsg());break;
+      case 'openshop':if(st.phase==='end'||st.phase==='lobby')openShop();break;
       case 'used':wallet.items[d.item]=Math.max(0,(wallet.items[d.item]||0)-1);saveWallet();sendGear();if(ITEMS[d.item])say(ITEMS[d.item].icon+' Dùng '+ITEMS[d.item].name);break;
     }
   }
