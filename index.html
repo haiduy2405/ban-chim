@@ -377,6 +377,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
     <label>Cầm máy bằng tay nào?</label>
     <div class="seg" id="pHand"><button data-h="R">🤜 Tay phải</button><button data-h="L">Tay trái 🤛</button></div>
     <div class="saverow"><button id="pCalib" style="flex:1 1 100%">🎯 HIỆU CHỈNH TÂM (2 chạm)</button></div>
+    <div class="saverow"><button id="pAxis" style="flex:1 1 100%"></button></div>
     <div class="saverow"><button id="pCenter">◎ Căn giữa lại</button><button id="pSound">🔊 Âm thanh</button></div>
     <button class="btn" id="pResume">▶ TIẾP TỤC</button>
   </div></div>
@@ -486,7 +487,7 @@ window.addEventListener('unhandledrejection',e=>showErr('Lỗi: '+(e.reason&&e.r
 // ================== CONFIG ==================
 const PREFIX = 'banchim-v2-';      // peer id prefix on the public PeerJS server
 const ROUND_SEC = 90;
-const VERSION='v3.2';
+const VERSION='v3.3';
 const MAX_AMMO = 6;
 const RELOAD_MS = 1200;
 const MAX_PLAYERS = 4;
@@ -1736,13 +1737,14 @@ function initGun(){
   function calibRender(){const d=$('#cDot');$('#cStep').textContent=calib.step===0?'1/2 · Chĩa vào GÓC TRÊN-TRÁI màn hình':'2/2 · Chĩa vào GÓC DƯỚI-PHẢI màn hình';d.style.left=calib.step===0?'6%':'94%';d.style.top=calib.step===0?'8%':'92%';}
   function calibOpen(){if(!cur){say('Chưa nhận cảm biến');return;}calib.on=true;calib.step=0;calib.s=[];calibRender();$('#calib').classList.remove('hide');}
   function calibClose(){calib.on=false;$('#calib').classList.add('hide');}
+  const axisTxt=()=>{$('#pAxis').textContent=mode==='y'?'🎮 Kiểu cầm: ĐIỀU KHIỂN TV (đầu máy) — đổi':'📷 Kiểu cầm: CAMERA (lưng máy) — đổi';};
+  $('#pAxis').addEventListener('click',()=>{mode=mode==='y'?'z':'y';lss('bc_axis',mode);axisTxt();center();say('Đã đổi kiểu cầm — hãy hiệu chỉnh lại');});
   $('#pCalib').addEventListener('click',()=>{audio();calibOpen();});
   $('#cCancel').addEventListener('click',e=>{e.stopPropagation();calibClose();});
   $('#calib').addEventListener('pointerdown',e=>{
     if(e.target.id==='cCancel')return;e.preventDefault();
     const sm=oriAgo(150)||cur;if(!sm)return;
-    const dY=Math.abs(sm.fy[2]),dZ=Math.abs(sm.fz[2]);if(calib.step===0)mode=dY<=dZ?'y':'z';modeSet=true;
-    calib.s.push(hp(mode==='y'?sm.fy:sm.fz));vib(25);
+        calib.s.push(hp(mode==='y'?sm.fy:sm.fz));vib(25);
     if(calib.step===0){calib.step=1;calibRender();return;}
     const [A,B]=calib.s;let dyaw=((B.yaw-A.yaw+540)%360)-180;const w=Math.abs(dyaw),h=Math.abs(B.pitch-A.pitch);
     if(dyaw<=0||B.pitch>=A.pitch||w<10||w>150||h<4){calib.step=0;calib.s=[];calibRender();$('#cStep').textContent='Chưa đúng — làm lại: chĩa vào GÓC TRÊN-TRÁI';vib([60,40,60]);return;}
@@ -1755,7 +1757,7 @@ function initGun(){
   });
   $('#pSound').addEventListener('click',()=>{setMuted(!muted);syncPause();});
   let pauseShown=false;
-  function renderPause(){
+  function renderPause(){axisTxt();
     const run=['play','intro','count'].includes(st.phase)&&!st.spec;
     $('#gPause').classList.toggle('hide',!run&&!st.paused);
     const show=!!st.paused;if(show&&!pauseShown)syncPause();pauseShown=show;
@@ -1776,7 +1778,7 @@ function initGun(){
   let fX=oneEuro(1.2,25),fY=oneEuro(1.2,25),yR=Math.max(.35,Math.min(1.2,+ls('bc_yr','.6')||.6));
   // Chế độ CHUỘT (gyro tương đối): con trỏ cộng dồn tốc độ xoay như chuột → không phụ thuộc la bàn/alpha nên hết giật & hết trôi; chạm mép là tự bù.
   const rel={on:false,fail:0,k:1,x:.5,y:.5,t:0,bx:0,by:0,bz:0,sOG:0,sGG:0,path:0,py:null,pp:null};
-  let sensorOK=false,cur=null,mode='y',yaw0=0,pitch0=0,aimX=.5,aimY=.5,hist=[],lastSent=0,sentX=-1,sentY=-1,lastShake=0,needCenter=true;
+  let sensorOK=false,cur=null,mode=(ls('bc_axis','y')==='z'?'z':'y'),yaw0=0,pitch0=0,aimX=.5,aimY=.5,hist=[],lastSent=0,sentX=-1,sentY=-1,lastShake=0,needCenter=true;
   const isTouch=matchMedia('(pointer:coarse)').matches;
   // lịch sử cảm biến thô: khi bấm nút (ngón cái làm máy rung/nghiêng) ta lấy tư thế TRƯỚC lúc bấm
   const oriHist=[];let oriCount=0,sensorHz=0,modeSet=false;
@@ -1802,7 +1804,7 @@ function initGun(){
     const s=agoMs?oriAgo(agoMs):cur;
     if(!s){aimX=.5;aimY=.5;return;}
     const dY=Math.abs(s.fy[2]),dZ=Math.abs(s.fz[2]);
-    if(!modeSet||Math.abs(dY-dZ)>.12){mode=dY<=dZ?'y':'z';modeSet=true;}   // trục nào nằm ngang hơn = nòng súng; gần 45° thì giữ trục cũ cho khỏi đổi thất thường
+    // trục ngắm CỐ ĐỊNH (mặc định = ĐẦU MÁY như remote TV) — không tự đổi trục nữa, vì tự đổi làm tâm nhảy khi nghiêng máy
     const o=hp(mode==='y'?s.fy:s.fz);yaw0=o.yaw;pitch0=o.pitch;
     if(rel.on){rel.x=.5;rel.y=.5;fX=oneEuro(1.2,25);fY=oneEuro(1.2,25);const tn=now();aimX=fX(.5,tn);aimY=fY(.5,tn);pushAim();}
   }
