@@ -1370,8 +1370,10 @@ function initGun(){
     $('#shTabs').innerHTML=tabs.map(t=>`<button data-t="${t[0]}" class="${t[0]===shopTab?'on':''}">${t[1]}</button>`).join('');
     $('.shop-title').textContent=shopMode==='run'?'CỬA HÀNG TRONG VÁN':'CỬA HÀNG SKIN';
   }
+  let shopSig='';
+  const sigNow=()=>JSON.stringify([shopMode,shopTab,st.coins,st.gun,st.inv,st.mode,save.gems,save.skin,save.skins]);
   function renderShop(){
-    updCoin();setTabs();const coins=st.coins||0,inv=st.inv||{o:['pistol'],u:{mag:0,rel:0,rad:0,dmg:0},s:0,r:0};let html='';
+    shopSig=sigNow();updCoin();setTabs();const coins=st.coins||0,inv=st.inv||{o:['pistol'],u:{mag:0,rel:0,rad:0,dmg:0},s:0,r:0};let html='';
     if(shopMode==='run'&&shopTab==='guns'){
       html+='<div class="shnote">Xu kiếm được trong ván. Mỗi ván làm lại từ <b>0 xu + Súng Lục</b>. Mua nhiều súng rồi bấm <b>⇄</b> trên màn chơi để đổi súng theo tình huống.</div>';
       GUN_KEYS.forEach(k=>{const g=GUNS[k],own=inv.o.includes(k),using=st.gun===k;
@@ -1591,7 +1593,7 @@ function initGun(){
       if(lastCoins!==null&&st.coins>lastCoins&&inRun())coinFx(st.coins-lastCoins);
       lastCoins=st.coins;
     }
-    updCoin();if(!$('#shop').classList.contains('hide')&&shopMode==='run')renderShop();
+    updCoin();if(!$('#shop').classList.contains('hide')&&shopMode==='run'&&sigNow()!==shopSig)renderShop();
     const lob=st.phase==='lobby'||st.phase==='end';
     const brk=st.phase==='shopbreak'&&!st.spec;
     if(shopMode==='menu'&&!lob&&!brk)$('#shop').classList.add('hide');
