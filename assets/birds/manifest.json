@@ -1,0 +1,101 @@
+{
+  "normal": {
+    "file": "birds/normal.webp",
+    "frames": 6,
+    "dead": 1,
+    "cellW": 256,
+    "cellH": 192,
+    "r": 48,
+    "fps": 12
+  },
+  "fast": {
+    "file": "birds/fast.webp",
+    "frames": 6,
+    "dead": 1,
+    "cellW": 256,
+    "cellH": 192,
+    "r": 48,
+    "fps": 16
+  },
+  "gold": {
+    "file": "birds/gold.webp",
+    "frames": 6,
+    "dead": 1,
+    "cellW": 256,
+    "cellH": 192,
+    "r": 48,
+    "fps": 14
+  },
+  "civ": {
+    "file": "birds/civ.webp",
+    "frames": 6,
+    "dead": 1,
+    "cellW": 256,
+    "cellH": 192,
+    "r": 48,
+    "fps": 10
+  },
+  "dodge": {
+    "file": "birds/dodge.webp",
+    "frames": 6,
+    "dead": 1,
+    "cellW": 256,
+    "cellH": 192,
+    "r": 48,
+    "fps": 14
+  },
+  "crate": {
+    "file": "birds/crate.webp",
+    "frames": 6,
+    "dead": 1,
+    "cellW": 256,
+    "cellH": 192,
+    "r": 48,
+    "fps": 10
+  },
+  "swoop": {
+    "file": "birds/swoop.webp",
+    "frames": 6,
+    "dead": 1,
+    "cellW": 256,
+    "cellH": 192,
+    "r": 48,
+    "fps": 14
+  },
+  "heavy": {
+    "file": "birds/heavy.webp",
+    "frames": 6,
+    "dead": 1,
+    "cellW": 256,
+    "cellH": 192,
+    "r": 48,
+    "fps": 9
+  },
+  "bat": {
+    "file": "birds/bat.webp",
+    "frames": 6,
+    "dead": 1,
+    "cellW": 256,
+    "cellH": 192,
+    "r": 48,
+    "fps": 14
+  },
+  "boss1": {
+    "file": "birds/boss1.webp",
+    "frames": 6,
+    "dead": 1,
+    "cellW": 512,
+    "cellH": 384,
+    "r": 96,
+    "fps": 8
+  },
+  "boss2": {
+    "file": "birds/boss2.webp",
+    "frames": 6,
+    "dead": 1,
+    "cellW": 512,
+    "cellH": 384,
+    "r": 96,
+    "fps": 8
+  }
+}

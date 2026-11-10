@@ -1,0 +1,198 @@
+{
+  "rung_sky": {
+    "file": "bg/rung_sky.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": false,
+    "opaque": true
+  },
+  "rung_far": {
+    "file": "bg/rung_far.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "rung_mid": {
+    "file": "bg/rung_mid.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "rung_near": {
+    "file": "bg/rung_near.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "bien_sky": {
+    "file": "bg/bien_sky.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": false,
+    "opaque": true
+  },
+  "bien_far": {
+    "file": "bg/bien_far.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "bien_mid": {
+    "file": "bg/bien_mid.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "bien_near": {
+    "file": "bg/bien_near.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "samac_sky": {
+    "file": "bg/samac_sky.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": false,
+    "opaque": true
+  },
+  "samac_far": {
+    "file": "bg/samac_far.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "samac_mid": {
+    "file": "bg/samac_mid.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "samac_near": {
+    "file": "bg/samac_near.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "suong_sky": {
+    "file": "bg/suong_sky.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": false,
+    "opaque": true
+  },
+  "suong_far": {
+    "file": "bg/suong_far.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "suong_mid": {
+    "file": "bg/suong_mid.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "suong_near": {
+    "file": "bg/suong_near.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "tuyet_sky": {
+    "file": "bg/tuyet_sky.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": false,
+    "opaque": true
+  },
+  "tuyet_far": {
+    "file": "bg/tuyet_far.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "tuyet_mid": {
+    "file": "bg/tuyet_mid.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "tuyet_near": {
+    "file": "bg/tuyet_near.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "bao_sky": {
+    "file": "bg/bao_sky.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": false,
+    "opaque": true
+  },
+  "bao_far": {
+    "file": "bg/bao_far.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "bao_mid": {
+    "file": "bg/bao_mid.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "bao_near": {
+    "file": "bg/bao_near.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "dem_sky": {
+    "file": "bg/dem_sky.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": false,
+    "opaque": true
+  },
+  "dem_far": {
+    "file": "bg/dem_far.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "dem_mid": {
+    "file": "bg/dem_mid.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  },
+  "dem_near": {
+    "file": "bg/dem_near.webp",
+    "width": 1920,
+    "height": 1080,
+    "tile": true,
+    "opaque": false
+  }
+}
