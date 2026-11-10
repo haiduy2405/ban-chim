@@ -220,44 +220,56 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 #shToast{position:absolute;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);background:rgba(0,0,0,.8);padding:11px 18px;border-radius:999px;font-weight:800;font-size:15px;border:1px solid rgba(255,255,255,.2);animation:tin .25s;white-space:nowrap}
 @keyframes tin{from{opacity:0;transform:translate(-50%,10px)}}
 
-/* ===== LOBBY v3.1: bố cục "title screen", chữ co giãn theo màn hình (--u) ===== */
-#lobby{background:radial-gradient(90% 80% at 30% 45%,rgba(10,30,70,.15),rgba(2,6,16,.82)),linear-gradient(180deg,rgba(2,6,16,.55),rgba(2,6,16,.1) 40%,rgba(2,6,16,.7));backdrop-filter:none;padding:calc(var(--u)*24px)}
-#lobby .mwrap{max-width:calc(var(--u)*1500px);gap:calc(var(--u)*48px);flex-wrap:nowrap;align-items:center;overflow:visible}
+/* ===== LOBBY v3.2: gọn, tinh tế; cỡ chữ theo --u (tăng nhẹ theo độ phân giải) ===== */
+#lobby{background:radial-gradient(80% 90% at 28% 50%,rgba(6,16,36,.55),rgba(2,6,14,.86)),linear-gradient(180deg,rgba(2,6,14,.5),rgba(2,6,14,0) 35%,rgba(2,6,14,.6));backdrop-filter:blur(2px);padding:calc(var(--u)*28px)}
+#lobby .mwrap{max-width:calc(var(--u)*1080px);gap:calc(var(--u)*40px);flex-wrap:nowrap;align-items:center;overflow:visible}
 #lobby .mleft{flex:1 1 auto;align-items:flex-start;text-align:left}
-#lobby .logo{position:relative;line-height:.88;margin-bottom:calc(var(--u)*10px)}
-#lobby .logo .l1,#lobby .logo .l2{display:inline-block;margin-right:calc(var(--u)*18px);font-size:calc(var(--u)*92px);letter-spacing:calc(var(--u)*4px);-webkit-text-stroke:calc(var(--u)*4px) #4a1f00;filter:drop-shadow(0 calc(var(--u)*7px) 0 #4a1f00) drop-shadow(0 calc(var(--u)*18px) calc(var(--u)*26px) rgba(255,140,0,.45))}
-#lobby .lbird{font-size:0;position:absolute;right:calc(var(--u)*-150px);top:calc(var(--u)*-26px);width:calc(var(--u)*140px);height:calc(var(--u)*105px);background:url(assets/birds/gold.webp) 0 0/700% 100% no-repeat;animation:lflap .55s steps(6) infinite,bob 2.4s ease-in-out infinite;filter:drop-shadow(0 calc(var(--u)*8px) calc(var(--u)*10px) rgba(0,0,0,.5))}
-@keyframes lflap{to{background-position-x:calc(var(--u)*-840px)}}
-#lobby .lsub{font-size:calc(var(--u)*22px);font-weight:700;letter-spacing:calc(var(--u)*1px);margin:calc(var(--u)*8px) 0 calc(var(--u)*6px);color:#e8f3ff;text-shadow:0 2px 8px #000}
-#lobby .lver{font-size:calc(var(--u)*15px);padding:calc(var(--u)*4px) calc(var(--u)*14px);margin:0 0 calc(var(--u)*14px)}
-#lobby .mpanel{max-width:calc(var(--u)*760px);padding:calc(var(--u)*14px) calc(var(--u)*20px);border-radius:calc(var(--u)*22px);background:linear-gradient(160deg,rgba(18,40,76,.78),rgba(6,16,34,.82));border:calc(var(--u)*2px) solid rgba(160,200,255,.22);box-shadow:0 calc(var(--u)*16px) calc(var(--u)*50px) rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.12);text-align:left}
-#lobby .mlabel{font-size:calc(var(--u)*15px);letter-spacing:calc(var(--u)*4px);margin:calc(var(--u)*4px) 0 calc(var(--u)*10px);color:#9ec4ff;opacity:.9}
-#lobby #modeChips{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*12px);margin:0}
-#lobby #modeChips .chip{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*4px);padding:calc(var(--u)*10px) calc(var(--u)*8px);border-radius:calc(var(--u)*16px);font-size:calc(var(--u)*21px);background:rgba(255,255,255,.07);border:calc(var(--u)*2px) solid rgba(255,255,255,.12);opacity:1;transition:transform .15s,box-shadow .15s,background .15s}
-#lobby #modeChips .chip:hover{transform:translateY(calc(var(--u)*-3px));background:rgba(255,255,255,.14)}
-#lobby #modeChips .chip .ci{font-size:calc(var(--u)*32px);line-height:1}
-#lobby #modeChips .chip.on{background:linear-gradient(#3fd98a,#17a057);border-color:#c8ffe0;box-shadow:0 0 calc(var(--u)*28px) rgba(60,230,140,.55),0 calc(var(--u)*5px) 0 #0e7a3f}
-#lobby #themeChips .chip{font-size:calc(var(--u)*17px);padding:calc(var(--u)*8px) calc(var(--u)*14px);background:rgba(255,255,255,.08)}
-#lobby #themeChips .chip.on{background:#2fbf71}
-#lobby .small{font-size:calc(var(--u)*17px);opacity:.85;line-height:1.45}
-#lobby #modeDesc{min-height:calc(var(--u)*50px)!important;margin-top:calc(var(--u)*8px);color:#dbe9ff}
-#lobby .mbtns{margin-top:calc(var(--u)*16px);justify-content:flex-start;gap:calc(var(--u)*16px);flex-wrap:nowrap}
-#lobby .btn{margin:0}
-#lobby .btn.play{font-size:calc(var(--u)*38px);padding:calc(var(--u)*14px) calc(var(--u)*56px);white-space:nowrap;border-radius:calc(var(--u)*24px);box-shadow:0 calc(var(--u)*8px) 0 #137a40,0 calc(var(--u)*20px) calc(var(--u)*36px) rgba(0,0,0,.4),0 0 calc(var(--u)*40px) rgba(70,240,150,.35);animation:lpulse 2s ease-in-out infinite}
-@keyframes lpulse{50%{box-shadow:0 calc(var(--u)*8px) 0 #137a40,0 calc(var(--u)*20px) calc(var(--u)*36px) rgba(0,0,0,.4),0 0 calc(var(--u)*64px) rgba(70,240,150,.65)}}
-#lobby .btn.alt{white-space:nowrap;font-size:calc(var(--u)*20px);padding:calc(var(--u)*14px) calc(var(--u)*22px);border-radius:calc(var(--u)*18px);background:rgba(44,74,107,.85);border:calc(var(--u)*2px) solid rgba(160,200,255,.25)}
-#lobby #hiscore{font-size:calc(var(--u)*17px);margin-top:calc(var(--u)*14px)!important;color:#ffe27a}
-#lobby .mright{flex:0 0 calc(var(--u)*380px);padding:calc(var(--u)*20px) calc(var(--u)*24px);border-radius:calc(var(--u)*28px);background:linear-gradient(170deg,rgba(18,40,76,.85),rgba(6,14,30,.9));border:calc(var(--u)*2px) solid rgba(160,200,255,.25);box-shadow:0 calc(var(--u)*20px) calc(var(--u)*60px) rgba(0,0,0,.55)}
-#lobby #qr{width:calc(var(--u)*290px);height:calc(var(--u)*290px);padding:calc(var(--u)*14px);border-radius:calc(var(--u)*18px);margin:0 auto calc(var(--u)*6px);box-shadow:0 0 calc(var(--u)*30px) rgba(120,180,255,.35)}
+#lobby .logo{position:relative;line-height:.9;margin-bottom:calc(var(--u)*6px)}
+#lobby .logo .l1,#lobby .logo .l2{display:inline-block;margin-right:calc(var(--u)*14px);font-size:calc(var(--u)*64px);font-weight:900;letter-spacing:calc(var(--u)*3px);-webkit-text-stroke:calc(var(--u)*2px) #3b1800;filter:drop-shadow(0 calc(var(--u)*3px) 0 #3b1800) drop-shadow(0 calc(var(--u)*8px) calc(var(--u)*14px) rgba(255,150,30,.3))}
+#lobby .lbird{font-size:0;position:absolute;right:calc(var(--u)*-96px);top:calc(var(--u)*-14px);width:calc(var(--u)*88px);height:calc(var(--u)*66px);background:url(assets/birds/gold.webp) 0 0/700% 100% no-repeat;animation:lflap .55s steps(6) infinite,bob 2.4s ease-in-out infinite;filter:drop-shadow(0 calc(var(--u)*5px) calc(var(--u)*6px) rgba(0,0,0,.5))}
+@keyframes lflap{to{background-position-x:calc(var(--u)*-528px)}}
+#lobby .lsub{font-size:calc(var(--u)*15px);font-weight:600;letter-spacing:calc(var(--u)*3px);text-transform:uppercase;margin:calc(var(--u)*6px) 0 calc(var(--u)*4px);color:#b9cde8;opacity:.9}
+#lobby .lver{font-size:calc(var(--u)*11px);padding:calc(var(--u)*2px) calc(var(--u)*10px);margin:0 0 calc(var(--u)*18px);background:rgba(255,255,255,.08);color:#9fb3cf;font-weight:700}
+#lobby .mpanel{max-width:calc(var(--u)*560px);padding:calc(var(--u)*16px) calc(var(--u)*18px);border-radius:calc(var(--u)*14px);background:rgba(10,20,38,.62);border:1px solid rgba(160,190,235,.16);box-shadow:0 calc(var(--u)*12px) calc(var(--u)*34px) rgba(0,0,0,.4);text-align:left;backdrop-filter:blur(8px)}
+#lobby .mlabel{font-size:calc(var(--u)*11px);letter-spacing:calc(var(--u)*3px);margin:0 0 calc(var(--u)*8px);color:#8fb0de;opacity:1;font-weight:700}
+#lobby #modeChips{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*8px);margin:0}
+#lobby #modeChips .chip{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:calc(var(--u)*8px);padding:calc(var(--u)*10px) calc(var(--u)*8px);border-radius:calc(var(--u)*10px);font-size:calc(var(--u)*15px);font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);opacity:.8;transition:all .15s}
+#lobby #modeChips .chip:hover{opacity:1;background:rgba(255,255,255,.09)}
+#lobby #modeChips .chip .ci{font-size:calc(var(--u)*18px);line-height:1}
+#lobby #modeChips .chip.on{opacity:1;background:linear-gradient(180deg,rgba(60,210,130,.28),rgba(30,150,90,.2));border-color:#5fe3a0;box-shadow:0 0 calc(var(--u)*16px) rgba(70,230,150,.28)}
+#lobby #themeChips{gap:calc(var(--u)*6px);justify-content:flex-start}
+#lobby #themeChips .chip{font-size:calc(var(--u)*12.5px);padding:calc(var(--u)*5px) calc(var(--u)*10px);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:999px;opacity:.85}
+#lobby #themeChips .chip.on{background:rgba(60,210,130,.25);border-color:#5fe3a0;opacity:1}
+#lobby .small{font-size:calc(var(--u)*13px);opacity:.8;line-height:1.5}
+#lobby #modeDesc{min-height:calc(var(--u)*40px)!important;margin-top:calc(var(--u)*10px);color:#cfe0f5}
+#lobby .mbtns{margin-top:calc(var(--u)*16px);justify-content:flex-start;gap:calc(var(--u)*12px);flex-wrap:nowrap}
+#lobby .btn{margin:0;white-space:nowrap}
+#lobby .btn.play{font-size:calc(var(--u)*22px);font-weight:800;letter-spacing:calc(var(--u)*2px);padding:calc(var(--u)*13px) calc(var(--u)*44px);border-radius:calc(var(--u)*12px);background:linear-gradient(180deg,#4fe09a,#1fa860);box-shadow:0 calc(var(--u)*3px) 0 #0f7a40,0 calc(var(--u)*10px) calc(var(--u)*22px) rgba(0,0,0,.4);animation:none}
+#lobby .btn.play:hover{filter:brightness(1.08)}
+#lobby .btn.alt{font-size:calc(var(--u)*14px);font-weight:700;padding:calc(var(--u)*12px) calc(var(--u)*18px);border-radius:calc(var(--u)*12px);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16)}
+#lobby #hiscore{font-size:calc(var(--u)*12px);margin-top:calc(var(--u)*12px)!important;color:#e9c96a;opacity:.9}
+#lobby .mright{flex:0 0 calc(var(--u)*290px);padding:calc(var(--u)*18px);border-radius:calc(var(--u)*16px);background:rgba(10,20,38,.7);border:1px solid rgba(160,190,235,.18);box-shadow:0 calc(var(--u)*16px) calc(var(--u)*44px) rgba(0,0,0,.5);backdrop-filter:blur(8px)}
+#lobby #qr{width:calc(var(--u)*210px);height:calc(var(--u)*210px);padding:calc(var(--u)*10px);border-radius:calc(var(--u)*10px);margin:0 auto calc(var(--u)*8px);box-shadow:none}
 #lobby #qr img,#lobby #qr canvas{width:100%!important;height:100%!important}
-#lobby .mright .code{font-size:calc(var(--u)*68px);letter-spacing:calc(var(--u)*12px);margin:calc(var(--u)*8px) 0 calc(var(--u)*2px);text-shadow:0 0 calc(var(--u)*24px) rgba(255,210,63,.5)}
-#lobby #pcount{font-size:calc(var(--u)*20px);font-weight:800;color:#9ec4ff}
-#lobby #plist li{font-size:calc(var(--u)*22px);padding:calc(var(--u)*8px) calc(var(--u)*14px);border-radius:calc(var(--u)*14px);margin:calc(var(--u)*6px) 0}
-#lobby #plist .dot{width:calc(var(--u)*20px);height:calc(var(--u)*20px)}
-#lobby #plist li .small{font-size:calc(var(--u)*16px)}
-#lobby .shophint{font-size:calc(var(--u)*16px)!important;padding:calc(var(--u)*10px) calc(var(--u)*14px);border-radius:calc(var(--u)*14px);margin-top:calc(var(--u)*10px)}
-#lobby #audioHint{font-size:calc(var(--u)*15px)}
-@media (max-width:900px){#lobby .mwrap{flex-wrap:wrap}#lobby .mleft{align-items:center;text-align:center}#lobby .mright{flex:1 1 100%}#lobby .lbird{display:none}}
+#lobby .mright .code{font-size:calc(var(--u)*42px);letter-spacing:calc(var(--u)*9px);margin:calc(var(--u)*4px) 0 0;text-shadow:none}
+#lobby .mright .small{font-size:calc(var(--u)*11.5px)}
+#lobby #pcount{font-size:calc(var(--u)*12.5px);font-weight:700;color:#8fb0de;margin-top:calc(var(--u)*2px)}
+#lobby #plist{min-width:0;margin:calc(var(--u)*8px) 0}
+#lobby #plist li{font-size:calc(var(--u)*15px);padding:calc(var(--u)*7px) calc(var(--u)*11px);border-radius:calc(var(--u)*9px);margin:calc(var(--u)*5px) 0;background:rgba(255,255,255,.06)}
+#lobby #plist .dot{width:calc(var(--u)*11px);height:calc(var(--u)*11px)}
+#lobby #plist li .small{font-size:calc(var(--u)*11px)}
+#lobby .shophint{font-size:calc(var(--u)*11px)!important;padding:calc(var(--u)*8px) calc(var(--u)*10px);border-radius:calc(var(--u)*9px);margin-top:calc(var(--u)*8px);background:rgba(255,210,63,.08)}
+#lobby #audioHint{font-size:calc(var(--u)*11px)}
+@media (max-width:820px){#lobby .mwrap{flex-wrap:wrap}#lobby .mleft{align-items:center;text-align:center}#lobby .mright{flex:1 1 100%}#lobby .lbird{display:none}}
+/* ===== hiệu chỉnh tâm (điện thoại) ===== */
+#calib{position:fixed;inset:0;z-index:60;background:rgba(4,10,22,.94);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;touch-action:none}
+#calib .cbox{width:100%;max-width:420px}
+#calib .cstep{font-size:22px;font-weight:800;line-height:1.3;margin-bottom:18px}
+#calib .cscr{position:relative;width:78%;aspect-ratio:16/9;margin:0 auto 18px;border:2px solid #6f95c9;border-radius:8px;background:rgba(255,255,255,.04)}
+#calib .cscr i{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:#ffd23f;box-shadow:0 0 0 6px rgba(255,210,63,.3);animation:cblink 1s infinite}
+@keyframes cblink{50%{transform:scale(1.25);opacity:.7}}
+#calib .csub{opacity:.75;font-size:15px;margin-bottom:22px}
+#calib button{background:rgba(255,255,255,.12);border-radius:12px;padding:12px 26px;font-size:16px;font-weight:700}
 </style>
 </head>
 <body>
@@ -364,9 +376,11 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
     <label>Bắn bằng giật máy: <b id="pShakeV"></b></label><input type="range" id="pShake" min="10" max="45" step="1">
     <label>Cầm máy bằng tay nào?</label>
     <div class="seg" id="pHand"><button data-h="R">🤜 Tay phải</button><button data-h="L">Tay trái 🤛</button></div>
+    <div class="saverow"><button id="pCalib" style="flex:1 1 100%">🎯 HIỆU CHỈNH TÂM (2 chạm)</button></div>
     <div class="saverow"><button id="pCenter">◎ Căn giữa lại</button><button id="pSound">🔊 Âm thanh</button></div>
     <button class="btn" id="pResume">▶ TIẾP TỤC</button>
   </div></div>
+  <div id="calib" class="hide"><div class="cbox"><div class="cstep" id="cStep"></div><div class="cscr"><i id="cDot"></i></div><div class="csub">Chĩa đầu máy vào đúng điểm vàng trên màn hình, rồi <b>chạm bất kỳ đâu</b></div><button id="cCancel">Hủy</button></div></div>
   <div id="gPlay" class="hide">
     <div class="gtop">
       <div class="gname"><span class="dot" id="gDot"></span><span id="gMe"></span></div>
@@ -472,7 +486,7 @@ window.addEventListener('unhandledrejection',e=>showErr('Lỗi: '+(e.reason&&e.r
 // ================== CONFIG ==================
 const PREFIX = 'banchim-v2-';      // peer id prefix on the public PeerJS server
 const ROUND_SEC = 90;
-const VERSION='v3.1';
+const VERSION='v3.2';
 const MAX_AMMO = 6;
 const RELOAD_MS = 1200;
 const MAX_PLAYERS = 4;
@@ -677,7 +691,7 @@ function initScreen(){
   function genRoom(){const c='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let r='';for(let i=0;i<4;i++)r+=c[Math.random()*c.length|0];return r;}
 
   // ---------- resize + background layers ----------
-  function setU(){document.documentElement.style.setProperty('--u',Math.max(.7,Math.min(2.8,Math.min(innerWidth/1366,innerHeight/768))).toFixed(3));}
+  function setU(){document.documentElement.style.setProperty('--u',(()=>{const r=Math.min(innerWidth/1366,innerHeight/768);return Math.max(.75,Math.min(1.7,r>=1?1+(r-1)*.55:r)).toFixed(3);})());}
   addEventListener('resize',setU);setU();
   function resize(){
     DPR=Math.min(window.devicePixelRatio||1, innerWidth>1400?1:1.5);
@@ -1289,7 +1303,7 @@ function initScreen(){
   addEventListener('mousemove',e=>{if(mouseP){mouseP.tx=e.clientX/innerWidth;mouseP.ty=e.clientY/innerHeight;mouseP.lastSeen=now();}});
   cv.addEventListener('mousedown',e=>{if(!mouseP)return;if(e.button===2)doReload(mouseP);else doFire(mouseP,e.clientX/innerWidth,e.clientY/innerHeight,0);});
   addEventListener('contextmenu',e=>e.preventDefault());
-  addEventListener('keydown',e=>{audio();if(e.key==='p'||e.key==='P')setPause(!paused,'Máy chủ','user');if(e.key==='g'||e.key==='G'){ART_ON=!ART_ON;lsset('bc_art',ART_ON?'1':'0');buildLayers();popup(W/2,H*.2,ART_ON?'🎨 Đồ họa: SPRITE':'Đồ họa: VẼ BẰNG CODE','#fff',true);}if(e.key==='f'||e.key==='F'){FX=!FX;lsset('bc_fx',FX?'1':'0');popup(W/2,H*.2,FX?'✨ Hiệu ứng: BẬT':'Hiệu ứng: TẮT (máy yếu)','#fff',true);}if(e.key==='r'||e.key==='R'){if(mouseP)doReload(mouseP);}
+  addEventListener('keydown',e=>{audio();if((e.key==='p'||e.key==='P'||e.code==='Space')&&(e.key!==' '&&e.code!=='Space'||['play','intro','count','shopbreak'].includes(phase)||paused)){if(e.code==='Space')e.preventDefault();if(!e.repeat)setPause(!paused,'Máy chủ','user');}if(e.key==='g'||e.key==='G'){ART_ON=!ART_ON;lsset('bc_art',ART_ON?'1':'0');buildLayers();popup(W/2,H*.2,ART_ON?'🎨 Đồ họa: SPRITE':'Đồ họa: VẼ BẰNG CODE','#fff',true);}if(e.key==='f'||e.key==='F'){FX=!FX;lsset('bc_fx',FX?'1':'0');popup(W/2,H*.2,FX?'✨ Hiệu ứng: BẬT':'Hiệu ứng: TẮT (máy yếu)','#fff',true);}if(e.key==='r'||e.key==='R'){if(mouseP)doReload(mouseP);}
     if(e.key==='m'||e.key==='M')toggleMute();});
 
   // ---------- UI ----------
@@ -1717,6 +1731,28 @@ function initGun(){
   $('#pResume').addEventListener('click',()=>{audio();tx({k:'pause',pid,on:false});vib(20);});
   $('#gContBtn').addEventListener('click',()=>{audio();tx({k:'continue',pid});vib(20);});
   $('#pCenter').addEventListener('click',()=>{center();say('Đã căn giữa ✓');});
+  // ---- hiệu chỉnh 2 điểm (góc trên-trái, góc dưới-phải): tự suy ra tâm + độ nhạy ngang + tỉ lệ dọc theo đúng khoảng cách/kích thước màn hình
+  const calib={on:false,step:0,s:[]};
+  function calibRender(){const d=$('#cDot');$('#cStep').textContent=calib.step===0?'1/2 · Chĩa vào GÓC TRÊN-TRÁI màn hình':'2/2 · Chĩa vào GÓC DƯỚI-PHẢI màn hình';d.style.left=calib.step===0?'6%':'94%';d.style.top=calib.step===0?'8%':'92%';}
+  function calibOpen(){if(!cur){say('Chưa nhận cảm biến');return;}calib.on=true;calib.step=0;calib.s=[];calibRender();$('#calib').classList.remove('hide');}
+  function calibClose(){calib.on=false;$('#calib').classList.add('hide');}
+  $('#pCalib').addEventListener('click',()=>{audio();calibOpen();});
+  $('#cCancel').addEventListener('click',e=>{e.stopPropagation();calibClose();});
+  $('#calib').addEventListener('pointerdown',e=>{
+    if(e.target.id==='cCancel')return;e.preventDefault();
+    const sm=oriAgo(150)||cur;if(!sm)return;
+    const dY=Math.abs(sm.fy[2]),dZ=Math.abs(sm.fz[2]);if(calib.step===0)mode=dY<=dZ?'y':'z';modeSet=true;
+    calib.s.push(hp(mode==='y'?sm.fy:sm.fz));vib(25);
+    if(calib.step===0){calib.step=1;calibRender();return;}
+    const [A,B]=calib.s;let dyaw=((B.yaw-A.yaw+540)%360)-180;const w=Math.abs(dyaw),h=Math.abs(B.pitch-A.pitch);
+    if(dyaw<=0||B.pitch>=A.pitch||w<10||w>150||h<4){calib.step=0;calib.s=[];calibRender();$('#cStep').textContent='Chưa đúng — làm lại: chĩa vào GÓC TRÊN-TRÁI';vib([60,40,60]);return;}
+    const degX=clamp(Math.round(w),25,100);yR=clamp(h/degX,.35,1.2);
+    sens.value=degX;$('#pSens').value=degX;lss('bc_sens',degX);lss('bc_yr',yR.toFixed(3));
+    yaw0=A.yaw+dyaw/2;yaw0=((yaw0+540)%360)-180;pitch0=(A.pitch+B.pitch)/2;
+    if(rel.on){rel.x=clamp(.5+(w/2)/degX,0,1.05);rel.y=clamp(.5+(h/2)/(degX*yR),0,1.05);}
+    fX=oneEuro(1.2,25);fY=oneEuro(1.2,25);
+    calibClose();say('Hiệu chỉnh xong ✓ (ngang '+degX+'°)');vib([40,40,90]);if(typeof showS==='function')showS();
+  });
   $('#pSound').addEventListener('click',()=>{setMuted(!muted);syncPause();});
   let pauseShown=false;
   function renderPause(){
@@ -1737,7 +1773,7 @@ function initGun(){
   function oneEuro(minC,beta){let x=null,dx=0,t=0;const al=(c,dt)=>1/(1+1/(2*Math.PI*c*dt));
     return (v,tn)=>{if(x===null){x=v;t=tn;return v;}const dt=Math.max(.001,(tn-t)/1000);t=tn;
       dx+=al(1,dt)*((v-x)/dt-dx);x+=al(minC+beta*Math.abs(dx),dt)*(v-x);return x;};}
-  let fX=oneEuro(1.2,25),fY=oneEuro(1.2,25);
+  let fX=oneEuro(1.2,25),fY=oneEuro(1.2,25),yR=Math.max(.35,Math.min(1.2,+ls('bc_yr','.6')||.6));
   // Chế độ CHUỘT (gyro tương đối): con trỏ cộng dồn tốc độ xoay như chuột → không phụ thuộc la bàn/alpha nên hết giật & hết trôi; chạm mép là tự bù.
   const rel={on:false,fail:0,k:1,x:.5,y:.5,t:0,bx:0,by:0,bz:0,sOG:0,sGG:0,path:0,py:null,pp:null};
   let sensorOK=false,cur=null,mode='y',yaw0=0,pitch0=0,aimX=.5,aimY=.5,hist=[],lastSent=0,sentX=-1,sentY=-1,lastShake=0,needCenter=true;
@@ -1775,7 +1811,7 @@ function initGun(){
     if(rel.on)return;
     const o=hp(mode==='y'?cur.fy:cur.fz);
     let dy=o.yaw-yaw0;dy=((dy+540)%360)-180;
-    const dp=o.pitch-pitch0, degX=+sens.value, degY=degX*.6;
+    const dp=o.pitch-pitch0, degX=+sens.value, degY=degX*yR;
     const nx=clamp(.5+dy/degX,-.05,1.05), ny=clamp(.5-dp/degY,-.05,1.05);
     const tn=now();aimX=fX(nx,tn);aimY=fY(ny,tn);
     pushAim();
@@ -1812,7 +1848,7 @@ function initGun(){
       return;
     }
     rel.x=clamp(rel.x+rel.k*gX/+sens.value,-.05,1.05);
-    rel.y=clamp(rel.y-rel.k*gY/(+sens.value*.6),-.05,1.05);
+    rel.y=clamp(rel.y-rel.k*gY/(+sens.value*yR),-.05,1.05);
     aimX=fX(rel.x,t);aimY=fY(rel.y,t);pushAim();
   }
   function onMotion(e){
