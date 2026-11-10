@@ -433,7 +433,7 @@ window.addEventListener('unhandledrejection',e=>showErr('Lỗi: '+(e.reason&&e.r
 // ================== CONFIG ==================
 const PREFIX = 'banchim-v2-';      // peer id prefix on the public PeerJS server
 const ROUND_SEC = 90;
-const VERSION='v2.9';
+const VERSION='v3.0';
 const MAX_AMMO = 6;
 const RELOAD_MS = 1200;
 const MAX_PLAYERS = 4;
@@ -552,13 +552,13 @@ const UPS={
   rel:{name:'Nạp Nhanh',      icon:'🔄',desc:'−18% thời gian nạp mỗi cấp'},
   rad:{name:'Tầm Ngắm Rộng',  icon:'🎯',desc:'+12% độ rộng trúng mỗi cấp'},
   dmg:{name:'Đạn Xuyên Giáp', icon:'💥',desc:'+15% sát thương ĐẦU và BOSS mỗi cấp'}};
-const UP_KEYS=Object.keys(UPS),UP_COST=[70,120,180],UP_MAX=3;
+const UP_KEYS=Object.keys(UPS),UP_COST=[110,190,290],UP_MAX=3;
 const ITEMS={
-  heart :{name:'Tim Hồi Phục',icon:'❤️',price:150,modes:['coop','survival'],desc:'+1 tim ngay (Hành trình: tim chung · Sinh tồn: mạng của bạn).'},
-  shield:{name:'Khiên Chắn',  icon:'🛡️',price:120,modes:['coop','survival'],max:3,desc:'Chặn 1 lần mất tim/mạng (bắn nhầm dân, quái chạm…). Giữ tối đa 3.'},
-  revive:{name:'Hồi Sinh',    icon:'✨',price:300,modes:['coop','survival'],max:1,desc:'Tự dùng khi bạn bị loại / cả đội hết tim: hồi lại 2 tim.'},
-  boost :{name:'Thần Tốc',    icon:'⚡',price:90, modes:['classic','coop','survival'],desc:'Vô hạn đạn 8 giây — dùng ngay.'},
-  dbl   :{name:'Điểm Đôi',    icon:'🎯',price:90, modes:['classic','coop','survival'],desc:'Điểm x2 trong 15 giây — dùng ngay.'}};
+  heart :{name:'Tim Hồi Phục',icon:'❤️',price:260,modes:['coop','survival'],desc:'+1 tim ngay (Hành trình: tim chung · Sinh tồn: mạng của bạn).'},
+  shield:{name:'Khiên Chắn',  icon:'🛡️',price:200,modes:['coop','survival'],max:3,desc:'Chặn 1 lần mất tim/mạng (bắn nhầm dân, quái chạm…). Giữ tối đa 3.'},
+  revive:{name:'Hồi Sinh',    icon:'✨',price:450,modes:['coop','survival'],max:1,desc:'Tự dùng khi bạn bị loại / cả đội hết tim: hồi lại 2 tim.'},
+  boost :{name:'Thần Tốc',    icon:'⚡',price:150,modes:['classic','coop','survival'],desc:'Vô hạn đạn 8 giây — dùng ngay.'},
+  dbl   :{name:'Điểm Đôi',    icon:'🎯',price:150,modes:['classic','coop','survival'],desc:'Điểm x2 trong 15 giây — dùng ngay.'}};
 const ITEM_KEYS=Object.keys(ITEMS);
 // Skin: mua bằng NGỌC 💎 (thưởng khi thắng) ở cửa hàng ngoài menu.
 const SKINS={
@@ -571,6 +571,14 @@ const SKINS={
 const SKIN_KEYS=Object.keys(SKINS);
 
 
+// ================== AUDIO GATE (host): có điện thoại vào mà chưa có tiếng → cần 1 cú click/phím ==================
+{const g=document.createElement('div');g.id='audioGate';g.style.cssText='position:fixed;inset:0;z-index:99;display:none;align-items:center;justify-content:center;background:rgba(5,12,28,.82);color:#fff;font:800 clamp(22px,4vw,44px)/1.3 system-ui;text-align:center;cursor:pointer;backdrop-filter:blur(6px)';
+  g.innerHTML='<div>🔊 Nhấn chuột / phím bất kỳ<br>để bật tiếng + toàn màn hình<small style="display:block;font-size:.4em;font-weight:600;opacity:.7;margin-top:10px">(trình duyệt chặn âm thanh tới khi bạn tương tác 1 lần)</small></div>';
+  document.addEventListener('DOMContentLoaded',()=>document.body.appendChild(g));
+  const go=()=>{audio();if(AC&&AC.state==='running'){g.style.display='none';try{if(!document.fullscreenElement)document.documentElement.requestFullscreen({navigationUI:'hide'}).catch(()=>{});}catch(e){}}};
+  ['pointerdown','keydown','touchstart'].forEach(ev=>addEventListener(ev,go,true));
+  setInterval(()=>{try{const hp=window.__hostPlayers,need=hp&&hp.size>0&&(!AC||AC.state!=='running');if(g.parentNode)g.style.display=need?'flex':'none';}catch(e){}},600);
+}
 // ================== MODE SWITCH ==================
 {const v=document.getElementById('ver');if(v)v.textContent=VERSION;const vt=document.getElementById('verTag');if(vt)vt.textContent=VERSION;const g=document.getElementById('gVer');if(g)g.textContent=VERSION;}
 if(ROOM) initGun(); else initScreen();
@@ -583,6 +591,7 @@ function initScreen(){
   const cv=$('#cv'), ctx=cv.getContext('2d');
   let W=0,H=0,S=1,DPR=1, layers=null;
   const players=new Map();          // pid -> player
+  window.__hostPlayers=players;
   let birds=[], parts=[], pops=[], clouds=[], bid=0;
   let phase='lobby', roundStart=0, countStart=0, nextSpawn=0, nextBoss=0;
   let slowUntil=0, shake=0, scroll=0, avgX=.5, freezeUntil=0, flashT=0, goldenAnnounced=false;
@@ -613,7 +622,7 @@ function initScreen(){
     ];
   // ===== HÀNH TRÌNH: mỗi STAGE (chương) = 3 màn + 1 boss. Thêm chương mới: thêm 1 phần tử vào CHAPTERS (3 màn thường + boss). Thua hết tim = GAME OVER, boss `final:true` = thắng cả game.
   const CHAPTERS=[
-    {name:'KHỞI HÀNH',levels:LV.slice(0,3),boss:{theme:'bien',bname:'ĐẠI BÀNG THỦ LĨNH',hp0:14,hpPer:12,slow:1.3,tip:'Bắn ĐẦU = 2 sát thương · bắn vỡ TRỨNG trước khi chạm đất!'}},
+    {name:'KHỞI HÀNH',levels:LV.slice(0,3),boss:{theme:'bien',bname:'ĐẠI BÀNG THỦ LĨNH',hp0:24,hpPer:20,slow:1.1,tip:'Bắn ĐẦU = 2 sát thương · bắn vỡ TRỨNG trước khi chạm đất!'}},
     {name:'BÃO TÁP',levels:LV.slice(3,6),boss:{theme:'dem',bname:'CHÚA TỂ CHIM',final:true,hp0:30,hpPer:22,slow:1,tip:'Bắn ĐẦU = 2 sát thương · bắn vỡ TRỨNG trước khi chạm đất!'}}];
   const STAGES=CHAPTERS.flatMap((c,ci)=>[...c.levels.map((l,li)=>({...l,ch:ci,lv:li+1,cname:c.name})),{...c.boss,boss:true,ch:ci,lv:0,cname:c.name}]);
   const stageLabel=i=>{const q=STAGES[i];return 'STAGE '+(q.ch+1)+(q.boss?' · BOSS':'-'+q.lv);};
@@ -892,7 +901,7 @@ function initScreen(){
     }
   }
   function startCont(){   // hết tim: cho 12s để ai đó đổi NGỌC tiếp tục tại đầu màn đang chơi
-    phase='contwait';contUntil=now()+12000;contCost=[15,25][Math.min(contUsed,1)];
+    phase='contwait';contUntil=now()+12000;contCost=[30,50][Math.min(contUsed,1)];
     birds.forEach(b=>{if(!b.dying)kill(b);});eggs=[];music(false);sfxBoss();shake=Math.max(shake,20*S);sendAll();
   }
   function doContinue(p){
