@@ -44,6 +44,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 .logo .l2{background:linear-gradient(#ffb199 10%,#ff5a3c 55%,#b01c10);-webkit-background-clip:text;background-clip:text}
 .lbird{position:absolute;right:-6px;top:-18px;font-size:clamp(36px,5vw,60px);animation:bob 1.8s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
 @keyframes bob{50%{transform:translateY(-8px) rotate(8deg)}}
+.lver{display:inline-block;margin:-8px 0 12px;padding:3px 12px;border-radius:999px;background:rgba(255,255,255,.14);font-size:13px;font-weight:800;letter-spacing:1px;color:#ffe27a}
 .lsub{opacity:.85;margin:6px 0 14px;font-size:17px}
 .mpanel{background:rgba(8,22,40,.72);border:2px solid rgba(255,255,255,.13);border-radius:20px;padding:14px 18px;width:100%;max-width:560px}
 .mlabel{font-size:12px;font-weight:800;letter-spacing:3px;opacity:.6;margin:2px 0 4px}
@@ -210,6 +211,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
       <div class="mleft">
         <div class="logo"><div class="lbird">🐦</div><div class="l1">BẮN</div><div class="l2">CHIM</div></div>
         <div class="lsub">Điện thoại là súng · màn hình là sân chơi</div>
+        <div class="lver" id="ver"></div>
         <div class="mpanel">
           <div class="mlabel">CHẾ ĐỘ CHƠI</div>
           <div class="chips" id="modeChips"></div>
@@ -231,7 +233,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
         <div class="code" id="roomCode">----</div>
         <div class="small" id="pcount"></div>
         <ul id="plist"><li class="small">Chưa có người chơi…</li></ul>
-        <div class="small shophint">🛒 <b>Cửa hàng súng &amp; nâng cấp</b> mở ngay trên điện thoại của bạn (trước hoặc sau ván)</div>
+        <div class="small shophint">🎨 <b>Skin</b> mua bằng 💎 ở điện thoại · 🔫 <b>súng &amp; nâng cấp</b> mua bằng 🪙 ngay trong ván</div>
       </div>
     </div>
   </div>
@@ -258,7 +260,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
   <div id="gJoin">
     <div class="jbody">
       <h1>🔫 Súng bắn chim</h1>
-      <div class="jmeta">Phòng <b id="gRoom"></b> · v2.0 · xu trong ván · hồ sơ lưu</div>
+      <div class="jmeta">Phòng <b id="gRoom"></b> · <b id="gVer"></b></div>
       <div>
         <label>Hồ sơ lưu (3 ô) · ngọc 💎 &amp; skin đi theo hồ sơ</label>
         <div class="slots" id="gSlots"></div>
@@ -387,6 +389,7 @@ window.addEventListener('unhandledrejection',e=>showErr('Lỗi: '+(e.reason&&e.r
 // ================== CONFIG ==================
 const PREFIX = 'banchim-v2-';      // peer id prefix on the public PeerJS server
 const ROUND_SEC = 90;
+const VERSION = 'v2.1';
 const MAX_AMMO = 6;
 const RELOAD_MS = 1200;
 const MAX_PLAYERS = 4;
@@ -499,6 +502,7 @@ const SKIN_KEYS=Object.keys(SKINS);
 
 
 // ================== MODE SWITCH ==================
+{const v=document.getElementById('ver');if(v)v.textContent=VERSION;const g=document.getElementById('gVer');if(g)g.textContent=VERSION;}
 if(ROOM) initGun(); else initScreen();
 
 // =====================================================================
