@@ -64,19 +64,31 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 /* ---------- GUN (điện thoại, tối ưu cầm 1 tay) ---------- */
 #gun{position:fixed;inset:0;display:flex;flex-direction:column;background:radial-gradient(130% 70% at 50% 0%,#1b4a7a 0%,#0b1d2e 62%);-webkit-touch-callout:none}
 #gJoin{flex:1;display:flex;flex-direction:column;min-height:0;max-width:440px;margin:0 auto;width:100%}
-.jbody{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;display:flex;flex-direction:column;justify-content:flex-start;gap:14px;padding:max(16px,env(safe-area-inset-top)) 20px 8px}
-.jbody h1{font-size:30px;text-align:center}
-.jbody>:first-child{margin-top:auto}.jbody>:last-child{margin-bottom:auto}
-.jmeta{text-align:center;font-size:14px;opacity:.7;margin-top:-8px}
-.jbody input[type=text]{font-size:22px;padding:14px;border-radius:14px;border:2px solid #2c4a6b;background:#132b45;color:#fff;width:100%;user-select:text;-webkit-user-select:text}
-.jbody label{font-size:14px;opacity:.85;display:block;margin-bottom:6px}
+.jbody{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;display:flex;flex-direction:column;gap:12px;padding:max(14px,env(safe-area-inset-top)) 16px 10px}
+.hero{text-align:center;padding:6px 0 2px}
+.hero .logo{font-size:40px;font-weight:900;letter-spacing:1px;line-height:1.05;background:linear-gradient(#fff6c8,#ffc933 55%,#ff8a1f);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 rgba(120,50,0,.55))}
+.hero .sub{font-size:12px;letter-spacing:3px;opacity:.65;margin-top:2px;font-weight:700}
+.hero .chips{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700}
+.jcard{background:linear-gradient(rgba(255,255,255,.09),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:12px 14px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.jcard h3{font-size:12px;letter-spacing:2px;opacity:.7;margin-bottom:10px;font-weight:800}
+.jcard label{font-size:13px;opacity:.85;display:block;margin:10px 0 6px}
+.jbody input[type=text]{width:100%;font-size:20px;padding:12px 14px;border-radius:14px;border:2px solid #2c4a6b;background:#0f2640;color:#fff}
 .jbody input[type=range]{width:100%;height:28px}
-.seg{display:flex;background:#132b45;border-radius:14px;padding:4px;gap:4px}
-.seg button{flex:1;padding:13px 6px;border-radius:11px;background:transparent;font-weight:800;font-size:16px;opacity:.65}
+.seg{display:flex;background:#0f2640;border-radius:14px;padding:4px;gap:4px}
+.seg button{flex:1;padding:12px 6px;border-radius:11px;background:transparent;font-weight:800;font-size:15px;opacity:.6}
 .seg button.on{background:#2fbf71;opacity:1}
-.tips{font-size:13px;opacity:.7;line-height:1.5}
-.jfoot{padding:10px 20px max(16px,env(safe-area-inset-bottom))}
-.jfoot .btn{width:100%;margin:0;font-size:26px;padding:20px;background:#2fbf71;border-radius:18px;box-shadow:0 6px 0 #1b7a47}
+.tips{font-size:12px;opacity:.7;line-height:1.5;margin-top:8px}
+.jcard details summary{cursor:pointer;font-weight:800;font-size:13px;opacity:.85;list-style:none;padding:2px 0}
+.jcard details summary::-webkit-details-marker{display:none}
+.jhow{display:flex;gap:8px;font-size:12px;opacity:.85}
+.jhow div{flex:1;background:rgba(0,0,0,.2);border-radius:12px;padding:8px 6px;text-align:center;line-height:1.35}
+.jhow b{display:block;font-size:20px}
+.jfoot{padding:10px 16px max(14px,env(safe-area-inset-bottom));background:linear-gradient(transparent,rgba(5,14,24,.85) 30%)}
+.jfoot .btn{width:100%;margin:0;font-size:26px;padding:18px;background:linear-gradient(#4be08e,#25a65e);border-radius:18px;box-shadow:0 6px 0 #1b7a47;letter-spacing:1px}
+.ic{display:inline-block;width:1.05em;height:1.05em;vertical-align:-.18em;background-size:contain;background-repeat:no-repeat;background-position:center}
+.ic-coin{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%23b87400'/%3E%3Ccircle cx='12' cy='11' r='10' fill='%23ffd54a'/%3E%3Ccircle cx='12' cy='11' r='7' fill='none' stroke='%23d99a00' stroke-width='1.6'/%3E%3Cpath d='M12 7v8M9.6 9.2h3.6a1.4 1.4 0 010 2.8h-2.4a1.4 1.4 0 000 2.8h3.6' fill='none' stroke='%23b87400' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E")}
+.ic-gem{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 3h12l5 6-11 13L1 9z' fill='%2335b6ff'/%3E%3Cpath d='M6 3l-5 6h22l-5-6z' fill='%238fdcff'/%3E%3Cpath d='M1 9h22L12 22z' fill='%231c7fd1'/%3E%3Cpath d='M8 9l4 13 4-13-4-6z' fill='%2362c8ff'/%3E%3C/svg%3E")}
 .slots{display:flex;gap:8px}
 .slots button{flex:1;padding:10px 4px;border-radius:12px;background:#132b45;border:2px solid transparent;font-weight:800;font-size:13px;line-height:1.3}
 .slots button.on{border-color:#2fbf71;background:#1a3a56}
@@ -87,7 +99,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 .gunrow{display:flex;gap:8px;padding:0 16px 6px}
 #gGun{padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.12);font-weight:800;font-size:14px}
 #gGun.multi{background:linear-gradient(#5fb8ff,#2a7fd6);color:#04203a}
-.jfoot .btn.shopj{font-size:18px;padding:13px;margin-bottom:10px;background:linear-gradient(#ffe27a,#f0a800);color:#4a2f00;box-shadow:0 5px 0 #a87400}
+.jfoot .btn.shopj{font-size:17px;padding:12px;margin-bottom:10px;background:linear-gradient(#ffe27a,#f0a800);color:#4a2f00;box-shadow:0 5px 0 #a87400}
 .jfoot .btn:active{transform:translateY(4px);box-shadow:0 2px 0 #1b7a47}
 
 #gPlay{--f:min(54vw,34vh);flex:1;display:flex;flex-direction:column;min-height:0}
@@ -261,37 +273,46 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 <!-- GUN MODE -->
 <div id="gun" class="hide">
   <div id="gJoin">
-    <div class="jbody">
-      <h1>🔫 Súng bắn chim</h1>
-      <div class="jmeta">Phòng <b id="gRoom"></b> · <b id="gVer"></b></div>
-      <div>
-        <label>Hồ sơ lưu (3 ô) · ngọc 💎 &amp; skin đi theo hồ sơ</label>
-        <div class="slots" id="gSlots"></div>
-        <div class="saverow"><button id="gExport">⬇ Tải về</button><button id="gImport">⬆ Mở file</button><button id="gWipe">🗑 Xoá ô</button></div>
-        <input type="file" id="gFile" accept=".json,application/json" class="hide">
-        <div class="tips" id="gSaveInfo"></div>
+    <div class="jbody" id="jBody">
+      <div class="hero">
+        <div class="logo">BẮN CHIM</div>
+        <div class="sub">SÚNG ĐIỆN THOẠI</div>
+        <div class="chips"><span class="chip">Phòng <b id="gRoom"></b></span><span class="chip" id="gVer"></span></div>
       </div>
-      <input type="text" id="gName" maxlength="12" placeholder="Tên của bạn" autocomplete="off">
-      <div>
+      <div class="jcard">
+        <h3>NGƯỜI CHƠI</h3>
+        <input type="text" id="gName" maxlength="12" placeholder="Nhập tên của bạn" autocomplete="off">
         <label>Cầm máy bằng tay nào?</label>
         <div class="seg" id="gHand"><button data-h="R">🤜 Tay phải</button><button data-h="L">Tay trái 🤛</button></div>
       </div>
-      <div>
-        <label>Độ nhạy ngắm: <b id="sensV"></b></label>
-        <input type="range" id="gSens" min="25" max="100" step="5">
+      <div class="jcard">
+        <h3>HỒ SƠ LƯU</h3>
+        <div class="slots" id="gSlots"></div>
+        <div class="tips" id="gSaveInfo"></div>
+        <details><summary>▾ Sao lưu / chuyển máy</summary>
+          <div class="saverow"><button id="gExport">⬇ Tải về</button><button id="gImport">⬆ Mở file</button><button id="gWipe">🗑 Xoá ô</button></div>
+          <input type="file" id="gFile" accept=".json,application/json" class="hide">
+        </details>
       </div>
-      <div>
-        <label>Bắn bằng giật máy: <b id="shakeV"></b></label>
-        <input type="range" id="gShake" min="10" max="45" step="1">
+      <div class="jcard">
+        <details><summary>⚙ Cài đặt ngắm &amp; giật máy</summary>
+          <label>Độ nhạy ngắm: <b id="sensV"></b></label>
+          <input type="range" id="gSens" min="25" max="100" step="5">
+          <label>Bắn bằng giật máy: <b id="shakeV"></b></label>
+          <input type="range" id="gShake" min="10" max="45" step="1">
+        </details>
       </div>
-      <div class="tips">Cầm máy như súng, chĩa vào giữa màn hình rồi bấm <b>CĂN GIỮA</b>. Chạm vùng trống bên dưới cũng là <b>BẮN</b>. Hết đạn chạm BẮN sẽ tự nạp. Mở bằng Chrome, không mở trong Zalo.</div>
+      <div class="jcard">
+        <div class="jhow"><div><b>🎯</b>Chĩa vào màn hình, bấm <b style="display:inline;font-size:inherit">CĂN GIỮA</b></div><div><b>👆</b>Chạm vùng trống = BẮN</div><div><b>🔄</b>Hết đạn tự nạp</div></div>
+        <div class="tips">Mở bằng Chrome/Safari, không mở trong Zalo.</div>
+      </div>
     </div>
-    <div class="jfoot"><button class="btn shopj" id="gShopJ">🎨 CỬA HÀNG SKIN · <span id="jCoin">💎 0</span></button><button class="btn" id="gGo">Vào chơi</button></div>
+    <div class="jfoot"><button class="btn shopj" id="gShopJ">🎨 CỬA HÀNG SKIN · <span id="jCoin"><i class="ic ic-gem"></i> 0</span></button><button class="btn" id="gGo">Vào chơi</button></div>
   </div>
   <div id="gPlay" class="hide">
     <div class="gtop">
       <div class="gname"><span class="dot" id="gDot"></span><span id="gMe"></span></div>
-      <div class="coinpill" id="gCoin">🪙 0</div><div id="gNet">⏳</div>
+      <div class="coinpill" id="gCoin"><i class="ic ic-coin"></i> 0</div><div id="gNet">⏳</div>
       <button id="gFlip" title="Đổi tay cầm">⇄</button>
     </div>
     <div class="ghud">
@@ -392,7 +413,7 @@ window.addEventListener('unhandledrejection',e=>showErr('Lỗi: '+(e.reason&&e.r
 // ================== CONFIG ==================
 const PREFIX = 'banchim-v2-';      // peer id prefix on the public PeerJS server
 const ROUND_SEC = 90;
-const VERSION = 'v2.1';
+const VERSION='v2.2';
 const MAX_AMMO = 6;
 const RELOAD_MS = 1200;
 const MAX_PLAYERS = 4;
@@ -1325,7 +1346,7 @@ function initGun(){
   function renderSlots(){
     const el=$('#gSlots');el.innerHTML='';
     [1,2,3].forEach(n=>{const s=n===slot?save:loadSlot(n),b=document.createElement('button');b.className=n===slot?'on':'';
-      b.innerHTML='Hồ sơ '+n+'<small>'+(slotUsed(s)?(s.name||'—')+' · 💎'+s.gems:'Trống')+'</small>';
+      b.innerHTML='Hồ sơ '+n+'<small>'+(slotUsed(s)?(s.name||'—')+' · <i class="ic ic-gem"></i>'+s.gems:'Trống')+'</small>';
       b.onclick=()=>{slot=n;lss('bc_slot',String(n));save=loadSlot(n)||blankSave();if(save.name)$('#gName').value=save.name;renderSlots();updCoin();sendGear();};el.appendChild(b);});
     const t=save.stats;$('#gSaveInfo').textContent=slotUsed(save)?`Ván: ${t.runs} · Thắng: ${t.wins} · Kỷ lục Cổ điển: ${t.bestClassic} · Sinh tồn: ${t.bestSurv}s · Hành trình: màn ${t.bestCoop||0}/5 · Skin: ${save.skins.length}/${SKIN_KEYS.length}`:'Ô trống — chơi và thắng để nhận ngọc 💎 mua skin.';
   }
@@ -1357,9 +1378,9 @@ function initGun(){
   const inRun=()=>['count','intro','play','shopbreak'].includes(st.phase);
   function updCoin(){
     const run=inRun();
-    $('#gCoin').textContent=run?'🪙 '+money(st.coins||0):'💎 '+money(save.gems);
-    $('#shCoin').textContent=shopMode==='run'?'🪙 '+money(st.coins||0):'💎 '+money(save.gems);
-    $('#jCoin').textContent='💎 '+money(save.gems);
+    $('#gCoin').innerHTML=run?'<i class="ic ic-coin"></i> '+money(st.coins||0):'<i class="ic ic-gem"></i> '+money(save.gems);
+    $('#shCoin').innerHTML=shopMode==='run'?'<i class="ic ic-coin"></i> '+money(st.coins||0):'<i class="ic ic-gem"></i> '+money(save.gems);
+    $('#jCoin').innerHTML='<i class="ic ic-gem"></i> '+money(save.gems);
     $('#gShop').textContent='🎨 CỬA HÀNG SKIN';
     const g=GUNS[st.gun]||GUNS.pistol,o=(st.inv&&st.inv.o)||['pistol'];
     $('#gGun').textContent='🔫 '+g.name+(o.length>1?'  ⇄':'');$('#gGun').classList.toggle('multi',o.length>1);
@@ -1405,7 +1426,7 @@ function initGun(){
       html+='<div class="shnote">Ngọc 💎 nhận khi chơi — <b>thắng càng nhiều, ngọc càng nhiều</b>. Skin chỉ đổi giao diện tâm ngắm, không đổi sức mạnh.</div>';
       SKIN_KEYS.forEach(k=>{const s=SKINS[k],own=save.skins.includes(k),using=save.skin===k;
         const btn=using?'<button class="shbtn using" disabled>ĐANG DÙNG ✓</button>':own?`<button class="shbtn equip" data-a="equips" data-k="${k}">TRANG BỊ</button>`
-          :`<button class="shbtn buy ${save.gems<s.price?'poor':''}" data-a="buys" data-k="${k}">MUA · 💎 ${money(s.price)}</button>`;
+          :`<button class="shbtn buy ${save.gems<s.price?'poor':''}" data-a="buys" data-k="${k}">MUA · <i class="ic ic-gem"></i> ${money(s.price)}</button>`;
         html+=`<div class="shcard ${k==='gold'?'legend':''} ${using?'sel':''}" style="--rc:${s.rar}"><div class="shimg">${skinSvg(k)}</div>
           <div class="shinfo"><div class="shname"><b>${s.name}</b><em>${s.tag}</em></div><div class="shdesc">${s.desc}</div>${btn}</div></div>`;});
     }
@@ -1441,7 +1462,7 @@ function initGun(){
   const sendReady=()=>{tx({k:'ready',pid});vib(15);$('#shop').classList.add('hide');};
   $('#gReady').addEventListener('click',sendReady);$('#shReady').addEventListener('click',sendReady);
   $('#gMenu').addEventListener('click',()=>{tx({k:'menu',pid});vib(10);});
-  renderSlots();
+  renderSlots();try{$('#jBody').scrollTop=0}catch(e){}
   const sens=$('#gSens'),shk=$('#gShake');
   sens.value=ls('bc_sens','60');shk.value=ls('bc_shake','22');
   const showS=()=>{$('#sensV').textContent=sens.value+'° = hết bề ngang';$('#shakeV').textContent=+shk.value>=45?'TẮT':(+shk.value<16?'rất nhạy':+shk.value<26?'vừa':'khó')+' ('+shk.value+')';};
