@@ -201,7 +201,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
   <div id="gJoin">
     <div class="jbody">
       <h1>🔫 Súng bắn chim</h1>
-      <div class="jmeta">Phòng <b id="gRoom"></b> · v1.6 · xu + cửa hàng</div>
+      <div class="jmeta">Phòng <b id="gRoom"></b> · v1.7 · ngắm kiểu chuột</div>
       <input type="text" id="gName" maxlength="12" placeholder="Tên của bạn" autocomplete="off">
       <div>
         <label>Cầm máy bằng tay nào?</label>
@@ -1193,7 +1193,9 @@ function initGun(){
   function oneEuro(minC,beta){let x=null,dx=0,t=0;const al=(c,dt)=>1/(1+1/(2*Math.PI*c*dt));
     return (v,tn)=>{if(x===null){x=v;t=tn;return v;}const dt=Math.max(.001,(tn-t)/1000);t=tn;
       dx+=al(1,dt)*((v-x)/dt-dx);x+=al(minC+beta*Math.abs(dx),dt)*(v-x);return x;};}
-  const fX=oneEuro(1.2,25),fY=oneEuro(1.2,25);
+  let fX=oneEuro(1.2,25),fY=oneEuro(1.2,25);
+  // Chế độ CHUỘT (gyro tương đối): con trỏ cộng dồn tốc độ xoay như chuột → không phụ thuộc la bàn/alpha nên hết giật & hết trôi; chạm mép là tự bù.
+  const rel={on:false,fail:0,k:1,x:.5,y:.5,t:0,bx:0,by:0,bz:0,sOG:0,sGG:0,path:0,py:null,pp:null};
   let sensorOK=false,cur=null,mode='y',yaw0=0,pitch0=0,aimX=.5,aimY=.5,hist=[],lastSent=0,sentX=-1,sentY=-1,lastShake=0,needCenter=true;
   const isTouch=matchMedia('(pointer:coarse)').matches;
   // lịch sử cảm biến thô: khi bấm nút (ngón cái làm máy rung/nghiêng) ta lấy tư thế TRƯỚC lúc bấm
@@ -1222,9 +1224,11 @@ function initGun(){
     const dY=Math.abs(s.fy[2]),dZ=Math.abs(s.fz[2]);
     if(!modeSet||Math.abs(dY-dZ)>.12){mode=dY<=dZ?'y':'z';modeSet=true;}   // trục nào nằm ngang hơn = nòng súng; gần 45° thì giữ trục cũ cho khỏi đổi thất thường
     const o=hp(mode==='y'?s.fy:s.fz);yaw0=o.yaw;pitch0=o.pitch;
+    if(rel.on){rel.x=.5;rel.y=.5;fX=oneEuro(1.2,25);fY=oneEuro(1.2,25);const tn=now();aimX=fX(.5,tn);aimY=fY(.5,tn);pushAim();}
   }
   function computeAim(){
     if(!cur)return;
+    if(rel.on)return;
     const o=hp(mode==='y'?cur.fy:cur.fz);
     let dy=o.yaw-yaw0;dy=((dy+540)%360)-180;
     const dp=o.pitch-pitch0, degX=+sens.value, degY=degX*.6;
@@ -1237,7 +1241,38 @@ function initGun(){
     if(t-lastSent>=15&&(Math.abs(aimX-sentX)>.0007||Math.abs(aimY-sentY)>.0007)){lastSent=t;sentX=aimX;sentY=aimY;tx({k:'aim',pid,x:+aimX.toFixed(4),y:+aimY.toFixed(4)});}
   }
   function aimAgo(ms){const t=now()-ms;for(let i=hist.length-1;i>=0;i--)if(hist[i].t<=t)return hist[i];return hist[0]||{x:aimX,y:aimY};}
+  const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],dot3=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+  function gyroStep(r){
+    const t=now(),dt=rel.t?Math.min(.05,(t-rel.t)/1000):0;rel.t=t;if(!dt||!cur)return;
+    let w=[(r.beta||0)*D,(r.gamma||0)*D,(r.alpha||0)*D];                 // tốc độ xoay quanh trục x,y,z của máy (rad/s)
+    const mag=Math.hypot(...w);
+    if(mag<2*D){rel.bx+=.02*(w[0]-rel.bx);rel.by+=.02*(w[1]-rel.by);rel.bz+=.02*(w[2]-rel.bz);}   // lúc đứng yên: học độ lệch (bias) của gyro
+    w=[w[0]-rel.bx,w[1]-rel.by,w[2]-rel.bz];
+    if(Math.hypot(...w)<.35*D)w=[0,0,0];
+    const fy=cur.fy,fz=cur.fz;
+    const up=[-(fy[0]*fz[1]-fy[1]*fz[0]),fy[2],-fz[2]];                  // hướng "lên" trong hệ trục của máy
+    const b=mode==='y'?[0,1,0]:[0,0,-1];                                  // nòng súng trong hệ trục của máy
+    const s=clamp(dot3(b,up),-1,1),c=Math.max(.35,Math.sqrt(1-s*s));
+    const bh=[b[0]-s*up[0],b[1]-s*up[1],b[2]-s*up[2]],n=Math.hypot(...bh);if(n<.05)return;   // chĩa gần thẳng đứng: bỏ qua
+    const R=cross(bh,up).map(x=>x/n),v=cross(w,b);                        // v = vận tốc đầu nòng
+    const gX=dot3(v,R)/c*dt/D,gY=dot3(v,up)/c*dt/D;                       // độ quay ngang (phải +) và dọc (lên +) trong bước này
+    if(!rel.on){
+      if(rel.fail>=3)return;                                              // tự kiểm tra chiều/đơn vị so với cảm biến hướng; sai thì dùng cách cũ
+      const o=hp(b[1]===1?cur.fy:cur.fz);
+      if(rel.py!==null){let dyo=o.yaw-rel.py;dyo=((dyo+540)%360)-180;const dpo=o.pitch-rel.pp;
+        if(Math.abs(dyo)<20){rel.sOG+=dyo*gX+dpo*gY;rel.sGG+=gX*gX+gY*gY;rel.path+=Math.abs(dyo)+Math.abs(dpo);}}
+      rel.py=o.yaw;rel.pp=o.pitch;
+      if(rel.path>40&&rel.sGG>.004){const k=rel.sOG/rel.sGG,ak=Math.abs(k);
+        if(ak>.6&&ak<1.6){rel.k=Math.sign(k);rel.on=true;}else if(ak>35&&ak<85){rel.k=Math.sign(k)*57.3;rel.on=true;}else{rel.fail++;rel.sOG=rel.sGG=rel.path=0;}
+        if(rel.on){rel.x=aimX;rel.y=aimY;}}
+      return;
+    }
+    rel.x=clamp(rel.x+rel.k*gX/+sens.value,-.05,1.05);
+    rel.y=clamp(rel.y-rel.k*gY/(+sens.value*.6),-.05,1.05);
+    aimX=fX(rel.x,t);aimY=fY(rel.y,t);pushAim();
+  }
   function onMotion(e){
+    const rr=e.rotationRate;if(rr&&rr.alpha!=null)gyroStep(rr);
     const thr=+shk.value;if(thr>=45)return;
     const a=e.acceleration;if(!a||a.x==null)return;
     const m=Math.hypot(a.x,a.y,a.z);
@@ -1392,7 +1427,7 @@ function initGun(){
     setTimeout(()=>{if(!sensorOK){pad.classList.remove('hide');$('#gPlay').classList.add('haspad');}},1500);
     net('⏳ máy chủ…');await loadIce();connect();
   };
-  window.__gun={fire,reload,center,state:()=>st,dbg};  // debug hook
+  window.__gun={fire,reload,center,state:()=>st,dbg,rel,aim:()=>[aimX,aimY]};  // debug hook
 }
 </script>
 </body>
