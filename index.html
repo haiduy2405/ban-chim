@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#0b1d2e">
+<meta name="theme-color" content="#0c2533">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
 <title>Bắn Chim</title>
 <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/archivo-latin.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/bvp-500-latin.woff2">
@@ -352,6 +355,11 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
 #pausePanel h2{font-family:var(--disp);font-weight:900;font-stretch:80%}
 #pausePanel .btn{background:var(--sig);color:var(--ink);border-radius:10px;box-shadow:0 5px 0 var(--sig-d)}
 #netBanner{background:var(--red-d)}
+.cfgrow .shopbtn{background:transparent;border:2px solid var(--line2);color:var(--paper);box-shadow:none}
+#pausePanel .btn.alt{background:transparent;border:2px solid var(--line2);color:var(--paper);box-shadow:none;font-size:18px;padding:12px;margin-top:10px}
+#pausePanel .btn.alt.arm{border-color:var(--red);background:var(--red-d)}
+#lobby #installBtn{font-size:calc(var(--u)*17px);padding:calc(var(--u)*12px) calc(var(--u)*20px);border-radius:calc(var(--u)*9px);font-stretch:100%;font-family:var(--ui);font-weight:700;margin:0}
+#lobby #installTip{margin-top:calc(var(--u)*10px);max-width:calc(var(--u)*520px);color:#e3c875}
 /* cửa hàng */
 #shop{background:linear-gradient(180deg,var(--bg1),var(--bg0))}
 .shop-title{font-family:var(--disp);font-weight:900;font-stretch:80%;letter-spacing:.02em;background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--paper)}
@@ -398,8 +406,10 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
         <div class="mbtns">
           <button class="btn play" id="startBtn">Bắt đầu chơi</button>
           <span class="small" id="startHint">Quét mã bên phải để vào phòng</span>
+          <button class="btn alt" id="installBtn">Cài app</button>
         </div>
         <div class="small" id="hiscore"></div>
+        <div class="small hide" id="installTip"></div>
         <div class="small" id="audioHint">Nhấn vào màn hình 1 lần để bật âm thanh</div>
       </div>
       <div class="mright">
@@ -478,7 +488,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
   </div>
   <div id="netBanner" class="hide">⚠ Mất kết nối — đang nối lại…</div>
   <div id="pausePanel" class="hide"><div class="pcard">
-    <h2>⏸ TẠM DỪNG</h2><div class="small" id="pBy"></div>
+    <h2>Tạm dừng</h2><div class="small" id="pBy"></div>
     <label>Độ nhạy ngắm: <b id="pSensV"></b></label><input type="range" id="pSens" min="15" max="100" step="5">
     <label>Bắn bằng giật máy: <b id="pShakeV"></b></label><input type="range" id="pShake" min="10" max="45" step="1">
     <label>Cầm máy bằng tay nào?</label>
@@ -486,6 +496,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulat
     <div class="saverow"><button id="pCalib" style="flex:1 1 100%">🎯 HIỆU CHỈNH TÂM (2 chạm)</button></div>
     <div class="saverow"><button id="pCenter">◎ Căn giữa lại</button><button id="pSound">🔊 Âm thanh</button></div>
     <button class="btn" id="pResume">▶ TIẾP TỤC</button>
+    <button class="btn alt" id="pMenu">Về menu chính</button>
   </div></div>
   <div id="calib" class="hide"><div class="cbox"><div class="cstep" id="cStep"></div><div class="cscr"><i id="cDot"></i></div><div class="csub">Chĩa đầu máy vào đúng điểm vàng trên màn hình, rồi <b>chạm bất kỳ đâu</b></div><button id="cCancel">Hủy</button></div></div>
   <div id="gPlay" class="hide">
@@ -594,7 +605,7 @@ window.addEventListener('unhandledrejection',e=>showErr('Lỗi: '+(e.reason&&e.r
 // ================== CONFIG ==================
 const PREFIX = 'banchim-v2-';      // peer id prefix on the public PeerJS server
 const ROUND_SEC = 90;
-const VERSION='v4.0';
+const VERSION='v4.1';
 const MAX_AMMO = 6;
 const RELOAD_MS = 1200;
 const MAX_PLAYERS = 4;
@@ -1433,6 +1444,8 @@ function initScreen(){
       case 'continue':doContinue(p);break;
       case 'start':if(phase==='lobby'||phase==='end')startRound();break;
       case 'menu':toMenu();break;
+      case 'quit':if(paused||phase==='end')quitToMenu();break;
+      case 'shop':{p.inShop=!!d.on;const any=activePlayers().some(q=>q.inShop);if(any&&!paused)setPause(true,p.name,'shop');else if(!any&&paused&&pauseReason==='shop')setPause(false);break;}
       case 'ready':if(phase==='shopbreak'){p.ready=true;renderBreak();}break;
       case 'gear':p.gear=cleanGear(d.gear);break;
       case 'buy':buy(p,d.id);break;
@@ -1450,6 +1463,10 @@ function initScreen(){
   // ---------- UI ----------
   $('#startBtn').onclick=e=>{e.stopPropagation();startRound();};
   $('#againBtn').onclick=e=>{e.stopPropagation();startRound();};
+  function quitToMenu(){
+    if(paused){_skew+=performance.now()-_pz;_pz=0;paused=false;pauseBy='';pauseReason='';}
+    players.forEach(q=>q.inShop=false);phase='end';music(false);toMenu();sendAll();
+  }
   function toMenu(){
     if(phase!=='end')return;phase='lobby';birds=[];eggs=[];boss=null;music(false);
     if(themeCfg!=='random')setTheme(themeCfg);
@@ -1474,17 +1491,31 @@ function initScreen(){
     sendAll();
   }
   function lostPlayers(rt){return activePlayers().filter(q=>!q.local&&!q.afk&&q.live&&rt-(q.rx||0)>(paused?3500:7000));}   // ngưỡng 7s khi đang chạy; chỉ coi là 'nối lại' khi <3.5s
-  function netWatch(){   // có người rớt mạng → tự tạm dừng, họ nối lại là chạy tiếp (tối đa 25s)
+  function netWatch(){
+    if(paused&&pauseReason==='shop'){const lp=lostPlayers(performance.now());if(!activePlayers().some(q=>q.inShop&&!lp.includes(q))){players.forEach(q=>q.inShop=false);setPause(false);}}   // có người rớt mạng → tự tạm dừng, họ nối lại là chạy tiếp (tối đa 25s)
     const rt=performance.now();
     players.forEach(q=>{if(q.local)return;if(q.rx&&rt-q.rx<3500)q.live=true;else if(phase==='lobby'||phase==='end')q.live=false;});   // chỉ tính người đã thật sự online trong ván
     if(!paused){if(rt<netGrace)return;if(['play','intro','count'].includes(phase)){const l=lostPlayers(rt);if(l.length){setPause(true,l[0].name,'net');netPauseAt=rt;}}}
     else if(pauseReason==='net'){const l=lostPlayers(rt);if(!l.length){setPause(false);netGrace=rt+8000;}else if(rt-netPauseAt>15000){l.forEach(q=>q.afk=true);setPause(false);}else{pauseBy=l[0].name;}}
   }
   setInterval(netWatch,500);
+  // ---- cài app (PWA)
+  let _ip=null;const isApp=matchMedia('(display-mode:standalone)').matches||navigator.standalone;
+  addEventListener('beforeinstallprompt',e=>{e.preventDefault();_ip=e;});
+  addEventListener('appinstalled',()=>{$('#installBtn').classList.add('hide');});
+  if(isApp)$('#installBtn').classList.add('hide');
+  $('#installBtn').addEventListener('click',async()=>{
+    const tip=$('#installTip');
+    if(_ip){_ip.prompt();try{await _ip.userChoice}catch(e){}_ip=null;return;}
+    const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+    tip.textContent=ios?'Safari: bấm Chia sẻ → "Thêm vào MH chính".':'Chrome/Edge: bấm biểu tượng cài đặt ở cuối thanh địa chỉ, hoặc menu ⋮ → "Cài đặt Bắn Chim". Trên TV: mở trình duyệt, vào trang này rồi dùng menu của trình duyệt.';
+    tip.classList.remove('hide');
+  });
+  if('serviceWorker' in navigator&&location.protocol.startsWith('http'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
   function drawPause(){
     ctx.fillStyle='rgba(5,12,24,.62)';ctx.fillRect(0,0,W,H);ctx.textAlign='center';
     ctx.font=`900 ${90*S}px Archivo,Be Vietnam Pro,system-ui,sans-serif`;outlined('⏸ TẠM DỪNG',W/2,H*.45,'#fff',10);
-    ctx.font=`800 ${34*S}px Archivo,Be Vietnam Pro,system-ui,sans-serif`;outlined(pauseReason==='net'?'📡 '+pauseBy+' mất kết nối — đang chờ nối lại…':(pauseBy?pauseBy+' đang chỉnh cài đặt':''),W/2,H*.54,'#ffd23f',6);
+    ctx.font=`800 ${34*S}px Archivo,Be Vietnam Pro,system-ui,sans-serif`;outlined(pauseReason==='net'?'📡 '+pauseBy+' mất kết nối — đang chờ nối lại…':(pauseReason==='shop'?pauseBy+' đang ở cửa hàng':pauseBy?pauseBy+' đang chỉnh cài đặt':''),W/2,H*.54,'#ffd23f',6);
     ctx.font=`700 ${24*S}px Archivo,Be Vietnam Pro,system-ui,sans-serif`;outlined('Bấm TIẾP TỤC trên điện thoại (hoặc phím P)',W/2,H*.6,'#fff',5);
   }
   function frame(){
@@ -1704,7 +1735,7 @@ function initScreen(){
   }
 
   resize();showHi();renderCfg();artInit();loadIce().then(openPeer);requestAnimationFrame(frame);
-  window.__bc={ART,setArt:v=>{ART_ON=v;buildLayers();},doContinue,startCont,phaseNow:()=>phase,STAGES,TYPES,setPause,paused:()=>paused,stageLabel,buy,players,birds:()=>birds,phase:()=>phase,spawn,spawnFlock,givePU,doFire,newPlayer,flocks,startRound,setMode,setThemeCfg,enterStage,stageClear,loseHeart,bossDefeated,dbg:o=>{if('stageKills' in o)stageKills=o.stageKills;},info:()=>({mode,stage,hearts,maxHearts,stageKills,stageGoal,phase,themeKey,eggs:eggs.length,bossHp:boss?boss.hp:null,bossMax:boss?boss.maxhp:null,bossDown}),skip:s=>{roundStart-=s*1000;}};  // debug hook
+  window.__bc={onMsg:(c,d)=>onMsg(c,d),ART,setArt:v=>{ART_ON=v;buildLayers();},doContinue,startCont,phaseNow:()=>phase,STAGES,TYPES,setPause,paused:()=>paused,stageLabel,buy,players,birds:()=>birds,phase:()=>phase,spawn,spawnFlock,givePU,doFire,newPlayer,flocks,startRound,setMode,setThemeCfg,enterStage,stageClear,loseHeart,bossDefeated,dbg:o=>{if('stageKills' in o)stageKills=o.stageKills;},info:()=>({mode,stage,hearts,maxHearts,stageKills,stageGoal,phase,themeKey,eggs:eggs.length,bossHp:boss?boss.hp:null,bossMax:boss?boss.maxhp:null,bossDown}),skip:s=>{roundStart-=s*1000;}};  // debug hook
 }
 
 // =====================================================================
@@ -1873,6 +1904,12 @@ function initGun(){
   pK.oninput=()=>{shk.value=pK.value;showS();lss('bc_shake',shk.value);syncPause();};
   $('#gPause').addEventListener('click',()=>{audio();tx({k:'pause',pid,on:true});vib(20);});
   $('#pResume').addEventListener('click',()=>{audio();tx({k:'pause',pid,on:false});vib(20);});
+  let qArm=0;$('#pMenu').addEventListener('click',e=>{const b=e.currentTarget;if(!qArm){qArm=setTimeout(()=>{qArm=0;b.classList.remove('arm');b.textContent='Về menu chính';},3000);b.classList.add('arm');b.textContent='Chạm lần nữa để thoát ván';vib(15);return;}clearTimeout(qArm);qArm=0;b.classList.remove('arm');b.textContent='Về menu chính';tx({k:'quit',pid});vib(30);});
+  let shopSent=false;
+  function syncShopPause(){const want=!$('#shop').classList.contains('hide')&&shopMode==='run'&&['play','intro','count'].includes(st.phase)&&!st.spec;if(want!==shopSent){shopSent=want;tx({k:'shop',pid,on:want});}}
+  $('#shop').addEventListener('click',()=>setTimeout(syncShopPause,0));
+  $('#gShop3').addEventListener('click',()=>setTimeout(syncShopPause,0));
+  $('#gCoin').addEventListener('click',()=>setTimeout(syncShopPause,0));
   $('#gContBtn').addEventListener('click',()=>{audio();tx({k:'continue',pid});vib(20);});
   $('#pCenter').addEventListener('click',()=>{center();say('Đã căn giữa ✓');});
   // ---- hiệu chỉnh 2 điểm (góc trên-trái, góc dưới-phải): tự suy ra tâm + độ nhạy ngang + tỉ lệ dọc theo đúng khoảng cách/kích thước màn hình
@@ -1902,7 +1939,7 @@ function initGun(){
   function renderPause(){
     const run=['play','intro','count'].includes(st.phase)&&!st.spec;
     $('#gPause').classList.toggle('hide',!run&&!st.paused);
-    const show=!!st.paused;if(show&&!pauseShown)syncPause();pauseShown=show;
+    const show=!!st.paused&&!(st.pauseR==='shop'&&shopSent);if(show&&!pauseShown)syncPause();pauseShown=show;
     $('#pausePanel').classList.toggle('hide',!show);
     $('#pBy').textContent=st.pauseR==='net'?'📡 '+st.pauseBy+' mất kết nối — đợi nối lại…':(st.pauseBy?(st.pauseBy==='Máy chủ'?'Máy chủ đã tạm dừng':st.pauseBy+' đã tạm dừng'):'');
   }
@@ -2065,7 +2102,7 @@ function initGun(){
       if(lastCoins!==null&&st.coins>lastCoins&&inRun())coinFx(st.coins-lastCoins);
       lastCoins=st.coins;
     }
-    updCoin();if(!$('#shop').classList.contains('hide')&&shopMode==='run'&&sigNow()!==shopSig)renderShop();
+    syncShopPause();updCoin();if(!$('#shop').classList.contains('hide')&&shopMode==='run'&&sigNow()!==shopSig)renderShop();
     const lob=st.phase==='lobby'||st.phase==='end';
     const brk=st.phase==='shopbreak'&&!st.spec;
     if(shopMode==='menu'&&!lob&&!brk)$('#shop').classList.add('hide');
